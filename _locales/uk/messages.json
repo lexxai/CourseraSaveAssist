@@ -1,0 +1,20 @@
+{
+  "plug_name": {
+    "message": "Помічник для збереження файлів з Сoursera"
+  },
+  "plug_description": {
+    "message": "Помічник для збереження медіафайлів з сайту www.coursera.org, таких як відео, субтитри та описи до відео."
+  },
+  "videoAction": {
+    "message": "Зберегти відео, субтитри та текст"
+  },
+  "SEARCHVIDEO": {
+    "message": "Пошук відео..."
+  },
+  "NOVIDEO": {
+    "message": "Відео не знайдено"
+  },
+  "SAVING": {
+    "message": "Збереження..."
+  }
+}

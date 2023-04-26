@@ -1,0 +1,20 @@
+{
+  "plug_name": {
+    "message": "Assistant for saving files from Coursera"
+  },
+  "plug_description": {
+    "message": "Assistant for saving media files from the website www.coursera.org, such as videos, subtitles, and video descriptions."
+  },
+  "videoAction": {
+    "message": "Save video, subtitles, and text"
+  },
+  "SEARCHVIDEO": {
+    "message": "Search for videos..."
+  },
+  "NOVIDEO": {
+    "message": "No videos found"
+  },
+  "SAVING": {
+    "message": "Saving..."
+  }
+}
