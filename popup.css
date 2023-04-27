@@ -16,14 +16,13 @@ button {
   height: 30px;
   width: 400px;
   outline: none;
-  margin: 10px;
+  margin: 10px auto;
   border: none;
   border-radius: 8px;
   font-weight:bold;
   color: white;
   cursor: pointer;	
   opacity: 0.5;
-  transition: opacity 0.1s ease-in;
 }
 
 button.current {
@@ -75,17 +74,16 @@ button:focus {
 #pdebug {
     width: 400px;
     text-align: center;
-    font-size: medium;
-    height: 40px;
+    height: 24px;
     outline: none;
-    margin: 10px;
-    padding-top: 15px;
+    margin: 10px auto;
+    padding-top: 6px;
     border: none;
-    border-radius: 10px;
+    border-radius: 8px;
     font-weight: bold;
     color: white;
     cursor: default;
-    display: block;
+    opacity: 0.8;
     background-color: red;
     display: none;
 }

@@ -1,13 +1,31 @@
 let tabid = 0;
 let taburl = "";
 
-let filename = "";
-let video = "";
-let subtitle = "";
-let videotext = "";
-const fileconfig = {
-  modulePrefix: "module-",
-  titleDelimeter: "_",
+const saveObjects = {
+  filename: "",
+  video: "",
+  subtitle: "",
+  videotext: "",
+  subtitle_addon: "",
+  subtitle_addon_lang: "",
+};
+
+const saveObjectsReq = {
+  filename: true,
+  video: true,
+  subtitle: true,
+  videotext: true,
+  subtitle_addon: true,
+  subtitle_addon_lang: "en",
+};
+
+const fileConfig = {
+  host_url: "coursera.org",
+  module_prefix: "module-",
+  title_delimeter: "_",
+  ext_video: ".mp4",
+  ext_sub: ".vtt",
+  ext_text: ".txt",
 };
 
 localization();
@@ -16,43 +34,53 @@ addListeners();
 
 //Functions....
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  console.log(
-    sender.tab
-      ? "from a content script:" + sender.tab.url
-      : "from the extension"
-  );
+  // console.log(
+  //   sender.tab
+  //     ? "from a content script:" + sender.tab.url
+  //     : "from the extension"
+  // );
   if (taburl != sender.tab.url) {
     console.log("message not for me, skip");
     return;
   }
-  if (request.greeting === "csa") {
-    //sendResponse({ ret: "OK" });
-    if (request.message.error) {
-      debuglog(chrome.i18n.getMessage("NOVIDEO"));
-      return;
-    }
-    videoAction.style.display = "block";
-    debuglog("");
-    let module = request.message.module;
-    let topic = request.message.topic;
-    topic = topic.replace(/([,. ]+)/gi, "_");
-    topic = topic.replace(/([\\\/*&:<>$#@^?!\[\]]+)/gi, "");
-    video = request.message.video;
-    // const ownersite = new URL(sender.tab.url);
-    // const baseURL = ownersite.protocol + "//" + ownersite.hostname;
-    subtitle = request.message.subtitle;
-    // if (!subtitle.startsWith("http")) subtitle = baseURL + subtitle;
-    videotext = request.message.videotext;
-    // if (!videotext.startsWith("http")) videotext = baseURL + videotext;
-    filename =
-      fileconfig.modulePrefix + module + fileconfig.titleDelimeter + topic;
-    //debuglog("READY to SAVE: " + subtitle);
-    console.log("module: ", request.message.result);
-  } else if (request.greeting === "csa-save") {
-    debuglog("");
-    if (request.message === "saving") {
-      window.close();
-    }
+  switch (request.greeting) {
+    case "csa":
+      //sendResponse({ ret: "OK" });
+      if (request.message.error) {
+        debuglog(chrome.i18n.getMessage("NOVIDEO"));
+        return;
+      }
+      videoAction.style.display = "block";
+      debuglog("");
+      let module = request.message.module;
+      let topic = request.message.topic;
+      topic = topic.replace(/([,. ]+)/gi, "_");
+      topic = topic.replace(/([\\\/*&:<>$#@^?!\[\]]+)/gi, "");
+      saveObjects.video = request.message.video;
+      if (request.message.subtitle)
+        saveObjects.subtitle = request.message.subtitle;
+      if (request.message.videotext)
+        saveObjects.videotext = request.message.videotext;
+      saveObjects.filename =
+        fileConfig.module_prefix + module + fileConfig.title_delimeter + topic;
+      //debuglog("READY to SAVE: " + subtitle);
+      if (request.message.subtitle_addon)
+        saveObjects.subtitle_addon = request.message.subtitle_addon;
+      if (request.message.subtitle_addon_lang)
+        saveObjects.subtitle_addon_lang = request.message.subtitle_addon_lang;
+      console.log("module: ", request.message.result);
+      break;
+    case "csa-save":
+      debuglog("");
+      if (request.message.state === "saving") {
+        debuglog(
+          chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items
+        );
+        setTimeout(() => {
+          window.close();
+        }, 1500);
+      }
+      break;
   }
 });
 
@@ -100,17 +128,26 @@ function debuglog(text) {
 }
 
 async function Initialize() {
-  debuglog(chrome.i18n.getMessage("SEARCHVIDEO"));
   let tab = await getCurrentTab();
   tabid = tab.id;
   taburl = tab.url;
   console.log("tabid: ", tabid);
   console.log("tab title: ", tab.title);
-  if (htitle && tabid) htitle.innerHTML = tab.title;
-  search_module();
+  if (htitle && tabid && tab.title != undefined) htitle.innerHTML = tab.title;
+  console.log("tab taburl: ", taburl);
+  let ownersite = "";
+  try {
+    ownersite = new URL(taburl).hostname;
+  } catch (e) {}
+  if (ownersite.indexOf(fileConfig.host_url) !== -1) {
+    debuglog(chrome.i18n.getMessage("SEARCHVIDEO"));
+    search_module();
+  } else {
+    debuglog(chrome.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
+  }
 }
 
-function implode_search() {
+function implode_search(saveObjectsReq) {
   function pressButton() {
     let butt = document.querySelector("#downloads-dropdown-btn");
     if (butt) butt.click();
@@ -120,30 +157,33 @@ function implode_search() {
     chrome.runtime.sendMessage({ greeting: "csa", message: m });
   }
 
-  function searchInVideo() {
+  function searchInVideo(langreq) {
     let result = {};
-    result.module = document
-      .querySelector("a.breadcrumb-title > span")
-      .innerHTML.split(" ")[1];
-    result.topic = document
-      .querySelector("span.breadcrumb-title")
-      .innerHTML.trim();
-    result.video = document.querySelector(
-      'video.vjs-tech source[type="video/mp4"]'
-    ).src;
-    let lang = document.querySelector("div.vjs-react").getAttribute("lang");
+    // result.module = document
+    //   .querySelector("a.breadcrumb-title > span")
+    //   .innerHTML.split(" ")[1];
+    // result.topic = document
+    //   .querySelector("span.breadcrumb-title")
+    //   .innerHTML.trim();
+    // result.video = document.querySelector(
+    //   'video.vjs-tech source[type="video/mp4"]'
+    // ).src;
+    // let lang = document.querySelector("div.vjs-react").getAttribute("lang");
+    let lang = "en";
+    if (langreq) lang = langreq;
+    result.lang = lang;
     result.subtitle = document.querySelector(
       'video.vjs-tech track[srclang="' + lang + '"]'
     ).src;
 
-    console.log("result.module", result.module);
-    console.log("result.topic", result.topic);
-    console.log("result.video", result.video);
-    console.log("result.subtitle lang:", lang, result.subtitle);
+    // console.log("result.module", result.module);
+    // console.log("result.topic", result.topic);
+    // console.log("result.video", result.video);
+    // console.log("result.subtitle lang:", lang, result.subtitle);
     return result;
   }
 
-  function searchInMenu() {
+  function searchInMenu(saveObjectsReq) {
     let result = {};
     result.module = document
       .querySelector("a.breadcrumb-title > span")
@@ -151,26 +191,33 @@ function implode_search() {
     result.topic = document
       .querySelector("span.breadcrumb-title")
       .innerHTML.trim();
-    result.video = document
-      .querySelector(
-        "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(3) > a"
-      )
-      .getAttribute("data-track-href");
-    let lang = document.querySelector("div.vjs-react").getAttribute("lang");
-    result.subtitle = document
-      .querySelector(
-        "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(2) > a"
-      )
-      .getAttribute("data-track-href");
-    result.videotext = document
-      .querySelector(
-        "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(1) > a"
-      )
-      .getAttribute("data-track-href");
-
-    // console.log("result.module", result.module);
-    // console.log("result.topic", result.topic);
-    // console.log("result.video", result.video);
+    if (saveObjectsReq.video) {
+      result.video = document
+        .querySelector(
+          "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(3) > a"
+        )
+        .getAttribute("data-track-href");
+    }
+    if (saveObjectsReq.subtitle) {
+      result.subtitle = document
+        .querySelector(
+          "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(2) > a"
+        )
+        .getAttribute("data-track-href");
+    }
+    if (saveObjectsReq.videotext) {
+      result.videotext = document
+        .querySelector(
+          "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(1) > a"
+        )
+        .getAttribute("data-track-href");
+    }
+    if (saveObjectsReq.subtitle_addon) {
+      let inVideo = searchInVideo(saveObjectsReq.subtitle_addon_lang);
+      result.subtitle_addon = inVideo.subtitle;
+      result.subtitle_addon_lang = inVideo.lang;
+    }
+    //console.log("search result:", result);
     sendMessage(result);
   }
 
@@ -188,9 +235,9 @@ function implode_search() {
       if (opened) {
         clearInterval(interval);
         console.log("opened menu");
-        searchInMenu();
+        searchInMenu(saveObjectsReq);
       }
-      if (maxtry-- <= 0) {
+      if (maxtry-- < 0) {
         clearInterval(interval);
         sendMessage({ error: "404" });
         console.log("error: 404");
@@ -198,7 +245,7 @@ function implode_search() {
     }, 100);
   } else {
     console.log("already opened menu");
-    searchInMenu();
+    searchInMenu(saveObjectsReq);
   }
 }
 
@@ -207,12 +254,12 @@ function search_module() {
     target: {
       tabId: tabid,
     },
-    args: [""],
+    args: [saveObjectsReq],
     func: implode_search,
   });
 }
 
-function implode_save(saveparam) {
+function implode_save(saveparam, fileConfig) {
   //console.log("implode_save: ", saveparam);
 
   function sendMessage(m) {
@@ -236,33 +283,50 @@ function implode_save(saveparam) {
         }, 0);
       });
   }
-
-  if (saveparam.video) saveAsFile(saveparam.video, saveparam.filename + ".mp4");
-  if (saveparam.subtitle)
-    saveAsFile(saveparam.subtitle, saveparam.filename + ".vtt");
-  if (saveparam.videotext)
-    saveAsFile(saveparam.videotext, saveparam.filename + ".txt");
+  let savingItems = 0;
+  if (saveparam.video) {
+    savingItems++;
+    saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video);
+  }
+  if (saveparam.subtitle) {
+    savingItems++;
+    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub);
+  }
+  if (saveparam.videotext) {
+    savingItems++;
+    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text);
+  }
+  if (saveparam.subtitle_addon) {
+    savingItems++;
+    saveAsFile(
+      saveparam.subtitle_addon,
+      saveparam.filename +
+        fileConfig.title_delimeter +
+        saveparam.subtitle_addon_lang +
+        fileConfig.ext_sub
+    );
+  }
 
   setTimeout(() => {
-    sendMessage("saving");
-  }, 2500);
+    sendMessage({ state: "saving", items: savingItems });
+  }, 1500);
 }
 
 function save_module() {
-  let saveparam = {
-    video: video,
-    subtitle: subtitle,
-    videotext: videotext,
-    filename: filename,
-  };
+  // let saveparam = {
+  //   video: video,
+  //   subtitle: subtitle,
+  //   videotext: videotext,
+  //   filename: filename,
+  // };
 
-  console.log("save_module: ", saveparam);
+  // console.log("save_module: ", saveparam);
 
   chrome.scripting.executeScript({
     target: {
       tabId: tabid,
     },
-    args: [saveparam],
+    args: [saveObjects, fileConfig],
     func: implode_save,
   });
 }

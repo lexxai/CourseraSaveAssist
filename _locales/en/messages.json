@@ -3,7 +3,7 @@
     "message": "Assistant for saving files from Coursera"
   },
   "plug_description": {
-    "message": "Assistant for saving media files from the website www.coursera.org, such as videos, subtitles, and video descriptions."
+    "message": "Assistant for saving media files from https://www.coursera.org, such as videos, subtitles, and video descriptions."
   },
   "videoAction": {
     "message": "Save video, subtitles, and text"
@@ -16,5 +16,11 @@
   },
   "SAVING": {
     "message": "Saving..."
+  },
+  "SAVINGFILES": {
+    "message": "Now storing files. Total number of files:"
+  },
+  "WRONGSITE": {
+    "message": "This is not the right site. I'm waiting for this one:"
   }
 }

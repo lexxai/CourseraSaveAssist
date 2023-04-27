@@ -1,11 +1,11 @@
 {
   "name": "__MSG_plug_name__",
   "description": "__MSG_plug_description__",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "lexxai",
   "manifest_version": 3,
   "permissions": ["scripting"],
-  "host_permissions": ["https://www.coursera.org/*"],
+  "host_permissions": ["https://*.coursera.org/*"],
   "action": {
     "default_title": "__MSG_plug_name__",
     "default_popup": "popup.html",
