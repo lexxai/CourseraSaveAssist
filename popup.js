@@ -198,7 +198,7 @@ function implode_search(saveObjectsReq) {
     result.lang = lang;
     result.subtitle = document.querySelector(
       'video.vjs-tech track[srclang="' + lang + '"]'
-    ).src;
+    )?.src;
 
     // console.log("result.module", result.module);
     // console.log("result.topic", result.topic);
@@ -214,32 +214,32 @@ function implode_search(saveObjectsReq) {
       .innerHTML.split(" ")[1];
     result.topic = document
       .querySelector("span.breadcrumb-title")
-      .innerHTML.trim();
+      ?.innerHTML.trim();
     if (saveObjectsReq.video) {
       result.video = document
         .querySelector(
           "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(3) > a"
         )
-        .getAttribute("data-track-href");
+        ?.getAttribute("data-track-href");
     }
     if (saveObjectsReq.subtitle) {
       result.subtitle = document
         .querySelector(
           "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(2) > a"
         )
-        .getAttribute("data-track-href");
+        ?.getAttribute("data-track-href");
     }
     if (saveObjectsReq.videotext) {
       result.videotext = document
         .querySelector(
           "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(1) > a"
         )
-        .getAttribute("data-track-href");
+        ?.getAttribute("data-track-href");
     }
     if (saveObjectsReq.subtitle_addon) {
       let inVideo = searchInVideo(saveObjectsReq.subtitle_addon_lang);
-      result.subtitle_addon = inVideo.subtitle;
-      result.subtitle_addon_lang = inVideo.lang;
+      result.subtitle_addon = inVideo?.subtitle;
+      result.subtitle_addon_lang = inVideo?.lang;
     }
     //console.log("search result:", result);
     sendMessage(result);
@@ -292,7 +292,6 @@ function implode_save(saveparam, fileConfig) {
 
   function saveAsFile(url, filename) {
     console.log("implode_save :: saveAsFile", url, filename);
-    return;
     fetch(url)
       .then((response) => response.blob())
       .then((blob) => {
