@@ -11,7 +11,6 @@ const saveObjects = {
 };
 
 const saveObjectsReq = {
-  filename: true,
   video: true,
   subtitle: true,
   videotext: true,
@@ -23,16 +22,19 @@ const fileConfig = {
   host_url: "coursera.org",
   module_prefix: "module-",
   title_delimeter: "_",
+  space_delimeter: "_",
   ext_video: ".mp4",
   ext_sub: ".vtt",
   ext_text: ".txt",
 };
 
-localization();
-Initialize();
-addListeners();
-
 //Functions....
+function init() {
+  localization();
+  Initialize();
+  addListeners();
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // console.log(
   //   sender.tab
@@ -54,7 +56,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       debuglog("");
       let module = request.message.module;
       let topic = request.message.topic;
-      topic = topic.replace(/([,. ]+)/gi, "_");
+      topic = topic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
       topic = topic.replace(/([\\\/*&:<>$#@^?!\[\]]+)/gi, "");
       saveObjects.video = request.message.video;
       if (request.message.subtitle)
@@ -268,7 +270,8 @@ function implode_save(saveparam, fileConfig) {
   }
 
   function saveAsFile(url, filename) {
-    //console.log("implode_save :: saveAsFile", url, filename);
+    console.log("implode_save :: saveAsFile", url, filename);
+    return;
     fetch(url)
       .then((response) => response.blob())
       .then((blob) => {
@@ -338,3 +341,39 @@ async function getCurrentTab() {
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab;
 }
+
+function escapeRegExp(string) {
+  return string.replace(/([\\\/*&:<>$#@^?!\[\]]+)/gi, "_");
+}
+
+function restore_options() {
+  // Use default value color = 'red' and likesColor = true.
+  chrome.storage.sync.get(
+    {
+      module: "module-",
+      modulesep: "_",
+      spacesep: "_",
+      subtitle_lang: "en",
+      savevideo: true,
+      savevideotxt: true,
+      savesubtitle: true,
+      savesubtitleadd: true,
+    },
+    (items) => {
+      fileConfig.module_prefix = items?.module;
+      if (items?.modulesep !== undefined)
+        fileConfig.title_delimeter = escapeRegExp(items.modulesep);
+      if (items?.spacesep !== undefined)
+        fileConfig.space_delimeter = escapeRegExp(items.spacesep);
+      saveObjectsReq.video = items?.savevideo;
+      saveObjectsReq.subtitle = items?.savesubtitle;
+      saveObjectsReq.videotext = items?.savevideotxt;
+      saveObjectsReq.subtitle_addon = items?.savesubtitleadd;
+      saveObjectsReq.subtitle_addon_lang = items?.subtitle_lang;
+      console.log("RESTORE_OPT", saveObjectsReq, fileConfig);
+      init();
+    }
+  );
+}
+
+document.addEventListener("DOMContentLoaded", restore_options);

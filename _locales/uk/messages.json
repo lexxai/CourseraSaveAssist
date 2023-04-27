@@ -59,6 +59,9 @@
   "MODULESEPCHAR": {
     "message": "Роздільний символ в назві файлів"
   },
+  "SPACESEPCHAR": {
+    "message": "Замість пробілів в назві файлів"
+  },
   "SAVEVIDEO": {
     "message": "Зберігати відео"
   },

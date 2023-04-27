@@ -7,6 +7,7 @@ function save_options(e) {
   e.preventDefault();
   let module = document.getElementById("module").value;
   let modulesep = document.getElementById("modulesep").value;
+  let spacesep = document.getElementById("spacesep").value;
   let subtitle_lang = document.getElementById("subtitle_lang").value;
   let savevideo = document.getElementById("savevideo").checked;
   let savevideotxt = document.getElementById("savevideotxt").checked;
@@ -28,6 +29,7 @@ function save_options(e) {
     {
       module: module,
       modulesep: modulesep,
+      spacesep: spacesep,
       subtitle_lang: subtitle_lang,
       savevideo: savevideo,
       savevideotxt: savevideotxt,
@@ -71,6 +73,7 @@ function restore_options() {
     {
       module: "module-",
       modulesep: "_",
+      spacesep: "_",
       subtitle_lang: "en",
       savevideo: true,
       savevideotxt: true,
@@ -78,9 +81,12 @@ function restore_options() {
       savesubtitleadd: true,
     },
     (items) => {
-      if (items.module) document.getElementById("module").value = items.module;
-      if (items.modulesep)
+      if (items.module !== undefined)
+        document.getElementById("module").value = items.module;
+      if (items.modulesep !== undefined)
         document.getElementById("modulesep").value = items.modulesep;
+      if (items.modulesep !== undefined)
+        document.getElementById("spacesep").value = items.spacesep;
       if (items.subtitle_lang)
         document.getElementById("subtitle_lang").value = items.subtitle_lang;
       if (items.savevideo !== undefined)
