@@ -6,7 +6,7 @@
     "message": "Assistant for saving media files from https://www.coursera.org, such as videos, subtitles, and video descriptions."
   },
   "videoAction": {
-    "message": "Save video, subtitles, and text"
+    "message": "Save:"
   },
   "SEARCHVIDEO": {
     "message": "Search for videos..."
@@ -22,5 +22,56 @@
   },
   "WRONGSITE": {
     "message": "This is not the right site. I'm waiting for this one:"
+  },
+  "RESET": {
+    "message": "Reset"
+  },
+  "SAVE": {
+    "message": "Save"
+  },
+  "OPTIONS": {
+    "message": "Options"
+  },
+  "SAVED_TXT": {
+    "message": "Options saved"
+  },
+  "RESTORED_DEFAULT_TXT": {
+    "message": "The settings are reset to the default values"
+  },
+  "SUBTILE_LANG": {
+    "message": "Language for additional subtitles"
+  },
+  "SUBTILE": {
+    "message": "subtitles"
+  },
+  "VIDEO": {
+    "message": "video"
+  },
+  "VIDEOTEXT": {
+    "message": "description"
+  },
+  "MODULE": {
+    "message": "Prefix for module name"
+  },
+  "MODULESEPCHAR": {
+    "message": "Separating character in file name"
+  },
+  "SPACESEPCHAR": {
+    "message": "Instead of spaces in file names"
+  },
+  "SAVEVIDEO": {
+    "message": "Save video"
+  },
+  "SAVEVIDEOTXT": {
+    "message": "Save video text content"
+  },
+  "SAVESUBTITLE": {
+    "message": "Save subtitles"
+  },
+  "SAVESUBTITLE_ADD": {
+    "message": "Save additional subtitles"
+  },
+  "SAVESOME": {
+    "message": "Do I still need to save something? Settings ignored"
   }
 }

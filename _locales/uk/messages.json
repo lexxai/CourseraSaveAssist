@@ -6,7 +6,7 @@
     "message": "Помічник для збереження медіафайлів з сайту https://www.coursera.org, таких як відео, субтитри та описи до відео."
   },
   "videoAction": {
-    "message": "Зберегти відео, субтитри та текст"
+    "message": "Зберегти:"
   },
   "SEARCHVIDEO": {
     "message": "Пошук відео..."
@@ -41,17 +41,14 @@
   "SUBTILE_LANG": {
     "message": "Мова для додаткових субтитрів"
   },
-  "SUBTILE_PRI": {
-    "message": "субтитри основні"
+  "SUBTILE": {
+    "message": "субтитри"
   },
   "VIDEO": {
     "message": "відео"
   },
   "VIDEOTEXT": {
-    "message": "текст до відео"
-  },
-  "SUBTILE_ADD": {
-    "message": "субтитри додаткові"
+    "message": "опис"
   },
   "MODULE": {
     "message": "Префікс для назви модуля"

@@ -100,7 +100,28 @@ function localization() {
   const bImg = document.getElementById("bImg");
 
   if (videoAction) {
+    let cnt = 0;
     videoAction.innerHTML = chrome.i18n.getMessage("videoAction");
+    if (saveObjectsReq.video) {
+      videoAction.innerHTML +=
+        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEO");
+    }
+    if (saveObjectsReq.subtitle) {
+      videoAction.innerHTML +=
+        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("SUBTILE");
+    }
+    if (saveObjectsReq.videotext) {
+      videoAction.innerHTML +=
+        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEOTEXT");
+    }
+    if (saveObjectsReq.subtitle_addon) {
+      videoAction.innerHTML +=
+        (cnt++ ? ", " : " ") +
+        chrome.i18n.getMessage("SUBTILE") +
+        ":" +
+        saveObjectsReq.subtitle_addon_lang;
+    }
+
     videoAction.style.display = "none";
   }
   if (subtitleAction)

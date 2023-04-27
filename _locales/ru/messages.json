@@ -6,7 +6,7 @@
     "message": "Помічник для збереження медіафайлів з сайту https://www.coursera.org, таких як відео, субтитри та описи до відео."
   },
   "videoAction": {
-    "message": "Зберегти відео, субтитри та текст"
+    "message": "Зберегти:"
   },
   "SEARCHVIDEO": {
     "message": "Пошук відео..."
@@ -22,5 +22,56 @@
   },
   "WRONGSITE": {
     "message": "Це не той сайт що треба. Чекаю на цей:"
+  },
+  "RESET": {
+    "message": "Скинути"
+  },
+  "SAVE": {
+    "message": "Зберегти"
+  },
+  "OPTIONS": {
+    "message": "Налаштування"
+  },
+  "SAVED_TXT": {
+    "message": "Налаштування збережено"
+  },
+  "RESTORED_DEFAULT_TXT": {
+    "message": "Налаштування скинуті до значень за умовчанням"
+  },
+  "SUBTILE_LANG": {
+    "message": "Мова для додаткових субтитрів"
+  },
+  "SUBTILE": {
+    "message": "субтитри"
+  },
+  "VIDEO": {
+    "message": "відео"
+  },
+  "VIDEOTEXT": {
+    "message": "опис"
+  },
+  "MODULE": {
+    "message": "Префікс для назви модуля"
+  },
+  "MODULESEPCHAR": {
+    "message": "Роздільний символ в назві файлів"
+  },
+  "SPACESEPCHAR": {
+    "message": "Замість пробілів в назві файлів"
+  },
+  "SAVEVIDEO": {
+    "message": "Зберігати відео"
+  },
+  "SAVEVIDEOTXT": {
+    "message": "Зберігати текстовий вміст відео"
+  },
+  "SAVESUBTITLE": {
+    "message": "Зберігати субтитри"
+  },
+  "SAVESUBTITLE_ADD": {
+    "message": "Зберігати додаткові субтитри"
+  },
+  "SAVESOME": {
+    "message": "Зберігати щось таки треба ? Налаштування ігноровано"
   }
 }

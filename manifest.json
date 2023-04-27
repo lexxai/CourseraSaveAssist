@@ -1,7 +1,7 @@
 {
   "name": "__MSG_plug_name__",
   "description": "__MSG_plug_description__",
-  "version": "0.0.2",
+  "version": "1.2",
   "author": "lexxai",
   "homepage_url": "https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html",
   "manifest_version": 3,
