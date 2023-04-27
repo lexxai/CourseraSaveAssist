@@ -1,5 +1,5 @@
 html, body {
-  height: 100%;
+  
   font-weight: bold;
   color: rgb(213, 213, 213);
 }
@@ -18,9 +18,6 @@ button.current {
   box-shadow: 0 0 0 2px white,
               0 0 0 4px black;
 }
-
-#startAction {background-color: green;}
-#stopAction {background-color: red;}
 
 
 div.hc {
