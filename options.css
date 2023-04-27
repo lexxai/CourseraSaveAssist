@@ -1,5 +1,4 @@
 html, body {
-  
   font-weight: bold;
   color: rgb(213, 213, 213);
 }
@@ -27,13 +26,6 @@ div.hc {
 	text-align: center;
 }
 
-div.cont {
-	position: relative;
-	height: 100%;	
-	width: 100%;
-	display:block;
-}
-
 div.stat {
 	position: absolute;
     right: 5px;
@@ -41,17 +33,13 @@ div.stat {
     font-style: bold;
 	/* bottom:60px%; */
 }
+.warning {
+color: yellow;
+}
 
 .ver {
 	/* position: absolute; */
     /* right: 5px; */
-	/* bottom:0px; */
-    text-align: left;
-    font-style: italic;
-}
-div.ver0 {
-	position: absolute;
-    left: 20px;
 	/* bottom:0px; */
     text-align: left;
     font-style: italic;
@@ -62,15 +50,10 @@ body {
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% 100%;
-  background-color: rgba(0,0,0, 0.1); /* Black w/opacity/see-through */
+  background-color: rgba(0,0,0, 0.1);
+  overflow: auto;
+  overflow-y: hidden;
 }
-
-table {
-    width: 100%;
-}
-
-
-textarea {width: 100%;}
 
 .flex-container {
   display: flex;
@@ -80,11 +63,6 @@ textarea {width: 100%;}
 	margin-left: auto;
 }
 
-.filenameloaded {
-    margin-left: 10px;
-    color: darkred;
-    font-weight: bold;
-}
 
 .hidden {
 	display: none!important;
@@ -93,11 +71,6 @@ textarea {width: 100%;}
 .btnctrl{
 	height: unset!important;
 	border: solid;
-}
-
-.videoplayer {
-  display: flex;
-  justify-content: center;
 }
 
 .item-container {

@@ -108,7 +108,8 @@ function localization() {
   if (options) {
     options.setAttribute("title", chrome.i18n.getMessage("OPTIONS"));
     options.addEventListener("click", () => {
-      window.open("options.html", "options");
+      chrome.runtime.openOptionsPage();
+      //window.open("options.html", "options");
     });
   }
 
@@ -313,15 +314,6 @@ function implode_save(saveparam, fileConfig) {
 }
 
 function save_module() {
-  // let saveparam = {
-  //   video: video,
-  //   subtitle: subtitle,
-  //   videotext: videotext,
-  //   filename: filename,
-  // };
-
-  // console.log("save_module: ", saveparam);
-
   chrome.scripting.executeScript({
     target: {
       tabId: tabid,
