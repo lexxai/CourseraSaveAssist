@@ -11,8 +11,8 @@ I did this too, and I realized how inconvenient it is to change the default file
 ](https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl)
 
 Example:
-https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
-https://youtu.be/rm9IyYF9Vco
+- https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
+- https://youtu.be/rm9IyYF9Vco
 
 # Помічник для збереження файлів з Сoursera (CSA)
 
@@ -25,8 +25,8 @@ https://youtu.be/rm9IyYF9Vco
 ](https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl)
 
 Приклдади:
-https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
-https://youtu.be/rm9IyYF9Vco
+- https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
+- https://youtu.be/rm9IyYF9Vco
 
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
 
