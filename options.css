@@ -1,0 +1,111 @@
+html, body {
+  height: 100%;
+  font-weight: bold;
+  color: rgb(213, 213, 213);
+}
+
+button {
+  height: 30px;
+  width: 80px;
+  outline: none;
+  margin: 10px;
+  border: none;
+  border-radius: 8px;
+  background-color: grey;
+}
+
+button.current {
+  box-shadow: 0 0 0 2px white,
+              0 0 0 4px black;
+}
+
+#startAction {background-color: green;}
+#stopAction {background-color: red;}
+
+
+div.hc {
+	display:flex; 
+	justify-content: center;
+	align-items: center; 
+	text-align: center;
+}
+
+div.cont {
+	position: relative;
+	height: 100%;	
+	width: 100%;
+	display:block;
+}
+
+div.stat {
+	position: absolute;
+    right: 5px;
+    text-align: right;
+    font-style: bold;
+	/* bottom:60px%; */
+}
+
+.ver {
+	/* position: absolute; */
+    /* right: 5px; */
+	/* bottom:0px; */
+    text-align: left;
+    font-style: italic;
+}
+div.ver0 {
+	position: absolute;
+    left: 20px;
+	/* bottom:0px; */
+    text-align: left;
+    font-style: italic;
+}
+
+body {
+  background-image: url('chrome-extension://__MSG_@@extension_id__/images/button-ico-512-bg.png');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  background-color: rgba(0,0,0, 0.1); /* Black w/opacity/see-through */
+}
+
+table {
+    width: 100%;
+}
+
+
+textarea {width: 100%;}
+
+.flex-container {
+  display: flex;
+  justify-content: space-between;
+}
+.flex-right {
+	margin-left: auto;
+}
+
+.filenameloaded {
+    margin-left: 10px;
+    color: darkred;
+    font-weight: bold;
+}
+
+.hidden {
+	display: none!important;
+}
+
+.btnctrl{
+	height: unset!important;
+	border: solid;
+}
+
+.videoplayer {
+  display: flex;
+  justify-content: center;
+}
+
+.item-container {
+  gap: 10px;
+  padding: 10px;
+  display: grid;
+  grid-template-columns: auto auto;
+}
