@@ -14,6 +14,8 @@ Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
 
+![CSA-MENU-EN-1280x800](https://user-images.githubusercontent.com/3278842/235016537-25628c4c-112c-4ad6-b56c-0492131ca91d.png)
+
 # Помічник для збереження файлів з Сoursera (CSA)
 
 Чи знаєте що доступ до відео матеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
@@ -30,5 +32,4 @@ Example:
 
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
 
-![CSA-01](https://user-images.githubusercontent.com/3278842/234727927-c8d89ce2-47aa-4a82-bc18-6206a161304a.png)
-
+![CSA-MENU-UA-1280x800](https://user-images.githubusercontent.com/3278842/235016549-f0b272c3-493f-4dbb-85bb-76a769a3dcf6.png)
