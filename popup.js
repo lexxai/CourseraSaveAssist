@@ -201,6 +201,7 @@ async function Initialize() {
   } catch (e) {}
   if (ownersite.indexOf(fileConfig.host_url) !== -1) {
     debuglog(chrome.i18n.getMessage("SEARCHVIDEO"));
+    getCourseInfo();
     search_module();
   } else {
     debuglog(chrome.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
@@ -450,4 +451,55 @@ async function save_options() {
     () => {}
   );
 }
+
+function implode_getCourseInfo() {
+  function searchCourseID() {
+    let result = { success: false };
+    let ci = document
+      .querySelector("div.m-a-0.body > a")
+      ?.getAttribute("data-click-value");
+    if (ci) {
+      ci = JSON.parse(ci);
+      //console.log("coureinfo cs", ci, ci?.course_id);
+      result.course_id = ci?.course_id;
+      result.item_id = ci?.item_id;
+      if (result.course_id && result.item_id) result.success = true;
+    }
+    return result;
+  }
+  function genAPIrequest(i) {
+    return (
+      "/api/onDemandLectureVideos.v1/" +
+      i.course_id +
+      "~" +
+      i.item_id +
+      "?includes=video&fields=onDemandVideos.v1"
+    );
+  }
+  let courseinfo = searchCourseID();
+  if (courseinfo.success) {
+    URL = genAPIrequest(courseinfo);
+    if (URL) {
+      fetch(URL)
+        .then((response) => response.json())
+        .then((json) => console.log(json));
+    }
+  }
+
+  console.log("coureinfo", courseinfo, URL);
+}
+
+function getCourseInfo() {
+  console.log("getCourseInfo");
+  chrome.scripting.executeScript({
+    target: {
+      tabId: tabid,
+    },
+    args: [],
+    func: implode_getCourseInfo,
+  });
+}
+
+// functions end
+
 document.addEventListener("DOMContentLoaded", restore_options);
