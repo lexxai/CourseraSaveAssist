@@ -80,7 +80,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         );
         setTimeout(() => {
           window.close();
-        }, 1500);
+        }, 3500);
       }
       break;
   }

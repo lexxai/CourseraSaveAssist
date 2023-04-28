@@ -21,7 +21,7 @@ function save_options(e) {
     status.classList.add("warning");
     setTimeout(() => {
       status.innerHTML = "";
-      status.classList.clear();
+      status.classList.remove("warning");
     }, 1750);
     return;
   }
@@ -43,7 +43,7 @@ function save_options(e) {
       status.classList.add("warning");
       setTimeout(() => {
         status.innerHTML = "";
-        status.classList.clear();
+        status.classList.remove("warning");
       }, 750);
     }
   );
@@ -60,7 +60,7 @@ function reset_options(e) {
     status.classList.add("warning");
     setTimeout(() => {
       status.innerHTML = "";
-      status.classList.clear();
+      status.classList.remove("warning");
     }, 750);
   }
 }
