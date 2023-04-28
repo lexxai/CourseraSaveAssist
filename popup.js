@@ -452,7 +452,11 @@ async function save_options() {
   );
 }
 
-function implode_getCourseInfo() {
+function implode_getCourseInfo(saveObjectsReq) {
+  function searchCourseLanguage() {
+    return document.querySelector("#select-language")?.selectedOptions[0]
+      ?.value;
+  }
   function searchCourseID() {
     let result = { success: false };
     let ci = document
@@ -473,16 +477,35 @@ function implode_getCourseInfo() {
       i.course_id +
       "~" +
       i.item_id +
-      "?includes=video&fields=onDemandVideos.v1"
+      "?includes=video&fields=onDemandVideos.v1(sources,subtitles,subtitlesVtt,subtitlesTxt)"
     );
   }
+
+  function parseCourseMedia(j) {
+    let obj = j.linked["onDemandVideos.v1"][0];
+    let sub = obj.subtitlesVtt;
+    let video = obj.sources.byResolution["720p"].mp4VideoUrl;
+    let text = obj.subtitlesTxt;
+    //let objp = JSON.stringify(obj, null, 4);
+    console.log("parseCouseMedia video", video);
+    console.log("parseCouseMedia subtitle", lang, sub[lang]);
+    console.log("parseCouseMedia subtitle", lang_add, sub[lang_add]);
+    console.log("parseCouseMedia text", lang, text[lang]);
+    console.log("parseCouseMedia text", lang_add, text[lang_add]);
+  }
+
+  let lang = searchCourseLanguage();
+  let lang_add = saveObjectsReq.subtitle_addon_lang;
+
   let courseinfo = searchCourseID();
   if (courseinfo.success) {
     URL = genAPIrequest(courseinfo);
     if (URL) {
       fetch(URL)
         .then((response) => response.json())
-        .then((json) => console.log(json));
+        .then((json) => {
+          parseCourseMedia(json);
+        });
     }
   }
 
@@ -495,7 +518,7 @@ function getCourseInfo() {
     target: {
       tabId: tabid,
     },
-    args: [],
+    args: [saveObjectsReq],
     func: implode_getCourseInfo,
   });
 }
