@@ -13,6 +13,10 @@ function save_options(e) {
   let savevideotxt = document.getElementById("savevideotxt").checked;
   let savesubtitle = document.getElementById("savesubtitle").checked;
   let savesubtitleadd = document.getElementById("savesubtitleadd").checked;
+  let lastmodule = document.getElementById("lastmodule").value;
+  let lasttopic = document.getElementById("lasttopic").value;
+  let lastfileid = document.getElementById("lastfileid").value;
+  let usesaveid = document.getElementById("usesaveid").checked;
   let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd;
   if (!isSave) {
     const status = document.getElementById("status");
@@ -35,6 +39,10 @@ function save_options(e) {
       savevideotxt: savevideotxt,
       savesubtitle: savesubtitle,
       savesubtitleadd: savesubtitleadd,
+      lastmodule: lastmodule,
+      lasttopic: lasttopic,
+      lastfileid: lastfileid,
+      usesaveid: usesaveid,
     },
     () => {
       // Update status to let user know options were saved.
@@ -79,6 +87,10 @@ function restore_options() {
       savevideotxt: true,
       savesubtitle: true,
       savesubtitleadd: true,
+      lastmodule: "",
+      lasttopic: "",
+      lastfileid: 0,
+      usesaveid: true,
     },
     (items) => {
       if (items.module !== undefined)
@@ -98,6 +110,14 @@ function restore_options() {
       if (items.savesubtitle !== undefined)
         document.getElementById("savesubtitleadd").checked =
           items.savesubtitleadd;
+      if (items.lastmodule)
+        document.getElementById("lastmodule").value = items.lastmodule;
+      if (items.lasttopic)
+        document.getElementById("lasttopic").value = items.lasttopic;
+      if (items.lastfileid !== undefined)
+        document.getElementById("lastfileid").value = Number(items.lastfileid);
+      if (items.usesaveid !== undefined)
+        document.getElementById("usesaveid").checked = items.usesaveid;
     }
   );
 }

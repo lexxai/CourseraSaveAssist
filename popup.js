@@ -8,6 +8,8 @@ const saveObjects = {
   videotext: "",
   subtitle_addon: "",
   subtitle_addon_lang: "",
+  module: "",
+  topic: "",
 };
 
 const saveObjectsReq = {
@@ -16,6 +18,7 @@ const saveObjectsReq = {
   videotext: true,
   subtitle_addon: true,
   subtitle_addon_lang: "en",
+  usesaveid: true,
 };
 
 const fileConfig = {
@@ -26,6 +29,9 @@ const fileConfig = {
   ext_video: ".mp4",
   ext_sub: ".vtt",
   ext_text: ".txt",
+  lastfileid: 0,
+  lastmodule: "",
+  lasttopic: "",
 };
 
 //Functions....
@@ -56,31 +62,60 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       debuglog("");
       let module = request.message.module;
       let topic = request.message.topic;
+
+      if (fileConfig.lasttopic != topic) {
+        saveObjects.topic = topic;
+        saveObjects.fileid = Number(fileConfig.lastfileid) + 1;
+      } else {
+        saveObjects.topic = fileConfig.lasttopic;
+        saveObjects.fileid = fileConfig.lastfileid;
+      }
+      if (fileConfig.lastmodule != module) {
+        saveObjects.module = module;
+        saveObjects.fileid = 1;
+      } else {
+        saveObjects.module = fileConfig.lastmodule;
+      }
+
       topic = topic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
-      topic = topic.replace(/([\\\/*&:<>$#@^?!\[\]]+)/gi, "");
+      topic = topic.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
       saveObjects.video = request.message.video;
       if (request.message.subtitle)
         saveObjects.subtitle = request.message.subtitle;
       if (request.message.videotext)
         saveObjects.videotext = request.message.videotext;
-      saveObjects.filename =
-        fileConfig.module_prefix + module + fileConfig.title_delimeter + topic;
+      saveObjects.filename = fileConfig.module_prefix + module;
+      if (saveObjectsReq.usesaveid)
+        saveObjects.filename +=
+          fileConfig.title_delimeter +
+          String(saveObjects.fileid).padStart(2, "0");
+      saveObjects.filename += fileConfig.title_delimeter + topic;
       //debuglog("READY to SAVE: " + subtitle);
       if (request.message.subtitle_addon)
         saveObjects.subtitle_addon = request.message.subtitle_addon;
       if (request.message.subtitle_addon_lang)
         saveObjects.subtitle_addon_lang = request.message.subtitle_addon_lang;
-      console.log("module: ", request.message.result);
+      console.log("module: ", saveObjects.filename);
+      setTimeout(() => {
+        const videoAction = document.getElementById("videoAction");
+        if (videoAction) {
+          videoAction.setAttribute("title", "File: " + saveObjects.filename);
+        }
+      }, 100);
       break;
     case "csa-save":
       debuglog("");
       if (request.message.state === "saving") {
+        fileConfig.lastmodule = saveObjects.module;
+        fileConfig.lasttopic = saveObjects.topic;
+        fileConfig.lastfileid = saveObjects.fileid;
+        save_options();
         debuglog(
           chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items
         );
         setTimeout(() => {
           window.close();
-        }, 3500);
+        }, 1500);
       }
       break;
   }
@@ -378,6 +413,10 @@ function restore_options() {
       savevideotxt: true,
       savesubtitle: true,
       savesubtitleadd: true,
+      lastmodule: "",
+      lasttopic: "",
+      lastfileid: 0,
+      usesaveid: true,
     },
     (items) => {
       fileConfig.module_prefix = items?.module;
@@ -390,10 +429,24 @@ function restore_options() {
       saveObjectsReq.videotext = items?.savevideotxt;
       saveObjectsReq.subtitle_addon = items?.savesubtitleadd;
       saveObjectsReq.subtitle_addon_lang = items?.subtitle_lang;
+      saveObjectsReq.usesaveid = items?.usesaveid;
+      fileConfig.lastmodule = items?.lastmodule;
+      fileConfig.lasttopic = items?.lasttopic;
+      fileConfig.lastfileid = items?.lastfileid;
       console.log("RESTORE_OPT", saveObjectsReq, fileConfig);
       init();
     }
   );
 }
 
+async function save_options() {
+  await chrome.storage.sync.set(
+    {
+      lastmodule: fileConfig.lastmodule,
+      lasttopic: fileConfig.lasttopic,
+      lastfileid: fileConfig.lastfileid,
+    },
+    () => {}
+  );
+}
 document.addEventListener("DOMContentLoaded", restore_options);

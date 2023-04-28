@@ -73,5 +73,17 @@
   },
   "SAVESOME": {
     "message": "Do I still need to save something? Settings ignored"
+  },
+  "LASTMODULE": {
+    "message": "The last saved module"
+  },
+  "LASTTITLE": {
+    "message": "Last video header"
+  },
+  "LASTFILEID": {
+    "message": "Last file number"
+  },
+  "USEFILEID": {
+    "message": "Use file numbering"
   }
 }
