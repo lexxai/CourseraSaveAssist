@@ -202,7 +202,7 @@ async function Initialize() {
   if (ownersite.indexOf(fileConfig.host_url) !== -1) {
     debuglog(chrome.i18n.getMessage("SEARCHVIDEO"));
     getCourseInfo();
-    search_module();
+    //search_module();
   } else {
     debuglog(chrome.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
   }
@@ -453,6 +453,9 @@ async function save_options() {
 }
 
 function implode_getCourseInfo(saveObjectsReq) {
+  function sendMessage(m) {
+    chrome.runtime.sendMessage({ greeting: "csa", message: m });
+  }
   function searchCourseLanguage() {
     return document.querySelector("#select-language")?.selectedOptions[0]
       ?.value;
@@ -471,6 +474,16 @@ function implode_getCourseInfo(saveObjectsReq) {
     }
     return result;
   }
+  function getModouleInfo() {
+    let result = {};
+    result.module = document
+      .querySelector("a.breadcrumb-title > span")
+      .innerHTML.split(" ")[1];
+    result.topic = document
+      .querySelector("span.breadcrumb-title")
+      ?.innerHTML.trim();
+    return result;
+  }
   function genAPIrequest(i) {
     return (
       "/api/onDemandLectureVideos.v1/" +
@@ -482,21 +495,34 @@ function implode_getCourseInfo(saveObjectsReq) {
   }
 
   function parseCourseMedia(j) {
+    let video_res = "720p";
     let obj = j.linked["onDemandVideos.v1"][0];
     let sub = obj.subtitlesVtt;
-    let video = obj.sources.byResolution["720p"].mp4VideoUrl;
+    let video = obj.sources.byResolution[video_res].mp4VideoUrl;
     let text = obj.subtitlesTxt;
-    //let objp = JSON.stringify(obj, null, 4);
-    console.log("parseCouseMedia video", video);
-    console.log("parseCouseMedia subtitle", lang, sub[lang]);
-    console.log("parseCouseMedia subtitle", lang_add, sub[lang_add]);
-    console.log("parseCouseMedia text", lang, text[lang]);
-    console.log("parseCouseMedia text", lang_add, text[lang_add]);
+    console.log("parseCourseMedia video", video);
+    console.log("parseCourseMedia subtitle", lang, sub[lang]);
+    console.log("parseCourseMedia subtitle", lang_add, sub[lang_add]);
+    console.log("parseCourseMedia text", lang, text[lang]);
+    console.log("parseCourseMedia text", lang_add, text[lang_add]);
+    if (saveObjectsReq.video) result.video = video;
+    if (saveObjectsReq.subtitle) result.subtitle = sub[lang];
+    if (saveObjectsReq.videotext) result.videotext = text[lang];
+    if (saveObjectsReq.subtitle_addon) {
+      result.subtitle_addon = sub[lang_add];
+      result.subtitle_addon_lang = lang_add;
+    }
+    if (saveObjectsReq.videotext_addon) {
+      result.videotext_addon = text[lang];
+      result.videotext_addon_lang = lang_add;
+    }
+    sendMessage(result);
   }
 
+  let result = {};
   let lang = searchCourseLanguage();
   let lang_add = saveObjectsReq.subtitle_addon_lang;
-
+  result = getModouleInfo();
   let courseinfo = searchCourseID();
   if (courseinfo.success) {
     URL = genAPIrequest(courseinfo);
@@ -505,15 +531,21 @@ function implode_getCourseInfo(saveObjectsReq) {
         .then((response) => response.json())
         .then((json) => {
           parseCourseMedia(json);
+        })
+        .catch(() => {
+          sendMessage({ error: "404" });
         });
+    } else {
+      sendMessage({ error: "404" });
     }
+  } else {
+    sendMessage({ error: "404" });
   }
-
-  console.log("coureinfo", courseinfo, URL);
+  //console.log("coureinfo", courseinfo, URL);
 }
 
 function getCourseInfo() {
-  console.log("getCourseInfo");
+  console.log("getCourseInfo start");
   chrome.scripting.executeScript({
     target: {
       tabId: tabid,
