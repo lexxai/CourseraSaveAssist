@@ -84,7 +84,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         saveObjects.subtitle = request.message.subtitle;
       if (request.message.videotext)
         saveObjects.videotext = request.message.videotext;
-      saveObjects.filename = fileConfig.module_prefix + module;
+      saveObjects.filename =
+        fileConfig.module_prefix + String(module).padStart(2, "0");
       if (saveObjectsReq.usesaveid)
         saveObjects.filename +=
           fileConfig.title_delimeter +
