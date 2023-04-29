@@ -35,3 +35,4 @@ Example:
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
 
 ![CSA-MENU-UA-1280x800](https://user-images.githubusercontent.com/3278842/235016549-f0b272c3-493f-4dbb-85bb-76a769a3dcf6.png)
+![CSA-OPTION-1-4-UA-1280x800](https://user-images.githubusercontent.com/3278842/235306163-e7d1ddae-4c39-4364-ab2b-74825e4e9f97.png)
