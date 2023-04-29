@@ -39,16 +39,16 @@
     "message": "The settings are reset to the default values"
   },
   "LANG_ADD": {
-    "message": "Add. lang. for subs and transcription"
+    "message": "Add. lang. for subs and transcript"
   },
   "SUBTILE": {
-    "message": "subtitles"
+    "message": "subs"
   },
   "VIDEO": {
     "message": "video"
   },
   "VIDEOTEXT": {
-    "message": "description"
+    "message": "transcript"
   },
   "MODULE": {
     "message": "Prefix for module name"
