@@ -5,6 +5,15 @@ Google Chrome Extension "Assistant for saving files from Сoursera" (CSA)
 Do you know that access to video materials ends after the course is over, and if you want to recall the knowledge later, users record video materials to their own media if they have such an opportunity.
 I did this too, and I realized how inconvenient it is to change the default file name to logical names, and sooner or later you will make a mistake. That's why I came up with the idea to create an application that would help make this easier in a legal way.
 
+donate: https://patreon.com/lexxai  
+
+What's new in version 1.4 :
+- Using coursera API to get media information
+- Added automatic file numbering within a single module
+- Added a choice of video image quality
+- Added a choice to store additional video transcript in another language
+- Up to 5 media files from one video can be stored
+
 ## The application is publicly available in the Chrome Google Web Store
 
 [https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl
@@ -22,6 +31,15 @@ Example:
 
 Чи знаєте що доступ до відео матеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
+
+Що нового в версії 1.4. :
+- Використання coursera API для отримання інформації про медіа
+- Додана автоматична нумерація файлів у межах одного модуля
+- Додано вибір якості відео зображення
+- Додано вибір зберігання додатково опису відео іншою мовою
+- Зберігається до 5-ти медіа файлів з одного відео
+
+donate: https://patreon.com/lexxai  
 
 ## Додаток є в публічному доступі в Chrome Google Web Store
 
