@@ -68,7 +68,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const htitle = document.getElementById("htitle");
       if (htitle) {
         const avl = chrome.i18n.getMessage("AVLANGUAGES");
-        htitle.setAttribute("title", avl + request.message.languages);
+        htitle.setAttribute("title", avl + " " + request.message.languages);
       }
 
       let module = request.message.module;
@@ -343,7 +343,7 @@ function search_module() {
 }
 
 function implode_save(saveparam, fileConfig) {
-  console.log("implode_save: ", saveparam);
+  //console.log("implode_save: ", saveparam);
 
   function sendMessage(m) {
     chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
@@ -380,26 +380,29 @@ function implode_save(saveparam, fileConfig) {
     saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text);
   }
   if (saveparam.videotext_addon) {
-    savingItems++;
-    saveAsFile(
-      saveparam.videotext_addon,
-      saveparam.filename +
-        fileConfig.title_delimeter +
-        saveparam.videotext_addon_lang +
-        fileConfig.ext_text
-    );
+    Object.keys(saveparam.videotext_addon).forEach((lang) => {
+      savingItems++;
+      saveAsFile(
+        saveparam.videotext_addon[lang],
+        saveparam.filename +
+          fileConfig.title_delimeter +
+          lang +
+          fileConfig.ext_text
+      );
+    });
   }
   if (saveparam.subtitle_addon) {
-    savingItems++;
-    saveAsFile(
-      saveparam.subtitle_addon,
-      saveparam.filename +
-        fileConfig.title_delimeter +
-        saveparam.subtitle_addon_lang +
-        fileConfig.ext_sub
-    );
+    Object.keys(saveparam.subtitle_addon).forEach((lang) => {
+      savingItems++;
+      saveAsFile(
+        saveparam.subtitle_addon[lang],
+        saveparam.filename +
+          fileConfig.title_delimeter +
+          lang +
+          fileConfig.ext_sub
+      );
+    });
   }
-
   setTimeout(() => {
     sendMessage({ state: "saving", items: savingItems });
   }, 1500);
@@ -534,7 +537,7 @@ function implode_getCourseInfo(saveObjectsReq) {
   function getLanguageCodes(sub) {
     const keys = [];
     if (sub) {
-      Object.keys(sub).forEach(function (key) {
+      Object.keys(sub).forEach((key) => {
         if (keys.indexOf(key) == -1) {
           keys.push(key);
         }
@@ -583,8 +586,7 @@ function implode_getCourseInfo(saveObjectsReq) {
         }
       }
     }
-
-    console.log("RETURN MESSAGE", result);
+    //console.log("RETURN MESSAGE", result);
     sendMessage(result);
   }
 

@@ -92,7 +92,10 @@
   "VIDEORES": {
     "message": "Video quality 720p"
   },
+  "MULTLANG": {
+    "message": "You can use multiple languages by separating them with a comma"
+  },
   "AVLANGUAGES": {
-    "message": "Languages:"
+    "message": "Additional materials for this video are available in the following languages:"
   }
 }
