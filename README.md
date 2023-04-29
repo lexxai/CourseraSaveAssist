@@ -7,12 +7,16 @@ I did this too, and I realized how inconvenient it is to change the default file
 
 donate: https://patreon.com/lexxai  
 
+What's new in version 1.5 :
+- Displays information about all available additional languages for the current video.
+- Added the option to store additional video transcripts and subtitles in other languages. The list is separated by commas.
+- Saves additional media files in all selected languages.
+
 What's new in version 1.4 :
 - Using coursera API to get media information
 - Added automatic file numbering within a single module
 - Added a choice of video image quality
 - Added a choice to store additional video transcript in another language
-- Up to 5 media files from one video can be stored
 
 ## The application is publicly available in the Chrome Google Web Store
 
@@ -32,12 +36,16 @@ Example:
 Чи знаєте що доступ до відео матеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
 
+Що нового в версії 1.5. :
+- Відображається інформація про всі доступні додаткові мови для поточного відео.
+- Додано вибір зберігання додаткового опису відео та субтитрів іншими мовами. Список формується через кому.
+- Зберігається додаткові медіа файли усіма вибраними мовами.
+
 Що нового в версії 1.4. :
 - Використання coursera API для отримання інформації про медіа
 - Додана автоматична нумерація файлів у межах одного модуля
 - Додано вибір якості відео зображення
 - Додано вибір зберігання додатково опису відео іншою мовою
-- Зберігається до 5-ти медіа файлів з одного відео
 
 donate: https://patreon.com/lexxai  
 
@@ -54,3 +62,5 @@ donate: https://patreon.com/lexxai
 
 ![CSA-MENU-UA-1280x800](https://user-images.githubusercontent.com/3278842/235016549-f0b272c3-493f-4dbb-85bb-76a769a3dcf6.png)
 ![CSA-OPTION-1-4-UA-1280x800](https://user-images.githubusercontent.com/3278842/235306163-e7d1ddae-4c39-4364-ab2b-74825e4e9f97.png)
+![Screenshot 2023-04-29 211020](https://user-images.githubusercontent.com/3278842/235319274-38fbe424-7275-45a0-b91b-eb62ee24d811.png)
+
