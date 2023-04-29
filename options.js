@@ -5,20 +5,23 @@ const RESTORED_DEFAULT_TXT = chrome.i18n.getMessage("RESTORED_DEFAULT_TXT");
 function save_options(e) {
   console.log("save_options");
   e.preventDefault();
-  let module = document.getElementById("module").value;
-  let modulesep = document.getElementById("modulesep").value;
-  let spacesep = document.getElementById("spacesep").value;
-  let subtitle_lang = document.getElementById("subtitle_lang").value;
-  let savevideo = document.getElementById("savevideo").checked;
-  let videores = document.getElementById("videores").checked;
-  let savevideotxt = document.getElementById("savevideotxt").checked;
-  let savevideotxtadd = document.getElementById("savevideotxtadd").checked;
-  let savesubtitle = document.getElementById("savesubtitle").checked;
-  let savesubtitleadd = document.getElementById("savesubtitleadd").checked;
-  let lastmodule = document.getElementById("lastmodule").value;
-  let lasttopic = document.getElementById("lasttopic").value;
-  let lastfileid = document.getElementById("lastfileid").value;
-  let usesaveid = document.getElementById("usesaveid").checked;
+  let module = document.getElementById("module")?.value.trim();
+  let modulesep = document.getElementById("modulesep")?.value;
+  let spacesep = document.getElementById("spacesep")?.value;
+  let subtitle_lang = document.getElementById("subtitle_lang")?.value.trim();
+  subtitle_lang = subtitle_lang
+    .replace(/\s+/gi, "")
+    .replace(/[^a-z0-9A-Z,-]+/gi, "");
+  let savevideo = document.getElementById("savevideo")?.checked;
+  let videores = document.getElementById("videores")?.checked;
+  let savevideotxt = document.getElementById("savevideotxt")?.checked;
+  let savevideotxtadd = document.getElementById("savevideotxtadd")?.checked;
+  let savesubtitle = document.getElementById("savesubtitle")?.checked;
+  let savesubtitleadd = document.getElementById("savesubtitleadd")?.checked;
+  let lastmodule = document.getElementById("lastmodule")?.value;
+  let lasttopic = document.getElementById("lasttopic")?.value;
+  let lastfileid = document.getElementById("lastfileid")?.value;
+  let usesaveid = document.getElementById("usesaveid")?.checked;
   let isSave =
     savevideo ||
     savevideotxt ||
@@ -55,6 +58,7 @@ function save_options(e) {
     },
     () => {
       // Update status to let user know options were saved.
+      document.getElementById("subtitle_lang").value = subtitle_lang;
       let status = document.getElementById("status");
       status.innerHTML = SAVED_TXT;
       status.classList.add("warning");

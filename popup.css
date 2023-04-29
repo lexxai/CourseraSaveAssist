@@ -14,9 +14,9 @@ button#options {
 
 button {
   height: 30px;
-  width: 400px;
+  width: auto;
   outline: none;
-  margin: 10px auto;
+  margin: 10px 30px;
   border: none;
   border-radius: 8px;
   font-weight:bold;
@@ -33,6 +33,9 @@ button.current {
 #videoAction {
   background-color: green; 
   display: none;
+  min-height: 30px;
+  height: unset;
+  padding: 8px 12px;
 }
 /* #subtitleAction {background-color: red;}
 #textAction {background-color: blue;} */
@@ -72,12 +75,11 @@ button:focus {
 
 
 #pdebug {
-    width: 400px;
+    width: auto;
     text-align: center;
-    height: 24px;
     outline: none;
-    margin: 10px auto;
-    padding-top: 6px;
+    margin: 10px 30px 20px;
+    padding: 8px 8px;
     border: none;
     border-radius: 8px;
     font-weight: bold;

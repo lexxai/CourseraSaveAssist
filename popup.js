@@ -518,7 +518,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     let result = {};
     result.module = document
       .querySelector("a.breadcrumb-title > span")
-      .innerHTML.split(" ")[1];
+      ?.innerHTML.split(" ")[1];
     result.topic = document
       .querySelector("span.breadcrumb-title")
       ?.innerHTML.trim();
@@ -568,7 +568,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       result.videotext_addon = {};
       const languages_req = lang_add.split(",", 20);
       for (let i = 0; i < languages_req.length; i++) {
-        let langi = languages_req[i];
+        let langi = languages_req[i].trim();
         //console.log("langi", langi);
         if (languages.includes(langi)) {
           if (saveObjectsReq.subtitle_addon) {
