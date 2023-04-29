@@ -38,8 +38,8 @@
   "RESTORED_DEFAULT_TXT": {
     "message": "The settings are reset to the default values"
   },
-  "SUBTILE_LANG": {
-    "message": "Language for additional subtitles"
+  "LANG_ADD": {
+    "message": "Add. lang. for subs and transcription"
   },
   "SUBTILE": {
     "message": "subtitles"
@@ -63,13 +63,16 @@
     "message": "Save video"
   },
   "SAVEVIDEOTXT": {
-    "message": "Save video text content"
+    "message": "Save transcript"
   },
   "SAVESUBTITLE": {
     "message": "Save subtitles"
   },
   "SAVESUBTITLE_ADD": {
     "message": "Save additional subtitles"
+  },
+  "SAVEVIDEOTXT_ADD": {
+    "message": "Save additional transcript"
   },
   "SAVESOME": {
     "message": "Do I still need to save something? Settings ignored"
@@ -85,5 +88,8 @@
   },
   "USEFILEID": {
     "message": "Use file numbering"
+  },
+  "VIDEORES": {
+    "message": "Video quality 720p"
   }
 }
