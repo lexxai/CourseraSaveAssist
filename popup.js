@@ -6,6 +6,8 @@ const saveObjects = {
   video: "",
   subtitle: "",
   videotext: "",
+  videotext_addon: "",
+  videotext_addon_lang: "",
   subtitle_addon: "",
   subtitle_addon_lang: "",
   module: "",
@@ -14,8 +16,11 @@ const saveObjects = {
 
 const saveObjectsReq = {
   video: true,
+  video_res: true,
   subtitle: true,
   videotext: true,
+  videotext_addon: true,
+  videotext_addon_lang: "en",
   subtitle_addon: true,
   subtitle_addon_lang: "en",
   usesaveid: true,
@@ -92,6 +97,10 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           String(saveObjects.fileid).padStart(2, "0");
       saveObjects.filename += fileConfig.title_delimeter + topic;
       //debuglog("READY to SAVE: " + subtitle);
+      if (request.message.videotext_addon)
+        saveObjects.videotext_addon = request.message.videotext_addon;
+      if (request.message.videotext_addon_lang)
+        saveObjects.videotext_addon_lang = request.message.videotext_addon_lang;
       if (request.message.subtitle_addon)
         saveObjects.subtitle_addon = request.message.subtitle_addon;
       if (request.message.subtitle_addon_lang)
@@ -156,6 +165,13 @@ function localization() {
         chrome.i18n.getMessage("SUBTILE") +
         ":" +
         saveObjectsReq.subtitle_addon_lang;
+    }
+    if (saveObjectsReq.videotext_addon) {
+      videoAction.innerHTML +=
+        (cnt++ ? ", " : " ") +
+        chrome.i18n.getMessage("VIDEOTEXT") +
+        ":" +
+        saveObjectsReq.videotext_addon_lang;
     }
 
     videoAction.style.display = "none";
@@ -321,7 +337,7 @@ function search_module() {
 }
 
 function implode_save(saveparam, fileConfig) {
-  //console.log("implode_save: ", saveparam);
+  console.log("implode_save: ", saveparam);
 
   function sendMessage(m) {
     chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
@@ -356,6 +372,16 @@ function implode_save(saveparam, fileConfig) {
   if (saveparam.videotext) {
     savingItems++;
     saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text);
+  }
+  if (saveparam.videotext_addon) {
+    savingItems++;
+    saveAsFile(
+      saveparam.videotext_addon,
+      saveparam.filename +
+        fileConfig.title_delimeter +
+        saveparam.videotext_addon_lang +
+        fileConfig.ext_text
+    );
   }
   if (saveparam.subtitle_addon) {
     savingItems++;
@@ -412,7 +438,9 @@ function restore_options() {
       spacesep: "_",
       subtitle_lang: "en",
       savevideo: true,
+      videores: true,
       savevideotxt: true,
+      savevideotxtadd: true,
       savesubtitle: true,
       savesubtitleadd: true,
       lastmodule: "",
@@ -427,8 +455,11 @@ function restore_options() {
       if (items?.spacesep !== undefined)
         fileConfig.space_delimeter = escapeRegExp(items.spacesep);
       saveObjectsReq.video = items?.savevideo;
+      saveObjectsReq.videores = items?.videores;
       saveObjectsReq.subtitle = items?.savesubtitle;
       saveObjectsReq.videotext = items?.savevideotxt;
+      saveObjectsReq.videotext_addon = items?.savevideotxtadd;
+      saveObjectsReq.videotext_addon_lang = items?.subtitle_lang;
       saveObjectsReq.subtitle_addon = items?.savesubtitleadd;
       saveObjectsReq.subtitle_addon_lang = items?.subtitle_lang;
       saveObjectsReq.usesaveid = items?.usesaveid;
@@ -495,7 +526,7 @@ function implode_getCourseInfo(saveObjectsReq) {
   }
 
   function parseCourseMedia(j) {
-    let video_res = "720p";
+    let video_res = saveObjectsReq.videores ? "720p" : "540p";
     let obj = j.linked["onDemandVideos.v1"][0];
     let sub = obj.subtitlesVtt;
     let video = obj.sources.byResolution[video_res].mp4VideoUrl;

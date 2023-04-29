@@ -10,14 +10,21 @@ function save_options(e) {
   let spacesep = document.getElementById("spacesep").value;
   let subtitle_lang = document.getElementById("subtitle_lang").value;
   let savevideo = document.getElementById("savevideo").checked;
+  let videores = document.getElementById("videores").checked;
   let savevideotxt = document.getElementById("savevideotxt").checked;
+  let savevideotxtadd = document.getElementById("savevideotxtadd").checked;
   let savesubtitle = document.getElementById("savesubtitle").checked;
   let savesubtitleadd = document.getElementById("savesubtitleadd").checked;
   let lastmodule = document.getElementById("lastmodule").value;
   let lasttopic = document.getElementById("lasttopic").value;
   let lastfileid = document.getElementById("lastfileid").value;
   let usesaveid = document.getElementById("usesaveid").checked;
-  let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd;
+  let isSave =
+    savevideo ||
+    savevideotxt ||
+    savesubtitle ||
+    savesubtitleadd ||
+    savevideotxtadd;
   if (!isSave) {
     const status = document.getElementById("status");
     const SAVESOME = chrome.i18n.getMessage("SAVESOME");
@@ -36,7 +43,9 @@ function save_options(e) {
       spacesep: spacesep,
       subtitle_lang: subtitle_lang,
       savevideo: savevideo,
+      videores: videores,
       savevideotxt: savevideotxt,
+      savevideotxtadd: savevideotxtadd,
       savesubtitle: savesubtitle,
       savesubtitleadd: savesubtitleadd,
       lastmodule: lastmodule,
@@ -84,8 +93,10 @@ function restore_options() {
       spacesep: "_",
       subtitle_lang: "en",
       savevideo: true,
+      videores: true,
       savevideotxt: true,
       savesubtitle: true,
+      savevideotxtadd: true,
       savesubtitleadd: true,
       lastmodule: "",
       lasttopic: "",
@@ -103,8 +114,13 @@ function restore_options() {
         document.getElementById("subtitle_lang").value = items.subtitle_lang;
       if (items.savevideo !== undefined)
         document.getElementById("savevideo").checked = items.savevideo;
+      if (items.videores !== undefined)
+        document.getElementById("videores").checked = items.videores;
       if (items.savevideotxt !== undefined)
         document.getElementById("savevideotxt").checked = items.savevideotxt;
+      if (items.savevideotxtadd !== undefined)
+        document.getElementById("savevideotxtadd").checked =
+          items.savevideotxtadd;
       if (items.savesubtitle !== undefined)
         document.getElementById("savesubtitle").checked = items.savesubtitle;
       if (items.savesubtitle !== undefined)
