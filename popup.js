@@ -500,11 +500,11 @@ function implode_getCourseInfo(saveObjectsReq) {
     let sub = obj.subtitlesVtt;
     let video = obj.sources.byResolution[video_res].mp4VideoUrl;
     let text = obj.subtitlesTxt;
-    console.log("parseCourseMedia video", video);
-    console.log("parseCourseMedia subtitle", lang, sub[lang]);
-    console.log("parseCourseMedia subtitle", lang_add, sub[lang_add]);
-    console.log("parseCourseMedia text", lang, text[lang]);
-    console.log("parseCourseMedia text", lang_add, text[lang_add]);
+    // console.log("parseCourseMedia video", video);
+    // console.log("parseCourseMedia subtitle", lang, sub[lang]);
+    // console.log("parseCourseMedia subtitle", lang_add, sub[lang_add]);
+    // console.log("parseCourseMedia text", lang, text[lang]);
+    // console.log("parseCourseMedia text", lang_add, text[lang_add]);
     if (saveObjectsReq.video) result.video = video;
     if (saveObjectsReq.subtitle) result.subtitle = sub[lang];
     if (saveObjectsReq.videotext) result.videotext = text[lang];
@@ -516,6 +516,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       result.videotext_addon = text[lang];
       result.videotext_addon_lang = lang_add;
     }
+    //console.log("RETURN MESSAGE", result);
     sendMessage(result);
   }
 
@@ -525,9 +526,11 @@ function implode_getCourseInfo(saveObjectsReq) {
   result = getModouleInfo();
   let courseinfo = searchCourseID();
   if (courseinfo.success) {
-    URL = genAPIrequest(courseinfo);
+    let URL = genAPIrequest(courseinfo);
     if (URL) {
-      fetch(URL)
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      fetch(URL, { signal: controller.signal })
         .then((response) => response.json())
         .then((json) => {
           parseCourseMedia(json);
