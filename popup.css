@@ -14,9 +14,9 @@ button#options {
 
 button {
   height: 30px;
-  width: auto;
+  width: 100%;
   outline: none;
-  margin: 10px 30px;
+  margin: 10px 30px 12px;
   border: none;
   border-radius: 8px;
   font-weight:bold;
@@ -75,7 +75,6 @@ button:focus {
 
 
 #pdebug {
-    width: auto;
     text-align: center;
     outline: none;
     margin: 10px 30px 20px;
