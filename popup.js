@@ -544,7 +544,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       result.subtitle_addon_lang = lang_add;
     }
     if (saveObjectsReq.videotext_addon) {
-      result.videotext_addon = text[lang];
+      result.videotext_addon = text[lang_add];
       result.videotext_addon_lang = lang_add;
     }
     //console.log("RETURN MESSAGE", result);
