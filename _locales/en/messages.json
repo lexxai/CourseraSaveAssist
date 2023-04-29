@@ -91,5 +91,8 @@
   },
   "VIDEORES": {
     "message": "Video quality 720p"
+  },
+  "AVLANGUAGES": {
+    "message": "Languages:"
   }
 }

@@ -65,6 +65,12 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
       videoAction.style.display = "block";
       debuglog("");
+      const htitle = document.getElementById("htitle");
+      if (htitle) {
+        const avl = chrome.i18n.getMessage("AVLANGUAGES");
+        htitle.setAttribute("title", avl + request.message.languages);
+      }
+
       let module = request.message.module;
       let topic = request.message.topic;
 
@@ -525,6 +531,18 @@ function implode_getCourseInfo(saveObjectsReq) {
     );
   }
 
+  function getLanguageCodes(sub) {
+    const keys = [];
+    if (sub) {
+      Object.keys(sub).forEach(function (key) {
+        if (keys.indexOf(key) == -1) {
+          keys.push(key);
+        }
+      });
+    }
+    return keys;
+  }
+
   function parseCourseMedia(j) {
     let video_res = saveObjectsReq.videores ? "720p" : "540p";
     let obj = j.linked["onDemandVideos.v1"][0];
@@ -539,15 +557,34 @@ function implode_getCourseInfo(saveObjectsReq) {
     if (saveObjectsReq.video) result.video = video;
     if (saveObjectsReq.subtitle) result.subtitle = sub[lang];
     if (saveObjectsReq.videotext) result.videotext = text[lang];
-    if (saveObjectsReq.subtitle_addon) {
-      result.subtitle_addon = sub[lang_add];
-      result.subtitle_addon_lang = lang_add;
+
+    const languages = getLanguageCodes(sub);
+    if (languages && languages.length) {
+      result.languages = languages;
+      result.subtitle_addon = {};
+      result.videotext_addon = {};
+      const languages_req = lang_add.split(",", 20);
+      for (let i = 0; i < languages_req.length; i++) {
+        let langi = languages_req[i];
+        //console.log("langi", langi);
+        if (languages.includes(langi)) {
+          if (saveObjectsReq.subtitle_addon) {
+            result.subtitle_addon[langi] = sub[langi];
+            result.subtitle_addon_lang = result.subtitle_addon_lang
+              ? result.subtitle_addon_lang + "," + langi
+              : langi;
+          }
+          if (saveObjectsReq.videotext_addon) {
+            result.videotext_addon[langi] = text[langi];
+            result.videotext_addon_lang = result.videotext_addon_lang
+              ? result.videotext_addon_lang + "," + langi
+              : langi;
+          }
+        }
+      }
     }
-    if (saveObjectsReq.videotext_addon) {
-      result.videotext_addon = text[lang_add];
-      result.videotext_addon_lang = lang_add;
-    }
-    //console.log("RETURN MESSAGE", result);
+
+    console.log("RETURN MESSAGE", result);
     sendMessage(result);
   }
 
