@@ -7,17 +7,7 @@ I did this too, and I realized how inconvenient it is to change the default file
 
 donate: https://patreon.com/lexxai  
 
-What's new in version 1.5:
-- Displays information about all available additional languages for the current video when you hover over the video title.
-- Added the option to store additional video description and subtitles in other languages. The list is separated by commas.
-- Saves additional media files in all selected languages.
-- Information about the generated file name is displayed when you hover over the save button. 
-
-What's new in version 1.4 :
-- Using coursera API to get media information
-- Added automatic file numbering within a single module
-- Added a choice of video image quality
-- Added a choice to store additional video transcript in another language
+## [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new)
 
 ## The application is publicly available in the Chrome Google Web Store
 
