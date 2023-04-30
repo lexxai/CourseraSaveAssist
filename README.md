@@ -7,10 +7,11 @@ I did this too, and I realized how inconvenient it is to change the default file
 
 donate: https://patreon.com/lexxai  
 
-What's new in version 1.5 :
-- Displays information about all available additional languages for the current video.
-- Added the option to store additional video transcripts and subtitles in other languages. The list is separated by commas.
+What's new in version 1.5:
+- Displays information about all available additional languages for the current video when you hover over the video title.
+- Added the option to store additional video description and subtitles in other languages. The list is separated by commas.
 - Saves additional media files in all selected languages.
+- Information about the generated file name is displayed when you hover over the save button. 
 
 What's new in version 1.4 :
 - Using coursera API to get media information
@@ -37,9 +38,10 @@ Example:
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
 
 Що нового в версії 1.5. :
-- Відображається інформація про всі доступні додаткові мови для поточного відео.
+- Відображається інформація про всі доступні додаткові мови для поточного відео при наведенні на заголовок відео.
 - Додано вибір зберігання додаткового опису відео та субтитрів іншими мовами. Список формується через кому.
-- Зберігається додаткові медіа файли усіма вибраними мовами.
+- Зберігаються додаткові медіа файли усіма вибраними мовами.
+- Відображається інформація про сформоване ім'я файлу при наведенні на кнопку зберігання. 
 
 Що нового в версії 1.4. :
 - Використання coursera API для отримання інформації про медіа
