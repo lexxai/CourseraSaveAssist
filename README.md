@@ -20,6 +20,7 @@ Example:
 
 ![CSA-MENU-EN-1280x800](https://user-images.githubusercontent.com/3278842/235016537-25628c4c-112c-4ad6-b56c-0492131ca91d.png)
 ![Screenshot 2023-04-29 044432](https://user-images.githubusercontent.com/3278842/235278835-ae2b81a6-eb53-448b-bfdf-d48e90980be1.png)
+![CSA-MENU-EN-1-5](https://user-images.githubusercontent.com/3278842/235378174-cbecc5f9-9eca-4afe-94fa-60f070142ae4.png)
 
 
 # Помічник для збереження файлів з Сoursera (CSA)
