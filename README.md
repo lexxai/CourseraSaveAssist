@@ -1,18 +1,16 @@
 # Assistant for saving files from Сoursera
 
-Google Chrome Extension "Assistant for saving files from Сoursera" (CSA)
+
 
 Do you know that access to video materials ends after the course is over, and if you want to recall the knowledge later, users record video materials to their own media if they have such an opportunity.
 I did this too, and I realized how inconvenient it is to change the default file name to logical names, and sooner or later you will make a mistake. That's why I came up with the idea to create an application that would help make this easier in a legal way.
 
-donate: https://patreon.com/lexxai  
 
-## [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new)
+## Google Chrome Extension 
+### "Assistant for saving files from Сoursera" (CSA) ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
+**[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
 
-## The application is publicly available in the Chrome Google Web Store
-
-[https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl
-](https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl)
+### The application is publicly available in the [Chrome Google Web Store](https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl)
 
 Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
@@ -28,19 +26,10 @@ Example:
 Чи знаєте що доступ до відео матеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
 
-Що нового в версії 1.5. :
-- Відображається інформація про всі доступні додаткові мови для поточного відео при наведенні на заголовок відео.
-- Додано вибір зберігання додаткового опису відео та субтитрів іншими мовами. Список формується через кому.
-- Зберігаються додаткові медіа файли усіма вибраними мовами.
-- Відображається інформація про сформоване ім'я файлу при наведенні на кнопку зберігання. 
+[Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)  
 
-Що нового в версії 1.4. :
-- Використання coursera API для отримання інформації про медіа
-- Додана автоматична нумерація файлів у межах одного модуля
-- Додано вибір якості відео зображення
-- Додано вибір зберігання додатково опису відео іншою мовою
+## [Що нового?](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%A9%D0%BE-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%3F)
 
-donate: https://patreon.com/lexxai  
 
 ## Додаток є в публічному доступі в Chrome Google Web Store
 
