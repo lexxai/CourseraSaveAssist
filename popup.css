@@ -1,3 +1,32 @@
+html,
+body {
+  --csa-sidebar-width: 240px;
+  --csa-body-text-color: rgb(22, 22, 22);
+  --csa-content-background: #fdfdfd;
+  --csa-content-text-color: #fcfcfc;
+  --csa-content-shade-background: black;
+  --csa-videoAction-background: green;
+  --csa-pdebug-background: red;
+  --csa-color-invert: 0;
+  display: block;
+  font-weight: bold;
+}
+
+body[data-darkmode="true"] {
+  --csa-body-text-color: #e7e7e7;
+  --csa-content-background: rgb(17, 17, 17);
+  --csa-color-invert: 1;
+}
+
+body {
+  color: var(--csa-body-text-color);
+  background-color: var(--csa-content-background);
+}
+
+[hidden] {
+  display: none;
+}
+
 button#options {
   width: 22px;
   height: 22px;
@@ -10,52 +39,50 @@ button#options {
   position: absolute;
   top: 10px;
   right: 10px;
+  filter: invert(var(--csa-color-invert));
 }
 
 button {
-  height: 30px;
+  /* min-height: 30px; */
   width: 100%;
   outline: none;
   margin: 10px 30px 12px;
   border: none;
   border-radius: 8px;
-  font-weight:bold;
-  color: white;
-  cursor: pointer;	
+  font-weight: bold;
+  color: var(--csa-content-text-color);
+  cursor: pointer;
   opacity: 0.5;
 }
 
 button.current {
-  box-shadow: 0 0 0 2px white,
-              0 0 0 4px black;
+  box-shadow: 0 0 0 2px var(--csa-content-text-color), 0 0 0 4px var(--csa-content-shade-background);
 }
 
 #videoAction {
-  background-color: green; 
-  display: none;
+  background-color: var(--csa-videoAction-background);
+  /* display: none; */
   min-height: 30px;
   height: unset;
   padding: 8px 12px;
 }
-/* #subtitleAction {background-color: red;}
-#textAction {background-color: blue;} */
-
 
 div.hc {
-	display:flex; 
-	justify-content: center;
-	align-items: center; 
-	text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
-h1{
+h1 {
   font-size: large;
   text-align: center;
 }
 
-h2{
+h2 {
   font-size: medium;
   text-align: center;
+  font-style: italic;
 }
 
 button#options:hover,
@@ -73,21 +100,16 @@ button:focus {
   display: block;
 }
 
-
 #pdebug {
-    text-align: center;
-    outline: none;
-    margin: 10px 30px 20px;
-    padding: 8px 8px;
-    border: none;
-    border-radius: 8px;
-    font-weight: bold;
-    color: white;
-    cursor: default;
-    opacity: 0.8;
-    background-color: red;
-    display: none;
+  text-align: center;
+  outline: none;
+  margin: 10px 30px 20px;
+  padding: 8px 8px;
+  border: none;
+  border-radius: 8px;
+  font-weight: bold;
+  color: var(--csa-content-text-color);
+  cursor: default;
+  opacity: 0.8;
+  background-color: var(--csa-pdebug-background);
 }
-
-
-

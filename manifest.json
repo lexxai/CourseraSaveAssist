@@ -1,9 +1,9 @@
 {
   "name": "__MSG_plug_name__",
   "description": "__MSG_plug_description__",
-  "version": "1.5",
+  "version": "1.6",
   "author": "lexxai",
-  "homepage_url": "https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html",
+  "homepage_url": "https://github.com/lexxai/CourseraSaveAssist/wiki",
   "manifest_version": 3,
   "permissions": ["scripting", "storage"],
   "options_ui": {

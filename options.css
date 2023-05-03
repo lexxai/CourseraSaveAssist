@@ -1,6 +1,13 @@
-html, body {
+html,
+body {
+  display: block !important;
+  height: 100%;
   font-weight: bold;
   color: rgb(213, 213, 213);
+}
+
+[hidden] {
+  display: none;
 }
 
 button {
@@ -11,46 +18,45 @@ button {
   border: none;
   border-radius: 8px;
   background-color: grey;
+  cursor: pointer;
 }
 
 button.current {
-  box-shadow: 0 0 0 2px white,
-              0 0 0 4px black;
+  box-shadow: 0 0 0 2px white, 0 0 0 4px black;
 }
 
-
 div.hc {
-	display:flex; 
-	justify-content: center;
-	align-items: center; 
-	text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }
 
 div.stat {
-	position: absolute;
-    right: 5px;
-    text-align: right;
-    font-style: bold;
-	/* bottom:60px%; */
+  position: absolute;
+  right: 5px;
+  text-align: right;
+  font-style: bold;
+  /* bottom:60px%; */
 }
 .warning {
-color: yellow;
+  color: yellow;
 }
 
 .ver {
-	/* position: absolute; */
-    /* right: 5px; */
-	/* bottom:0px; */
-    text-align: left;
-    font-style: italic;
+  /* position: absolute; */
+  /* right: 5px; */
+  /* bottom:0px; */
+  text-align: left;
+  font-style: italic;
 }
 
 body {
-  background-image: url('chrome-extension://__MSG_@@extension_id__/images/button-ico-512-bg.png');
+  background-image: url("chrome-extension://__MSG_@@extension_id__/images/button-ico-512-bg.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% 100%;
-  background-color: rgba(0,0,0, 0.1);
+  background-color: rgba(0, 0, 0, 0.1);
   overflow: auto;
   overflow-y: hidden;
 }
@@ -60,17 +66,16 @@ body {
   justify-content: space-between;
 }
 .flex-right {
-	margin-left: auto;
+  margin-left: auto;
 }
-
 
 .hidden {
-	display: none!important;
+  display: none !important;
 }
 
-.btnctrl{
-	height: unset!important;
-	border: solid;
+.btnctrl {
+  height: unset !important;
+  border: solid;
 }
 
 .item-container {

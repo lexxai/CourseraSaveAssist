@@ -63,7 +63,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         debuglog(chrome.i18n.getMessage("NOVIDEO"));
         return;
       }
-      videoAction.style.display = "block";
+      videoAction.removeAttribute("hidden");
       debuglog("");
       const htitle = document.getElementById("htitle");
       if (htitle) {
@@ -91,26 +91,17 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       topic = topic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
       topic = topic.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
       saveObjects.video = request.message.video;
-      if (request.message.subtitle)
-        saveObjects.subtitle = request.message.subtitle;
-      if (request.message.videotext)
-        saveObjects.videotext = request.message.videotext;
-      saveObjects.filename =
-        fileConfig.module_prefix + String(module).padStart(2, "0");
+      if (request.message.subtitle) saveObjects.subtitle = request.message.subtitle;
+      if (request.message.videotext) saveObjects.videotext = request.message.videotext;
+      saveObjects.filename = fileConfig.module_prefix + String(module).padStart(2, "0");
       if (saveObjectsReq.usesaveid)
-        saveObjects.filename +=
-          fileConfig.title_delimeter +
-          String(saveObjects.fileid).padStart(2, "0");
+        saveObjects.filename += fileConfig.title_delimeter + String(saveObjects.fileid).padStart(2, "0");
       saveObjects.filename += fileConfig.title_delimeter + topic;
       //debuglog("READY to SAVE: " + subtitle);
-      if (request.message.videotext_addon)
-        saveObjects.videotext_addon = request.message.videotext_addon;
-      if (request.message.videotext_addon_lang)
-        saveObjects.videotext_addon_lang = request.message.videotext_addon_lang;
-      if (request.message.subtitle_addon)
-        saveObjects.subtitle_addon = request.message.subtitle_addon;
-      if (request.message.subtitle_addon_lang)
-        saveObjects.subtitle_addon_lang = request.message.subtitle_addon_lang;
+      if (request.message.videotext_addon) saveObjects.videotext_addon = request.message.videotext_addon;
+      if (request.message.videotext_addon_lang) saveObjects.videotext_addon_lang = request.message.videotext_addon_lang;
+      if (request.message.subtitle_addon) saveObjects.subtitle_addon = request.message.subtitle_addon;
+      if (request.message.subtitle_addon_lang) saveObjects.subtitle_addon_lang = request.message.subtitle_addon_lang;
       console.log("module: ", saveObjects.filename);
       setTimeout(() => {
         const videoAction = document.getElementById("videoAction");
@@ -126,9 +117,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         fileConfig.lasttopic = saveObjects.topic;
         fileConfig.lastfileid = saveObjects.fileid;
         save_options();
-        debuglog(
-          chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items
-        );
+        debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
         setTimeout(() => {
           window.close();
         }, 1500);
@@ -150,40 +139,32 @@ function localization() {
 
   const bImg = document.getElementById("bImg");
 
+  document.getElementsByTagName("body")[0]?.setAttribute("data-darkmode", isDarkTheme());
+
   if (videoAction) {
     let cnt = 0;
     videoAction.innerHTML = chrome.i18n.getMessage("videoAction");
     if (saveObjectsReq.video) {
-      videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEO");
+      videoAction.innerHTML += (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEO");
     }
     if (saveObjectsReq.subtitle) {
-      videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("SUBTILE");
+      videoAction.innerHTML += (cnt++ ? ", " : " ") + chrome.i18n.getMessage("SUBTILE");
     }
     if (saveObjectsReq.videotext) {
-      videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEOTEXT");
+      videoAction.innerHTML += (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEOTEXT");
     }
     if (saveObjectsReq.subtitle_addon) {
       videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") +
-        chrome.i18n.getMessage("SUBTILE") +
-        ":" +
-        saveObjectsReq.subtitle_addon_lang;
+        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("SUBTILE") + ":" + saveObjectsReq.subtitle_addon_lang;
     }
     if (saveObjectsReq.videotext_addon) {
       videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") +
-        chrome.i18n.getMessage("VIDEOTEXT") +
-        ":" +
-        saveObjectsReq.videotext_addon_lang;
+        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEOTEXT") + ":" + saveObjectsReq.videotext_addon_lang;
     }
 
-    videoAction.style.display = "none";
+    videoAction.setAttribute("hidden", "");
   }
-  if (subtitleAction)
-    subtitleAction.innerHTML = chrome.i18n.getMessage("subtitleAction");
+  if (subtitleAction) subtitleAction.innerHTML = chrome.i18n.getMessage("subtitleAction");
   if (textAction) textAction.innerHTML = chrome.i18n.getMessage("textAction");
 
   if (options) {
@@ -194,18 +175,17 @@ function localization() {
     });
   }
 
-  if (bImg)
-    bImg.src =
-      "chrome-extension://" +
-      chrome.i18n.getMessage("@@extension_id") +
-      "/images/button-ico-128.png";
+  if (bImg) bImg.src = "chrome-extension://" + chrome.i18n.getMessage("@@extension_id") + "/images/button-ico-128.png";
 }
 
 function debuglog(text) {
   const pdebug = document.getElementById("pdebug");
   if (pdebug) {
     pdebug.innerHTML = text;
-    pdebug.style.display = text ? "block" : "none";
+    if (text) pdebug.removeAttribute("hidden");
+    else pdebug.setAttribute("hidden", "");
+
+    // pdebug.style.display = text ? "block" : "none";
   }
 }
 
@@ -255,9 +235,7 @@ function implode_search(saveObjectsReq) {
     let lang = "en";
     if (langreq) lang = langreq;
     result.lang = lang;
-    result.subtitle = document.querySelector(
-      'video.vjs-tech track[srclang="' + lang + '"]'
-    )?.src;
+    result.subtitle = document.querySelector('video.vjs-tech track[srclang="' + lang + '"]')?.src;
 
     // console.log("result.module", result.module);
     // console.log("result.topic", result.topic);
@@ -268,31 +246,21 @@ function implode_search(saveObjectsReq) {
 
   function searchInMenu(saveObjectsReq) {
     let result = {};
-    result.module = document
-      .querySelector("a.breadcrumb-title > span")
-      .innerHTML.split(" ")[1];
-    result.topic = document
-      .querySelector("span.breadcrumb-title")
-      ?.innerHTML.trim();
+    result.module = document.querySelector("a.breadcrumb-title > span").innerHTML.split(" ")[1];
+    result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
     if (saveObjectsReq.video) {
       result.video = document
-        .querySelector(
-          "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(3) > a"
-        )
+        .querySelector("div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(3) > a")
         ?.getAttribute("data-track-href");
     }
     if (saveObjectsReq.subtitle) {
       result.subtitle = document
-        .querySelector(
-          "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(2) > a"
-        )
+        .querySelector("div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(2) > a")
         ?.getAttribute("data-track-href");
     }
     if (saveObjectsReq.videotext) {
       result.videotext = document
-        .querySelector(
-          "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(1) > a"
-        )
+        .querySelector("div.rc-DownloadsDropdown.bt3-dropdown.bt3-open > ul > li:nth-last-child(1) > a")
         ?.getAttribute("data-track-href");
     }
     if (saveObjectsReq.subtitle_addon) {
@@ -304,17 +272,13 @@ function implode_search(saveObjectsReq) {
     sendMessage(result);
   }
 
-  let opened = document.querySelector(
-    "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open"
-  );
+  let opened = document.querySelector("div.rc-DownloadsDropdown.bt3-dropdown.bt3-open");
 
   let maxtry = 10;
   if (!opened) {
     pressButton();
     const interval = setInterval(() => {
-      let opened = document.querySelector(
-        "div.rc-DownloadsDropdown.bt3-dropdown.bt3-open"
-      );
+      let opened = document.querySelector("div.rc-DownloadsDropdown.bt3-dropdown.bt3-open");
       if (opened) {
         clearInterval(interval);
         console.log("opened menu");
@@ -384,10 +348,7 @@ function implode_save(saveparam, fileConfig) {
       savingItems++;
       saveAsFile(
         saveparam.videotext_addon[lang],
-        saveparam.filename +
-          fileConfig.title_delimeter +
-          lang +
-          fileConfig.ext_text
+        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_text
       );
     });
   }
@@ -396,16 +357,11 @@ function implode_save(saveparam, fileConfig) {
       savingItems++;
       saveAsFile(
         saveparam.subtitle_addon[lang],
-        saveparam.filename +
-          fileConfig.title_delimeter +
-          lang +
-          fileConfig.ext_sub
+        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_sub
       );
     });
   }
-  setTimeout(() => {
-    sendMessage({ state: "saving", items: savingItems });
-  }, 1500);
+  sendMessage({ state: "saving", items: savingItems });
 }
 
 function save_module() {
@@ -423,7 +379,7 @@ function addListeners() {
   videoAction?.addEventListener("click", () => {
     //console.log("addEventListener by videoAction tabid:" + tabid);
     save_module();
-    videoAction.style.display = "none";
+    videoAction.setAttribute("hidden", "");
     debuglog(chrome.i18n.getMessage("SAVING"));
   });
 }
@@ -459,10 +415,8 @@ function restore_options() {
     },
     (items) => {
       fileConfig.module_prefix = items?.module;
-      if (items?.modulesep !== undefined)
-        fileConfig.title_delimeter = escapeRegExp(items.modulesep);
-      if (items?.spacesep !== undefined)
-        fileConfig.space_delimeter = escapeRegExp(items.spacesep);
+      if (items?.modulesep !== undefined) fileConfig.title_delimeter = escapeRegExp(items.modulesep);
+      if (items?.spacesep !== undefined) fileConfig.space_delimeter = escapeRegExp(items.spacesep);
       saveObjectsReq.video = items?.savevideo;
       saveObjectsReq.videores = items?.videores;
       saveObjectsReq.subtitle = items?.savesubtitle;
@@ -497,14 +451,11 @@ function implode_getCourseInfo(saveObjectsReq) {
     chrome.runtime.sendMessage({ greeting: "csa", message: m });
   }
   function searchCourseLanguage() {
-    return document.querySelector("#select-language")?.selectedOptions[0]
-      ?.value;
+    return document.querySelector("#select-language")?.selectedOptions[0]?.value;
   }
   function searchCourseID() {
     let result = { success: false };
-    let ci = document
-      .querySelector("div.m-a-0.body > a")
-      ?.getAttribute("data-click-value");
+    let ci = document.querySelector("div.m-a-0.body > a")?.getAttribute("data-click-value");
     if (ci) {
       ci = JSON.parse(ci);
       //console.log("coureinfo cs", ci, ci?.course_id);
@@ -516,12 +467,8 @@ function implode_getCourseInfo(saveObjectsReq) {
   }
   function getModouleInfo() {
     let result = {};
-    result.module = document
-      .querySelector("a.breadcrumb-title > span")
-      ?.innerHTML.split(" ")[1];
-    result.topic = document
-      .querySelector("span.breadcrumb-title")
-      ?.innerHTML.trim();
+    result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
+    result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
     return result;
   }
   function genAPIrequest(i) {
@@ -562,7 +509,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     if (saveObjectsReq.videotext) result.videotext = text[lang];
 
     const languages = getLanguageCodes(sub);
-    if (languages && languages.length) {
+    if (lang_add && languages && languages.length) {
       result.languages = languages;
       result.subtitle_addon = {};
       result.videotext_addon = {};
@@ -573,9 +520,7 @@ function implode_getCourseInfo(saveObjectsReq) {
         if (languages.includes(langi)) {
           if (saveObjectsReq.subtitle_addon) {
             result.subtitle_addon[langi] = sub[langi];
-            result.subtitle_addon_lang = result.subtitle_addon_lang
-              ? result.subtitle_addon_lang + "," + langi
-              : langi;
+            result.subtitle_addon_lang = result.subtitle_addon_lang ? result.subtitle_addon_lang + "," + langi : langi;
           }
           if (saveObjectsReq.videotext_addon) {
             result.videotext_addon[langi] = text[langi];
@@ -626,6 +571,10 @@ function getCourseInfo() {
     args: [saveObjectsReq],
     func: implode_getCourseInfo,
   });
+}
+
+function isDarkTheme() {
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)")?.matches;
 }
 
 // functions end

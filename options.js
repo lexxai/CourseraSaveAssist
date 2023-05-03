@@ -1,6 +1,10 @@
 const SAVED_TXT = chrome.i18n.getMessage("SAVED_TXT");
 const RESTORED_DEFAULT_TXT = chrome.i18n.getMessage("RESTORED_DEFAULT_TXT");
 
+function isDarkTheme() {
+  return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
+}
+
 // Saves options to chrome.storage
 function save_options(e) {
   console.log("save_options");
@@ -9,9 +13,7 @@ function save_options(e) {
   let modulesep = document.getElementById("modulesep")?.value;
   let spacesep = document.getElementById("spacesep")?.value;
   let subtitle_lang = document.getElementById("subtitle_lang")?.value.trim();
-  subtitle_lang = subtitle_lang
-    .replace(/\s+/gi, "")
-    .replace(/[^a-z0-9A-Z,-]+/gi, "");
+  subtitle_lang = subtitle_lang.replace(/\s+/gi, "").replace(/[^a-z0-9A-Z,-]+/gi, "");
   let savevideo = document.getElementById("savevideo")?.checked;
   let videores = document.getElementById("videores")?.checked;
   let savevideotxt = document.getElementById("savevideotxt")?.checked;
@@ -22,12 +24,7 @@ function save_options(e) {
   let lasttopic = document.getElementById("lasttopic")?.value;
   let lastfileid = document.getElementById("lastfileid")?.value;
   let usesaveid = document.getElementById("usesaveid")?.checked;
-  let isSave =
-    savevideo ||
-    savevideotxt ||
-    savesubtitle ||
-    savesubtitleadd ||
-    savevideotxtadd;
+  let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd || savevideotxtadd;
   if (!isSave) {
     const status = document.getElementById("status");
     const SAVESOME = chrome.i18n.getMessage("SAVESOME");
@@ -108,36 +105,21 @@ function restore_options() {
       usesaveid: true,
     },
     (items) => {
-      if (items.module !== undefined)
-        document.getElementById("module").value = items.module;
-      if (items.modulesep !== undefined)
-        document.getElementById("modulesep").value = items.modulesep;
-      if (items.modulesep !== undefined)
-        document.getElementById("spacesep").value = items.spacesep;
-      if (items.subtitle_lang)
-        document.getElementById("subtitle_lang").value = items.subtitle_lang;
-      if (items.savevideo !== undefined)
-        document.getElementById("savevideo").checked = items.savevideo;
-      if (items.videores !== undefined)
-        document.getElementById("videores").checked = items.videores;
-      if (items.savevideotxt !== undefined)
-        document.getElementById("savevideotxt").checked = items.savevideotxt;
+      if (items.module !== undefined) document.getElementById("module").value = items.module;
+      if (items.modulesep !== undefined) document.getElementById("modulesep").value = items.modulesep;
+      if (items.modulesep !== undefined) document.getElementById("spacesep").value = items.spacesep;
+      if (items.subtitle_lang) document.getElementById("subtitle_lang").value = items.subtitle_lang;
+      if (items.savevideo !== undefined) document.getElementById("savevideo").checked = items.savevideo;
+      if (items.videores !== undefined) document.getElementById("videores").checked = items.videores;
+      if (items.savevideotxt !== undefined) document.getElementById("savevideotxt").checked = items.savevideotxt;
       if (items.savevideotxtadd !== undefined)
-        document.getElementById("savevideotxtadd").checked =
-          items.savevideotxtadd;
-      if (items.savesubtitle !== undefined)
-        document.getElementById("savesubtitle").checked = items.savesubtitle;
-      if (items.savesubtitle !== undefined)
-        document.getElementById("savesubtitleadd").checked =
-          items.savesubtitleadd;
-      if (items.lastmodule)
-        document.getElementById("lastmodule").value = items.lastmodule;
-      if (items.lasttopic)
-        document.getElementById("lasttopic").value = items.lasttopic;
-      if (items.lastfileid !== undefined)
-        document.getElementById("lastfileid").value = Number(items.lastfileid);
-      if (items.usesaveid !== undefined)
-        document.getElementById("usesaveid").checked = items.usesaveid;
+        document.getElementById("savevideotxtadd").checked = items.savevideotxtadd;
+      if (items.savesubtitle !== undefined) document.getElementById("savesubtitle").checked = items.savesubtitle;
+      if (items.savesubtitle !== undefined) document.getElementById("savesubtitleadd").checked = items.savesubtitleadd;
+      if (items.lastmodule) document.getElementById("lastmodule").value = items.lastmodule;
+      if (items.lasttopic) document.getElementById("lasttopic").value = items.lasttopic;
+      if (items.lastfileid !== undefined) document.getElementById("lastfileid").value = Number(items.lastfileid);
+      if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items.usesaveid;
     }
   );
 }
@@ -159,19 +141,12 @@ function localizeHtmlPage(elm) {
     localizeHtmlPage(elm.children[i]);
     if (elm.children[i].hasAttributes()) {
       for (let j = 0; j < elm.children[i].attributes.length; j++) {
-        elm.children[i].attributes[j].name = elm.children[i].attributes[
-          j
-        ].name.replace(messageRegex, localizeString);
-        elm.children[i].attributes[j].value = elm.children[i].attributes[
-          j
-        ].value.replace(messageRegex, localizeString);
+        elm.children[i].attributes[j].name = elm.children[i].attributes[j].name.replace(messageRegex, localizeString);
+        elm.children[i].attributes[j].value = elm.children[i].attributes[j].value.replace(messageRegex, localizeString);
       }
     }
     if (elm.children[i].innerHTML.length) {
-      elm.children[i].innerHTML = elm.children[i].innerHTML.replace(
-        messageRegex,
-        localizeString
-      );
+      elm.children[i].innerHTML = elm.children[i].innerHTML.replace(messageRegex, localizeString);
     }
   }
 }
@@ -190,8 +165,7 @@ function readManifest() {
   if (m) {
     //console.log('readManifest',m);
     let host = m.host_permissions[0].split("/*")[1];
-    document.getElementById("version").innerHTML =
-      "             v. " + m.version + " [" + host + "]";
+    document.getElementById("version").innerHTML = "             v. " + m.version + " [" + host + "]";
   }
 }
 
