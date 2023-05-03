@@ -9,7 +9,7 @@ Latest release: ![GitHub release (latest by date)](https://img.shields.io/github
 
 Version for development: ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
 
-**[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
+**[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new%3F) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
 
 ### The application is publicly available in the Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
 Example:
