@@ -7,7 +7,7 @@ I did this too, and I realized how inconvenient it is to change the default file
 
 
 ## Google Chrome Extension 
-### "Assistant for saving files from Сoursera" (CSA) ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
+### "Assistant for saving files from Сoursera" (CSA) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist) (![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist))
 **[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
 
 ### The application is publicly available in the [Chrome Google Web Store](https://chrome.google.com/webstore/detail/line/dmoebncbmkgfpjhjikkjljmbaacncohl)
@@ -46,3 +46,5 @@ Example:
 ![CSA-OPTION-1-4-UA-1280x800](https://user-images.githubusercontent.com/3278842/235306163-e7d1ddae-4c39-4364-ab2b-74825e4e9f97.png)
 ![Screenshot 2023-04-29 211020](https://user-images.githubusercontent.com/3278842/235319274-38fbe424-7275-45a0-b91b-eb62ee24d811.png)
 
+
+version: https://shields.io/category/version
