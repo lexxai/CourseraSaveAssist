@@ -26,7 +26,7 @@ Example:
 
 Версія в розробці: ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
 
-**[Завантаження](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F) | [Можливості](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [Що нового?](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%A9%D0%BE-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%3F) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
+**[Завантаження](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F) | [Можливості](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [Що нового?](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%A9%D0%BE-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%3F) | [Допомога проєкту](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%94%D0%BE%D0%BF%D0%BE%D0%BC%D0%BE%D0%B3%D0%B0-%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82%D1%83)**
 
 Чи знаєте що доступ до відео матеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
