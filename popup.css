@@ -1,6 +1,6 @@
 html,
 body {
-  --csa-sidebar-width: 240px;
+  --csa-sidebar-width: 600px;
   --csa-body-text-color: rgb(22, 22, 22);
   --csa-content-background: #fdfdfd;
   --csa-content-text-color: #fcfcfc;
@@ -24,7 +24,7 @@ body {
 }
 
 .spacer {
-  width: 600px;
+  width: var(-csa-sidebar-width);
 }
 
 [hidden] {
