@@ -30,22 +30,33 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 chrome.downloads.onCreated.addListener((s) => {
   console.log("New Download created. Id:" + s.id + ", fileSize:" + s.fileSize);
-  increaseState();
 });
 
 chrome.downloads.onChanged.addListener((e) => {
-  //console.log("Download state", e);
+  console.log("Download state", e);
   if (typeof e.state !== "undefined") {
     if (e.state.current === "complete") {
       console.log("Download id" + e.id + " has completed.");
-      decreaseState();
+      checkSavedState(e.id);
     }
     if (e.state.current === "interrupted" && e.error.current === "USER_CANCELED") {
       console.log("Download id" + e.id + " has USER_CANCELED.");
-      decreaseState();
+      checkSavedState(e.id);
     }
   }
 });
+
+function checkSavedState(id) {
+  chrome.storage.sync.get({ downloadingnow: [] }, (items) => {
+    if (items.downloadingnow.length) {
+      if (items.downloadingnow.includes(id)) {
+        console.log("Download id" + id + " was mine, clearing...");
+        clear_downloadId(id);
+        decreaseState();
+      }
+    }
+  });
+}
 
 function saving(obj) {
   tabid = obj.tabid;
@@ -58,11 +69,14 @@ function saving(obj) {
       saveAs: false,
       conflictAction: "overwrite",
     },
-    function (downloadId) {
+    (downloadId) => {
       // If 'downloadId' is undefined, then there is an error
       // so making sure it is not so before proceeding.
       if (typeof downloadId !== "undefined") {
         console.log("Download initiated, ID is: " + downloadId);
+        save_downloadId(downloadId);
+        increaseState();
+
         //sendMessage("downloading", downloadId);
       }
     }
@@ -91,10 +105,7 @@ function decreaseState() {
   chrome.action.getBadgeText({}, (c) => {
     c = Number(isNaN(c) ? 0 : c) - 1;
     if (c <= 0) {
-      setState("OK");
-      setTimeout(() => {
-        setState("");
-      }, 5000);
+      clear_download_store();
     } else {
       setState(c);
     }
@@ -125,8 +136,60 @@ function sentMsg(cmd, tabid = 0) {
 }
 
 async function getCurrentTab() {
-  let queryOptions = { active: true, lastFocusedWindow: true };
+  let queryOptions = {
+    active: true,
+    lastFocusedWindow: true,
+  };
   // `tab` will either be a `tabs.Tab` instance or `undefined`.
   let [tab] = await chrome.tabs.query(queryOptions);
   return tab;
+}
+
+function save_downloadId(downloadId) {
+  chrome.storage.sync.get(
+    {
+      downloadingnow: [downloadId],
+    },
+    (items) => {
+      console.log("save_downloadId get", downloadId, items?.downloadingnow);
+      if (items?.downloadingnow) {
+        if (!items.downloadingnow.includes(downloadId)) {
+          items.downloadingnow.push(downloadId);
+        }
+        console.log("save_downloadId set", downloadId, items?.downloadingnow);
+        chrome.storage.sync.set({
+          downloadingnow: items.downloadingnow,
+        });
+      }
+    }
+  );
+}
+function clear_download_store() {
+  setState("OK");
+  setTimeout(() => {
+    setState("");
+  }, 5000);
+  chrome.storage.sync.set({
+    downloadingnow: [],
+  });
+}
+function clear_downloadId(downloadId) {
+  chrome.storage.sync.get(
+    {
+      downloadingnow: [],
+    },
+    (items) => {
+      console.log("clear_downloadId get", downloadId, items?.downloadingnow);
+      if (items?.downloadingnow.length) {
+        let index = items.downloadingnow.indexOf(downloadId);
+        if (index != -1) {
+          items.downloadingnow.splice(index, 1);
+          console.log("clear_downloadId set", downloadId, index, items.downloadingnow);
+          chrome.storage.sync.set({
+            downloadingnow: items.downloadingnow,
+          });
+        }
+      }
+    }
+  );
 }
