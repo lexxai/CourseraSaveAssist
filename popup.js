@@ -316,14 +316,32 @@ function search_module() {
   });
 }
 
-function implode_save(saveparam, fileConfig) {
+function implode_save(saveparam, fileConfig, tabid = 0) {
   //console.log("implode_save: ", saveparam);
+
+  function sendMessageBackground(command, message) {
+    let port = chrome.runtime.connect({ name: "csa-background" });
+    port.postMessage({ command: command, message: message });
+  }
 
   function sendMessage(m) {
     chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
   }
 
   function saveAsFile(url, filename) {
+    let loc = new URL(window.location);
+    let baseurl = loc.protocol + "//" + loc.hostname;
+
+    let obj = {
+      tabid: tabid,
+      url: url,
+      filename: filename,
+      baseurl: baseurl,
+    };
+    sendMessageBackground("saving", obj);
+  }
+
+  function xsaveAsFile(url, filename) {
     console.log("implode_save :: saveAsFile", url, filename);
     fetch(url)
       .then((response) => response.blob())
@@ -379,7 +397,7 @@ function save_module() {
     target: {
       tabId: tabid,
     },
-    args: [saveObjects, fileConfig],
+    args: [saveObjects, fileConfig, tabid],
     func: implode_save,
   });
 }

@@ -1,3 +1,5 @@
+let tabid = 0;
+
 chrome.runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
   clearState();
@@ -9,19 +11,23 @@ chrome.runtime.onConnect.addListener(function (port) {
     switch (request.command) {
       case "tabid":
         clearState();
-        let tabid = request.message;
+        tabid = request.message;
         console.log("mgs background tabid:", tabid);
         break;
       case "setFilesCount":
         let count = request.message;
         console.log("mgs background setFilesCount:", count);
-        setState(count, 1);
-        setTimeout(() => {
-          setState(count, 2);
-          setTimeout(() => {
-            clearState();
-          }, 10000);
-        }, 5000);
+        setState(count);
+        // setTimeout(() => {
+        //   setState(count, 2);
+        //   setTimeout(() => {
+        //     //clearState();
+        //   }, 60 * 1000);
+        // }, 5000);
+        break;
+      case "saving":
+        console.log("saving background port", request.message);
+        saving(request.message);
         break;
       case "start":
         console.log("startAction background port");
@@ -38,17 +44,80 @@ chrome.runtime.onConnect.addListener(function (port) {
   });
 });
 
-function setState(c, mode = 0) {
-  const colormodes = ["white", "red", "blue"];
+chrome.downloads.onCreated.addListener((s) => {
+  console.log("New Download created. Id:" + s.id + ", URL: " + s.url + ", fileSize:" + s.fileSize + "filename", s);
+});
+
+chrome.downloads.onChanged.addListener((e) => {
+  //console.log("Download state", e);
+  if (typeof e.state !== "undefined") {
+    if (e.state.current === "complete") {
+      console.log("Download id" + e.id + " has completed.", e);
+      decreaseState();
+    }
+    if (e.state.current === "interrupted" && e.error.current === "USER_CANCELED") {
+      console.log("Download id" + e.id + " has USER_CANCELED.", e);
+      decreaseState();
+    }
+  }
+});
+
+function saving(obj) {
+  tabid = obj.tabid;
+  let url = String(obj.url).startsWith("http") ? obj.url : obj.baseurl + obj.url;
+  console.log("saving :", url, obj);
+  chrome.downloads.download(
+    {
+      url: url,
+      filename: obj.filename,
+      saveAs: false,
+      conflictAction: "overwrite",
+    },
+    function (downloadId) {
+      // If 'downloadId' is undefined, then there is an error
+      // so making sure it is not so before proceeding.
+      if (typeof downloadId !== "undefined") {
+        console.log("Download initiated, ID is: " + downloadId);
+        //sendMessage("downloading", downloadId);
+      }
+    }
+  );
+}
+
+function setState(c) {
   chrome.action.setBadgeText({ text: String(c).trim() });
+  setStateColor(1);
+  setTimeout(() => {
+    setStateColor(2);
+  }, 500);
+}
+
+function setStateColor(color = 0) {
+  const colormodes = ["white", "red", "blue"];
   chrome.action.setBadgeBackgroundColor({
-    color: colormodes[mode],
+    color: colormodes[color],
   });
 }
-function clearState(c) {
+
+function decreaseState() {
+  chrome.action.getBadgeText({}, (c) => {
+    c = Number(c) - 1;
+    if (c <= 0) c = "";
+    setState(c);
+  });
+}
+function increaseState() {
+  chrome.action.getBadgeText({}, (c) => {
+    c = Number(c) + 1;
+    if (c > 20) c = "";
+    setState(c);
+  });
+}
+
+function clearState() {
   chrome.action.setBadgeText({ text: "" });
   chrome.action.setBadgeBackgroundColor({
-    color: "",
+    color: "white",
   });
 }
 
