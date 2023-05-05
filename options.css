@@ -6,6 +6,11 @@ body {
   color: rgb(213, 213, 213);
 }
 
+.main {
+  max-width: 450px;
+  margin: 0 auto;
+}
+
 [hidden] {
   display: none;
 }

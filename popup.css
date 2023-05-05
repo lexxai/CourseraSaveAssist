@@ -23,6 +23,10 @@ body {
   background-color: var(--csa-content-background);
 }
 
+.spacer {
+  width: 600px;
+}
+
 [hidden] {
   display: none;
 }
