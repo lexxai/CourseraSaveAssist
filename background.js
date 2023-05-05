@@ -10,14 +10,14 @@ chrome.runtime.onConnect.addListener(function (port) {
   port.onMessage.addListener(function (request) {
     switch (request.command) {
       case "tabid":
-        clearState();
+        //clearState();
         tabid = request.message;
         console.log("mgs background tabid:", tabid);
         break;
       case "setFilesCount":
         let count = request.message;
         console.log("mgs background setFilesCount:", count);
-        setState(count);
+        //setState(count);
         break;
       case "saving":
         //console.log("saving background port", request.message);
@@ -40,6 +40,7 @@ chrome.runtime.onConnect.addListener(function (port) {
 
 chrome.downloads.onCreated.addListener((s) => {
   console.log("New Download created. Id:" + s.id + ", fileSize:" + s.fileSize);
+  increaseState();
 });
 
 chrome.downloads.onChanged.addListener((e) => {
@@ -78,45 +79,64 @@ function saving(obj) {
   );
 }
 
-function setState(c) {
-  chrome.action.setBadgeText({ text: String(c).trim() });
+function setState(c, tabid = 0) {
+  tabid = tabid ? tabid : getCurrentTab()?.id;
+  chrome.action.setBadgeText({ text: String(c).trim(), tabId: tabid });
   setStateColor(1);
   setTimeout(() => {
     setStateColor(2);
   }, 500);
 }
 
-function setStateColor(color = 0) {
+function setStateColor(color = 0, tabid = 0) {
+  tabid = tabid ? tabid : getCurrentTab()?.id;
   const colormodes = ["white", "red", "blue"];
   chrome.action.setBadgeBackgroundColor({
     color: colormodes[color],
+    tabId: tabid,
   });
 }
 
 function decreaseState() {
   chrome.action.getBadgeText({}, (c) => {
-    c = Number(c) - 1;
-    if (c <= 0) c = "";
-    setState(c);
+    c = Number(isNaN(c) ? 0 : c) - 1;
+    if (c <= 0) {
+      setState("OK");
+      setTimeout(() => {
+        setState("");
+      }, 5000);
+    } else {
+      setState(c);
+    }
   });
 }
 function increaseState() {
   chrome.action.getBadgeText({}, (c) => {
-    c = Number(c) + 1;
-    if (c > 20) c = "";
+    c = Number(isNaN(c) ? 0 : c) + 1;
+    if (c > 30) c = "";
     setState(c);
   });
 }
 
-function clearState() {
-  chrome.action.setBadgeText({ text: "" });
+function clearState(tabid = 0) {
+  tabid = tabid ? tabid : getCurrentTab()?.id;
+  chrome.action.setBadgeText({ text: "", tabId: tabid });
   chrome.action.setBadgeBackgroundColor({
     color: "white",
+    tabId: tabid,
   });
 }
 
 function sentMsg(cmd, tabid = 0) {
+  tabid = tabid ? tabid : getCurrentTab()?.id;
   chrome.runtime.sendMessage({ greeting: "csa-bg", command: cmd, tabid: tabid }, function (response) {
     console.log("runtime.sentMsg response", response);
   });
+}
+
+async function getCurrentTab() {
+  let queryOptions = { active: true, lastFocusedWindow: true };
+  // `tab` will either be a `tabs.Tab` instance or `undefined`.
+  let [tab] = await chrome.tabs.query(queryOptions);
+  return tab;
 }
