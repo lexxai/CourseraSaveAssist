@@ -124,6 +124,10 @@ function restore_options() {
   );
 }
 
+function clear_options() {
+  sendMessageBackground("counterClear", 0);
+}
+
 async function clearstorage() {
   //console.log('before data removed on storage.local');
   await new Promise((resolve, reject) => {
@@ -151,6 +155,11 @@ function localizeHtmlPage(elm) {
   }
 }
 
+function sendMessageBackground(command, message) {
+  let port = chrome.runtime.connect({ name: "csa-background" });
+  port.postMessage({ command: command, message: message });
+}
+
 function localizeString(_, str) {
   return str ? chrome.i18n.getMessage(str) : "";
 }
@@ -158,6 +167,7 @@ function localizeString(_, str) {
 function installListsEvent() {
   document.getElementById("save").addEventListener("click", save_options);
   document.getElementById("reset").addEventListener("click", reset_options);
+  document.getElementById("clear").addEventListener("click", clear_options);
 }
 
 function readManifest() {

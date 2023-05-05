@@ -97,5 +97,11 @@
   },
   "AVLANGUAGES": {
     "message": "Additional materials for this video are available in the following languages:"
+  },
+  "CLEAR": {
+    "message": "Counter"
+  },
+  "CLEAR_DESCR": {
+    "message": "Reset the downloaded file counter on the extension icon"
   }
 }

@@ -2,13 +2,16 @@ let tabid = 0;
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
-  clearState();
+  clear_download_store();
 });
 
 chrome.runtime.onConnect.addListener(function (port) {
   console.assert(port.name === "csa-background");
   port.onMessage.addListener(function (request) {
     switch (request.command) {
+      case "counterClear":
+        clear_download_store();
+        break;
       case "tabid":
         //clearState();
         tabid = request.message;
