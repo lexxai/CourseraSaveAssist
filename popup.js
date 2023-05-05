@@ -46,6 +46,14 @@ function init() {
   addListeners();
 }
 
+function sendMessageBackground(command, message) {
+  let port = chrome.runtime.connect({ name: "csa-background" });
+  port.postMessage({ command: command, message: message });
+  // port.onMessage.addListener(function (msg) {
+  //   console.log("port.onMessage", msg);
+  // });
+}
+
 chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // console.log(
   //   sender.tab
@@ -118,6 +126,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         fileConfig.lastfileid = saveObjects.fileid;
         save_options();
         debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
+        sendMessageBackground("setFilesCount", request.message.items);
         setTimeout(() => {
           window.close();
         }, 1500);
@@ -208,6 +217,7 @@ async function Initialize() {
   } else {
     debuglog(chrome.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
   }
+  sendMessageBackground("tabid", tabid);
 }
 
 function implode_search(saveObjectsReq) {

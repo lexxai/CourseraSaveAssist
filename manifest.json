@@ -5,7 +5,10 @@
   "author": "lexxai",
   "homepage_url": "https://github.com/lexxai/CourseraSaveAssist/wiki",
   "manifest_version": 3,
-  "permissions": ["scripting", "storage"],
+  "permissions": ["scripting", "storage", "downloads"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "options_ui": {
     "page": "options.html",
     "open_in_tab": false
