@@ -12,7 +12,7 @@ chrome.runtime.onConnect.addListener(function (port) {
       case "tabid":
         //clearState();
         tabid = request.message;
-        console.log("mgs background tabid:", tabid);
+        //console.log("mgs background tabid:", tabid);
         break;
       case "setFilesCount":
         let count = request.message;
@@ -23,18 +23,8 @@ chrome.runtime.onConnect.addListener(function (port) {
         //console.log("saving background port", request.message);
         saving(request.message);
         break;
-      case "start":
-        console.log("startAction background port");
-        chrome.storage.sync.get({}, (items) => {
-          console.log("msg background start");
-        });
-        // port.postMessage({
-        //   replybtn: "OK",
-        //   state: "on",
-        // });
-        return true;
-        break;
     }
+    return true;
   });
 });
 

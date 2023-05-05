@@ -1,5 +1,6 @@
 let tabid = 0;
 let taburl = "";
+let waitCourseInfoID = 0;
 
 const saveObjects = {
   filename: "",
@@ -60,16 +61,19 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //     ? "from a content script:" + sender.tab.url
   //     : "from the extension"
   // );
+  //console.log("POP MESSAGE:", request, sender);
   if (taburl != sender.tab.url) {
     console.log("message not for me, skip");
-    return;
+    return true;
   }
   switch (request.greeting) {
     case "csa":
       //sendResponse({ ret: "OK" });
+      clearWait(waitCourseInfoID);
+      console.log("getCourseInfo recieved");
       if (request.message.error) {
         debuglog(chrome.i18n.getMessage("NOVIDEO"));
-        return;
+        return true;
       }
       videoAction.removeAttribute("hidden");
       debuglog("");
@@ -133,6 +137,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }
       break;
   }
+  return true;
 });
 
 function localization() {
@@ -479,9 +484,11 @@ function implode_getCourseInfo(saveObjectsReq) {
   function sendMessage(m) {
     chrome.runtime.sendMessage({ greeting: "csa", message: m });
   }
+
   function searchCourseLanguage() {
     return document.querySelector("#select-language")?.selectedOptions[0]?.value;
   }
+
   function searchCourseID() {
     let result = { success: false };
     let ci = document.querySelector("div.m-a-0.body > a")?.getAttribute("data-click-value");
@@ -494,12 +501,14 @@ function implode_getCourseInfo(saveObjectsReq) {
     }
     return result;
   }
+
   function getModouleInfo() {
     let result = {};
     result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
     result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
     return result;
   }
+
   function genAPIrequest(i) {
     return (
       "/api/onDemandLectureVideos.v1/" +
@@ -560,11 +569,12 @@ function implode_getCourseInfo(saveObjectsReq) {
         }
       }
     }
+    result.error = "";
     //console.log("RETURN MESSAGE", result);
     sendMessage(result);
   }
 
-  let result = {};
+  let result = { error: "404" };
   let lang = searchCourseLanguage();
   let lang_add = saveObjectsReq.subtitle_addon_lang;
   result = getModouleInfo();
@@ -593,6 +603,10 @@ function implode_getCourseInfo(saveObjectsReq) {
 
 function getCourseInfo() {
   console.log("getCourseInfo start");
+  waitCourseInfoID = setTimeout(() => {
+    console.log("Timeout of get Course Info");
+    debuglog(chrome.i18n.getMessage("NOVIDEO"));
+  }, 8000);
   chrome.scripting.executeScript({
     target: {
       tabId: tabid,
@@ -604,6 +618,10 @@ function getCourseInfo() {
 
 function isDarkTheme() {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)")?.matches;
+}
+
+function clearWait(e) {
+  if (e) clearTimeout(e);
 }
 
 // functions end
