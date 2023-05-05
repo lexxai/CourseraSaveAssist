@@ -12,6 +12,11 @@ Version for development: ![current version](https://img.shields.io/github/manife
 **[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new%3F) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
 
 ### The application is publicly available in the Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
+
+The application has also been additionally tested in the following browsers:
+- Microsoft Egde (112.0.1722.68, Windows 11 x64)
+- Opera (98.0.4759.15, Windows 11 x64)
+
 Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
@@ -33,9 +38,14 @@ Example:
 
 ### Додаток є в публічному доступі в Chrome Google Web Store [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
 
+Також додатково перевірено роботу додатка в наступних браузерах:
+- Microsoft Egde (112.0.1722.68, Windows 11 x64)
+- Opera (98.0.4759.15, Windows 11 x64)
+
 Приклдади:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
+
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
 ![CSA-MENU-UA-1280x800](https://user-images.githubusercontent.com/3278842/235016549-f0b272c3-493f-4dbb-85bb-76a769a3dcf6.png)
 ![CSA-OPTION-1-4-UA-1280x800](https://user-images.githubusercontent.com/3278842/235306163-e7d1ddae-4c39-4364-ab2b-74825e4e9f97.png)
