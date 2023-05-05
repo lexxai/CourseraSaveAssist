@@ -103,5 +103,8 @@
   },
   "CLEAR_DESCR": {
     "message": "Reset the downloaded file counter on the extension icon"
+  },
+  "AUTHOR": {
+    "message": "Author"
   }
 }

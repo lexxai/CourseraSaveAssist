@@ -170,6 +170,20 @@ function installListsEvent() {
   document.getElementById("clear").addEventListener("click", clear_options);
 }
 
+function languageDetect() {
+  const urls = {
+    ru: "https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%9F%D0%BE%D0%BC%D1%96%D1%87%D0%BD%D0%B8%D0%BA-CSA",
+    uk: "https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%9F%D0%BE%D0%BC%D1%96%D1%87%D0%BD%D0%B8%D0%BA-CSA",
+    default: "https://github.com/lexxai/CourseraSaveAssist/wiki",
+  };
+  let language = window.navigator.userLanguage || window.navigator.language;
+  let url = urls[language] ? urls[language] : urls["default"];
+  const wiki = document.getElementById("awiki");
+  wiki?.setAttribute("href", url);
+  wiki?.setAttribute("title", language);
+  console.log(language, url);
+}
+
 function readManifest() {
   let m = chrome.runtime.getManifest();
   if (m) {
@@ -181,6 +195,7 @@ function readManifest() {
 
 function init() {
   localizeHtmlPage(document.body);
+  languageDetect();
   readManifest();
   installListsEvent();
   restore_options();

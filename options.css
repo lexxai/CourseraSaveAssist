@@ -52,7 +52,7 @@ div.stat {
   /* position: absolute; */
   /* right: 5px; */
   /* bottom:0px; */
-  text-align: left;
+  /* text-align: left; */
   font-style: italic;
 }
 
@@ -68,10 +68,10 @@ body {
 
 .flex-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
 }
 .flex-right {
-  margin-left: auto;
+  /* margin-left: auto; */
 }
 
 .hidden {
@@ -88,4 +88,9 @@ body {
   padding: 8px;
   display: grid;
   grid-template-columns: auto auto;
+}
+
+a:-webkit-any-link:active,
+a:-webkit-any-link {
+  color: rgb(213, 213, 213);
 }
