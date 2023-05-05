@@ -24,7 +24,7 @@ body {
 }
 
 .spacer {
-  width: var(-csa-sidebar-width);
+  width: var(--csa-sidebar-width);
 }
 
 [hidden] {
@@ -35,19 +35,17 @@ button#options {
   width: 22px;
   height: 22px;
   border: 0;
-  opacity: 0.5;
   background-image: url(images/gear.svg?background#background);
   background-repeat: no-repeat;
   transition: opacity 0.1s ease-in;
-  flex-shrink: 0;
   position: absolute;
-  top: 10px;
-  right: 10px;
+  margin: 0;
+  right: 20px;
+  border-radius: 0;
   filter: invert(var(--csa-color-invert));
 }
 
 button {
-  /* min-height: 30px; */
   width: 100%;
   outline: none;
   margin: 10px 30px 12px;
@@ -116,4 +114,10 @@ button:focus {
   cursor: default;
   opacity: 0.8;
   background-color: var(--csa-pdebug-background);
+}
+
+@media screen and (max-width: var(--csa-sidebar-width)) {
+  .spacer {
+    width: 95vw;
+  }
 }
