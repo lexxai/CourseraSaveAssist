@@ -341,23 +341,24 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
     sendMessageBackground("saving", obj);
   }
 
-  function xsaveAsFile(url, filename) {
-    console.log("implode_save :: saveAsFile", url, filename);
-    fetch(url)
-      .then((response) => response.blob())
-      .then((blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = filename;
-        document.body.appendChild(a);
-        a.click();
-        setTimeout(() => {
-          document.body.removeChild(a);
-          window.URL.revokeObjectURL(url);
-        }, 0);
-      });
-  }
+  // function xsaveAsFile(url, filename) {
+  //   console.log("implode_save :: saveAsFile", url, filename);
+  //   fetch(url)
+  //     .then((response) => response.blob())
+  //     .then((blob) => {
+  //       const url = window.URL.createObjectURL(blob);
+  //       const a = document.createElement("a");
+  //       a.href = url;
+  //       a.download = filename;
+  //       document.body.appendChild(a);
+  //       a.click();
+  //       setTimeout(() => {
+  //         document.body.removeChild(a);
+  //         window.URL.revokeObjectURL(url);
+  //       }, 0);
+  //     });
+  // }
+
   let savingItems = 0;
   if (saveparam.video) {
     savingItems++;

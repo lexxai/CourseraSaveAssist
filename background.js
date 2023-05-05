@@ -18,15 +18,9 @@ chrome.runtime.onConnect.addListener(function (port) {
         let count = request.message;
         console.log("mgs background setFilesCount:", count);
         setState(count);
-        // setTimeout(() => {
-        //   setState(count, 2);
-        //   setTimeout(() => {
-        //     //clearState();
-        //   }, 60 * 1000);
-        // }, 5000);
         break;
       case "saving":
-        console.log("saving background port", request.message);
+        //console.log("saving background port", request.message);
         saving(request.message);
         break;
       case "start":
@@ -45,18 +39,18 @@ chrome.runtime.onConnect.addListener(function (port) {
 });
 
 chrome.downloads.onCreated.addListener((s) => {
-  console.log("New Download created. Id:" + s.id + ", URL: " + s.url + ", fileSize:" + s.fileSize + "filename", s);
+  console.log("New Download created. Id:" + s.id + ", fileSize:" + s.fileSize);
 });
 
 chrome.downloads.onChanged.addListener((e) => {
   //console.log("Download state", e);
   if (typeof e.state !== "undefined") {
     if (e.state.current === "complete") {
-      console.log("Download id" + e.id + " has completed.", e);
+      console.log("Download id" + e.id + " has completed.");
       decreaseState();
     }
     if (e.state.current === "interrupted" && e.error.current === "USER_CANCELED") {
-      console.log("Download id" + e.id + " has USER_CANCELED.", e);
+      console.log("Download id" + e.id + " has USER_CANCELED.");
       decreaseState();
     }
   }
@@ -65,7 +59,7 @@ chrome.downloads.onChanged.addListener((e) => {
 function saving(obj) {
   tabid = obj.tabid;
   let url = String(obj.url).startsWith("http") ? obj.url : obj.baseurl + obj.url;
-  console.log("saving :", url, obj);
+  //console.log("saving :", url, obj);
   chrome.downloads.download(
     {
       url: url,
