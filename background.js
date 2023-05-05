@@ -19,7 +19,7 @@ chrome.runtime.onConnect.addListener(function (port) {
         break;
       case "setFilesCount":
         let count = request.message;
-        console.log("mgs background setFilesCount:", count);
+        //console.log("mgs background setFilesCount:", count);
         //setState(count);
         break;
       case "saving":
@@ -36,7 +36,7 @@ chrome.downloads.onCreated.addListener((s) => {
 });
 
 chrome.downloads.onChanged.addListener((e) => {
-  console.log("Download state", e);
+  //console.log("Download state", e);
   if (typeof e.state !== "undefined") {
     if (e.state.current === "complete") {
       console.log("Download id" + e.id + " has completed.");
@@ -117,7 +117,10 @@ function decreaseState() {
 function increaseState() {
   chrome.action.getBadgeText({}, (c) => {
     c = Number(isNaN(c) ? 0 : c) + 1;
-    if (c > 30) c = "";
+    if (c > 30) {
+      c = "";
+      clear_download_store();
+    }
     setState(c);
   });
 }
@@ -154,12 +157,12 @@ function save_downloadId(downloadId) {
       downloadingnow: [downloadId],
     },
     (items) => {
-      console.log("save_downloadId get", downloadId, items?.downloadingnow);
+      //console.log("save_downloadId get", downloadId, items?.downloadingnow);
       if (items?.downloadingnow) {
         if (!items.downloadingnow.includes(downloadId)) {
           items.downloadingnow.push(downloadId);
         }
-        console.log("save_downloadId set", downloadId, items?.downloadingnow);
+        //console.log("save_downloadId set", downloadId, items?.downloadingnow);
         chrome.storage.sync.set({
           downloadingnow: items.downloadingnow,
         });
@@ -182,12 +185,12 @@ function clear_downloadId(downloadId) {
       downloadingnow: [],
     },
     (items) => {
-      console.log("clear_downloadId get", downloadId, items?.downloadingnow);
+      //console.log("clear_downloadId get", downloadId, items?.downloadingnow);
       if (items?.downloadingnow.length) {
         let index = items.downloadingnow.indexOf(downloadId);
         if (index != -1) {
           items.downloadingnow.splice(index, 1);
-          console.log("clear_downloadId set", downloadId, index, items.downloadingnow);
+          //console.log("clear_downloadId set", downloadId, index, items.downloadingnow);
           chrome.storage.sync.set({
             downloadingnow: items.downloadingnow,
           });
