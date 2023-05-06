@@ -11,24 +11,26 @@
     <div class="main">
       <main>
         <div class="item-container">
-          <label for="course">__MSG_COURSE__:</label>
-          <div><input type="text" id="course" minlength="0" maxlength="63" value="" /></div>
           <label for="lastmodule">__MSG_LASTMODULE__:</label>
           <div><input type="number" id="lastmodule" min="0" max="99" size="5" value="" /></div>
           <label for="lasttopic">__MSG_LASTTITLE__:</label>
           <div><input type="text" id="lasttopic" minlength="0" maxlength="63" value="" /></div>
           <label for="lastfileid">__MSG_LASTFILEID__:</label>
           <div><input type="number" id="lastfileid" min="0" max="99" value="0" /></div>
-          <label for="usesaveid">__MSG_USEFILEID__:</label>
-          <div><input type="checkbox" id="usesaveid" checked /></div>
+          <div class="divider"><hr /></div>
+          <label for="course">__MSG_COURSE__:</label>
+          <div><input type="text" id="course" minlength="0" maxlength="63" value="" /></div>
           <label for="module">__MSG_MODULE__:</label>
           <div>
-            <input type="text" id="module" placeholder="module-" minlength="0" maxlength="63" value="module-" />
+            <input type="text" id="module" placeholder="" minlength="0" maxlength="63" value="M" />
           </div>
+          <label for="usesaveid">__MSG_USEFILEID__:</label>
+          <div><input type="checkbox" id="usesaveid" checked /></div>
           <label for="modulesep">__MSG_MODULESEPCHAR__:</label>
           <div><input type="text" id="modulesep" placeholder="_" minlength="0" maxlength="1" size="1" value="_" /></div>
           <label for="spacesep">__MSG_SPACESEPCHAR__:</label>
           <div><input type="text" id="spacesep" placeholder="_" minlength="0" maxlength="1" size="1" value="_" /></div>
+          <div class="divider"><hr /></div>
           <label for="savevideo">__MSG_SAVEVIDEO__:</label>
           <div><input type="checkbox" id="savevideo" checked /></div>
           <label for="videores">__MSG_VIDEORES__:</label>
@@ -55,6 +57,7 @@
               value="en"
             />
           </div>
+          <div class="divider"><hr /></div>
         </div>
       </main>
       <footer>

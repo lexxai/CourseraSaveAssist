@@ -61,7 +61,7 @@ function save_options(e) {
       setTimeout(() => {
         status.innerHTML = "";
         status.classList.remove("warning");
-      }, 111750);
+      }, 1750);
     });
 }
 
@@ -88,7 +88,7 @@ function restore_options() {
   browser.storage.sync
     .get({
       course: "",
-      module: "module-",
+      module: "M",
       modulesep: "_",
       spacesep: "_",
       subtitle_lang: "en",

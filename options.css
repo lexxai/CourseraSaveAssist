@@ -88,6 +88,9 @@ body {
   display: grid;
   grid-template-columns: 60% auto;
 }
+.divider {
+  grid-column: span 2;
+}
 
 a:-webkit-any-link:active,
 a:-webkit-any-link {

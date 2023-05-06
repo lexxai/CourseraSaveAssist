@@ -29,7 +29,8 @@ const saveObjectsReq = {
 
 const fileConfig = {
   host_url: "coursera.org",
-  module_prefix: "module-",
+  course_prefix: "",
+  module_prefix: "M",
   title_delimeter: "_",
   space_delimeter: "_",
   ext_video: ".mp4",
@@ -105,7 +106,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       saveObjects.video = request.message.video;
       if (request.message.subtitle) saveObjects.subtitle = request.message.subtitle;
       if (request.message.videotext) saveObjects.videotext = request.message.videotext;
-      saveObjects.filename = fileConfig.module_prefix + String(module).padStart(2, "0");
+      saveObjects.filename = fileConfig.course_prefix + fileConfig.module_prefix + String(module).padStart(2, "0");
       if (saveObjectsReq.usesaveid)
         saveObjects.filename += fileConfig.title_delimeter + String(saveObjects.fileid).padStart(2, "0");
       saveObjects.filename += fileConfig.title_delimeter + topic;
@@ -433,8 +434,9 @@ function escapeRegExp(string) {
 
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
-  chrome.storage.sync.get(
-    {
+  chrome.storage.sync
+    .get({
+      course: "",
       module: "module-",
       modulesep: "_",
       spacesep: "_",
@@ -449,8 +451,9 @@ function restore_options() {
       lasttopic: "",
       lastfileid: 0,
       usesaveid: true,
-    },
-    (items) => {
+    })
+    .then((items) => {
+      fileConfig.course_prefix = items?.course;
       fileConfig.module_prefix = items?.module;
       if (items?.modulesep !== undefined) fileConfig.title_delimeter = escapeRegExp(items.modulesep);
       if (items?.spacesep !== undefined) fileConfig.space_delimeter = escapeRegExp(items.spacesep);
@@ -468,19 +471,17 @@ function restore_options() {
       fileConfig.lastfileid = items?.lastfileid;
       console.log("RESTORE_OPT", saveObjectsReq, fileConfig);
       init();
-    }
-  );
+    });
 }
 
 async function save_options() {
-  await chrome.storage.sync.set(
-    {
+  await chrome.storage.sync
+    .set({
       lastmodule: fileConfig.lastmodule,
       lasttopic: fileConfig.lasttopic,
       lastfileid: fileConfig.lastfileid,
-    },
-    () => {}
-  );
+    })
+    .then(() => {});
 }
 
 function implode_getCourseInfo(saveObjectsReq) {
