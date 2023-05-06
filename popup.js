@@ -333,7 +333,7 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
     chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
   }
 
-  function saveAsFile(url, filename) {
+  function saveAsFile(url, filename, savingItems = 1) {
     let loc = new URL(window.location);
     let baseurl = loc.protocol + "//" + loc.hostname;
 
@@ -367,22 +367,23 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
   let savingItems = 0;
   if (saveparam.video) {
     savingItems++;
-    saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video);
+    saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video, savingItems);
   }
   if (saveparam.subtitle) {
     savingItems++;
-    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub);
+    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub, savingItems);
   }
   if (saveparam.videotext) {
     savingItems++;
-    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text);
+    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text, savingItems);
   }
   if (saveparam.videotext_addon) {
     Object.keys(saveparam.videotext_addon).forEach((lang) => {
       savingItems++;
       saveAsFile(
         saveparam.videotext_addon[lang],
-        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_text
+        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_text,
+        savingItems
       );
     });
   }
@@ -391,10 +392,12 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
       savingItems++;
       saveAsFile(
         saveparam.subtitle_addon[lang],
-        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_sub
+        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_sub,
+        savingItems
       );
     });
   }
+  if (savingItems) sendMessageBackground("dosave", savingItems);
   sendMessage({ state: "saving", items: savingItems });
 }
 

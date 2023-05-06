@@ -1,13 +1,16 @@
 let tabid = 0;
+const busymgs = [];
+let waitTimerSytate1 = 0;
+let waitTimerSytate2 = 0;
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
   clear_download_store();
 });
 
-chrome.runtime.onConnect.addListener(function (port) {
+chrome.runtime.onConnect.addListener(async (port) => {
   console.assert(port.name === "csa-background");
-  port.onMessage.addListener(function (request) {
+  port.onMessage.addListener(async (request) => {
     switch (request.command) {
       case "counterClear":
         clear_download_store();
@@ -23,8 +26,12 @@ chrome.runtime.onConnect.addListener(function (port) {
         //setState(count);
         break;
       case "saving":
-        //console.log("saving background port", request.message);
-        saving(request.message);
+        console.log("saving background port", busymgs.length);
+        busymgs.push(request.message);
+        break;
+      case "dosave":
+        console.log("dosave background ", busymgs);
+        doSaveIt(request.message);
         break;
     }
     return true;
@@ -49,8 +56,22 @@ chrome.downloads.onChanged.addListener((e) => {
   }
 });
 
+async function doSaveIt(items) {
+  // busymgs.forEach(async (item) => {
+  //   console.log("doSaveIt  ", item);
+  //   await saving(item);
+  // });
+  //let i = 0;
+  while (busymgs?.length) {
+    let item = busymgs.pop();
+    console.log("doSaveIt  ", item);
+    await saving(item);
+    //i++;
+  }
+}
+
 function checkSavedState(id) {
-  chrome.storage.sync.get({ downloadingnow: [] }, (items) => {
+  chrome.storage.session.get({ downloadingnow: [] }, (items) => {
     if (items.downloadingnow.length) {
       if (items.downloadingnow.includes(id)) {
         console.log("Download id" + id + " was mine, clearing...");
@@ -61,46 +82,45 @@ function checkSavedState(id) {
   });
 }
 
-function saving(obj) {
+async function saving(obj) {
   tabid = obj.tabid;
   let url = String(obj.url).startsWith("http") ? obj.url : obj.baseurl + obj.url;
-  //console.log("saving :", url, obj);
-  chrome.downloads.download(
-    {
+  console.log("saving :", url, obj);
+  await chrome.downloads
+    .download({
       url: url,
       filename: obj.filename,
       saveAs: false,
       conflictAction: "overwrite",
-    },
-    (downloadId) => {
+    })
+    .then(async (downloadId) => {
       // If 'downloadId' is undefined, then there is an error
       // so making sure it is not so before proceeding.
       if (typeof downloadId !== "undefined") {
         console.log("Download initiated, ID is: " + downloadId);
-        save_downloadId(downloadId);
-        increaseState();
-
+        //increaseState();
+        await save_downloadId(downloadId);
         //sendMessage("downloading", downloadId);
       }
-    }
-  );
+    });
 }
 
 function setState(c, tabid = 0) {
-  tabid = tabid ? tabid : getCurrentTab()?.id;
-  chrome.action.setBadgeText({ text: String(c).trim(), tabId: tabid });
+  //tabid = tabid ? tabid : getCurrentTab()?.id;  , tabId: tabid
+  chrome.action.setBadgeText({ text: String(c).trim() });
   setStateColor(1);
-  setTimeout(() => {
-    setStateColor(2);
+  if (waitTimerSytate1) clearTimeout(waitTimerSytate1);
+  if (waitTimerSytate2) clearTimeout(waitTimerSytate2);
+  waitTimerSytate1 = setTimeout(() => {
+    waitTimerSytate2 = setStateColor(2);
   }, 500);
 }
 
 function setStateColor(color = 0, tabid = 0) {
-  tabid = tabid ? tabid : getCurrentTab()?.id;
+  //tabid = tabid ? tabid : getCurrentTab()?.id;
   const colormodes = ["white", "red", "blue"];
   chrome.action.setBadgeBackgroundColor({
     color: colormodes[color],
-    tabId: tabid,
   });
 }
 
@@ -125,12 +145,19 @@ function increaseState() {
   });
 }
 
+function calcState(c) {
+  c = Number(isNaN(c) ? 0 : c);
+  if (c > 30 || c <= 0) {
+    c = "";
+  }
+  setState(c);
+}
+
 function clearState(tabid = 0) {
-  tabid = tabid ? tabid : getCurrentTab()?.id;
+  //tabid = tabid ? tabid : getCurrentTab()?.id;
   chrome.action.setBadgeText({ text: "", tabId: tabid });
   chrome.action.setBadgeBackgroundColor({
     color: "white",
-    tabId: tabid,
   });
 }
 
@@ -151,36 +178,43 @@ async function getCurrentTab() {
   return tab;
 }
 
-function save_downloadId(downloadId) {
-  chrome.storage.sync.get(
-    {
+async function save_downloadId(downloadId) {
+  console.log("save_downloadId begin", downloadId);
+  await chrome.storage.session
+    .get({
       downloadingnow: [downloadId],
-    },
-    (items) => {
+    })
+    .then(async (items) => {
+      console.log("save_downloadId then", items);
       //console.log("save_downloadId get", downloadId, items?.downloadingnow);
       if (items?.downloadingnow) {
         if (!items.downloadingnow.includes(downloadId)) {
           items.downloadingnow.push(downloadId);
         }
         //console.log("save_downloadId set", downloadId, items?.downloadingnow);
-        chrome.storage.sync.set({
-          downloadingnow: items.downloadingnow,
-        });
+        await chrome.storage.session
+          .set({
+            downloadingnow: items.downloadingnow,
+          })
+          .then(() => {
+            console.log("save_downloadId: ssaved items", items.downloadingnow);
+            calcState(items.downloadingnow.length);
+          });
       }
-    }
-  );
+    });
 }
+
 function clear_download_store() {
   setState("OK");
   setTimeout(() => {
     setState("");
   }, 5000);
-  chrome.storage.sync.set({
+  chrome.storage.session.set({
     downloadingnow: [],
   });
 }
 function clear_downloadId(downloadId) {
-  chrome.storage.sync.get(
+  chrome.storage.session.get(
     {
       downloadingnow: [],
     },
@@ -191,7 +225,7 @@ function clear_downloadId(downloadId) {
         if (index != -1) {
           items.downloadingnow.splice(index, 1);
           //console.log("clear_downloadId set", downloadId, index, items.downloadingnow);
-          chrome.storage.sync.set({
+          chrome.storage.session.set({
             downloadingnow: items.downloadingnow,
           });
         }
