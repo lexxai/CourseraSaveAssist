@@ -184,21 +184,23 @@ function languageDetect() {
   const wiki = document.getElementById("awiki");
   wiki?.setAttribute("href", url);
   wiki?.setAttribute("title", language);
-  console.log(language, url);
+  //console.log(language, url);
 }
 
 function readManifest() {
   let m = browser.runtime.getManifest();
   if (m) {
-    //console.log('readManifest',m);
-    let host = m.host_permissions[0].split("/*")[1];
-    document.getElementById("version").innerHTML = "             v. " + m.version + " [" + host + "]";
+    //console.log("readManifest", m);
+    let lang = m.current_locale;
+    let host = m.host_permissions[0].split("/*")[1].replace(/^\./, "");
+    let homepage_url = m.homepage_url + "?csaplugin=option&lang=" + lang;
+    document.getElementById("awiki").setAttribute("href", homepage_url);
+    document.getElementById("version").innerHTML = "v. " + m.version + " [" + host + "]";
   }
 }
 
 function init() {
   localizeHtmlPage(document.body);
-
   languageDetect();
   readManifest();
   installListsEvent();
