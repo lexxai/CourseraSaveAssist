@@ -1,7 +1,6 @@
+let waitTimerSytate1 = 0;
 let tabid = 0;
 const busymgs = [];
-let waitTimerSytate1 = 0;
-let waitTimerSytate2 = 0;
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
