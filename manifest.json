@@ -11,7 +11,7 @@
   },
   "options_ui": {
     "page": "options.html",
-    "open_in_tab": false
+    "open_in_tab": true
   },
   "host_permissions": ["https://*.coursera.org/*"],
   "action": {
