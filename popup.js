@@ -323,9 +323,9 @@ function search_module() {
 
 function implode_save(saveparam, fileConfig, tabid = 0) {
   //console.log("implode_save: ", saveparam);
-
+  let port;
   function sendMessageBackground(command, message) {
-    let port = chrome.runtime.connect({ name: "csa-background" });
+    if (!(port && port.name)) port = chrome.runtime.connect({ name: "csa-background" });
     port.postMessage({ command: command, message: message });
   }
 
