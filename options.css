@@ -35,29 +35,28 @@ div.hc {
   justify-content: center;
   align-items: center;
   text-align: center;
+  margin-top: 12px;
+}
+
+.statc {
+  position: relative;
 }
 
 div.stat {
   position: absolute;
-  right: 5px;
-  text-align: right;
+  right: 30px;
   font-style: bold;
-  /* bottom:60px%; */
 }
 .warning {
   color: yellow;
 }
 
 .ver {
-  /* position: absolute; */
-  /* right: 5px; */
-  /* bottom:0px; */
-  /* text-align: left; */
   font-style: italic;
 }
 
 body {
-  background-image: url("chrome-extension://__MSG_@@extension_id__/images/button-ico-512-bg.png");
+  background-image: url("images/button-ico-512-bg.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
   background-size: 100% 100%;
@@ -87,7 +86,7 @@ body {
   gap: 2px;
   padding: 8px;
   display: grid;
-  grid-template-columns: auto auto;
+  grid-template-columns: 60% auto;
 }
 
 a:-webkit-any-link:active,

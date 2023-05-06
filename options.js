@@ -1,6 +1,3 @@
-const SAVED_TXT = chrome.i18n.getMessage("SAVED_TXT");
-const RESTORED_DEFAULT_TXT = chrome.i18n.getMessage("RESTORED_DEFAULT_TXT");
-
 function isDarkTheme() {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
@@ -9,6 +6,7 @@ function isDarkTheme() {
 function save_options(e) {
   console.log("save_options");
   e.preventDefault();
+  let course = document.getElementById("course")?.value.trim();
   let module = document.getElementById("module")?.value.trim();
   let modulesep = document.getElementById("modulesep")?.value;
   let spacesep = document.getElementById("spacesep")?.value;
@@ -27,7 +25,7 @@ function save_options(e) {
   let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd || savevideotxtadd;
   if (!isSave) {
     const status = document.getElementById("status");
-    const SAVESOME = chrome.i18n.getMessage("SAVESOME");
+    const SAVESOME = browser.i18n.getMessage("SAVESOME");
     status.innerHTML = SAVESOME;
     status.classList.add("warning");
     setTimeout(() => {
@@ -36,8 +34,9 @@ function save_options(e) {
     }, 1750);
     return;
   }
-  chrome.storage.sync.set(
-    {
+  browser.storage.sync
+    .set({
+      course: course,
       module: module,
       modulesep: modulesep,
       spacesep: spacesep,
@@ -52,8 +51,8 @@ function save_options(e) {
       lasttopic: lasttopic,
       lastfileid: lastfileid,
       usesaveid: usesaveid,
-    },
-    () => {
+    })
+    .then(() => {
       // Update status to let user know options were saved.
       document.getElementById("subtitle_lang").value = subtitle_lang;
       let status = document.getElementById("status");
@@ -62,9 +61,8 @@ function save_options(e) {
       setTimeout(() => {
         status.innerHTML = "";
         status.classList.remove("warning");
-      }, 750);
-    }
-  );
+      }, 111750);
+    });
 }
 
 function reset_options(e) {
@@ -87,8 +85,9 @@ function reset_options(e) {
 // stored in chrome.storage.
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
-  chrome.storage.sync.get(
-    {
+  browser.storage.sync
+    .get({
+      course: "",
       module: "module-",
       modulesep: "_",
       spacesep: "_",
@@ -103,25 +102,25 @@ function restore_options() {
       lasttopic: "",
       lastfileid: 0,
       usesaveid: true,
-    },
-    (items) => {
-      if (items.module !== undefined) document.getElementById("module").value = items.module;
-      if (items.modulesep !== undefined) document.getElementById("modulesep").value = items.modulesep;
-      if (items.modulesep !== undefined) document.getElementById("spacesep").value = items.spacesep;
-      if (items.subtitle_lang) document.getElementById("subtitle_lang").value = items.subtitle_lang;
-      if (items.savevideo !== undefined) document.getElementById("savevideo").checked = items.savevideo;
-      if (items.videores !== undefined) document.getElementById("videores").checked = items.videores;
-      if (items.savevideotxt !== undefined) document.getElementById("savevideotxt").checked = items.savevideotxt;
+    })
+    .then((items) => {
+      if (items.course !== undefined) document.getElementById("course").value = items?.course;
+      if (items.module !== undefined) document.getElementById("module").value = items?.module;
+      if (items.modulesep !== undefined) document.getElementById("modulesep").value = items?.modulesep;
+      if (items.modulesep !== undefined) document.getElementById("spacesep").value = items?.spacesep;
+      if (items.subtitle_lang) document.getElementById("subtitle_lang").value = items?.subtitle_lang;
+      if (items.savevideo !== undefined) document.getElementById("savevideo").checked = items?.savevideo;
+      if (items.videores !== undefined) document.getElementById("videores").checked = items?.videores;
+      if (items.savevideotxt !== undefined) document.getElementById("savevideotxt").checked = items?.savevideotxt;
       if (items.savevideotxtadd !== undefined)
-        document.getElementById("savevideotxtadd").checked = items.savevideotxtadd;
-      if (items.savesubtitle !== undefined) document.getElementById("savesubtitle").checked = items.savesubtitle;
-      if (items.savesubtitle !== undefined) document.getElementById("savesubtitleadd").checked = items.savesubtitleadd;
-      if (items.lastmodule) document.getElementById("lastmodule").value = items.lastmodule;
-      if (items.lasttopic) document.getElementById("lasttopic").value = items.lasttopic;
+        document.getElementById("savevideotxtadd").checked = items?.savevideotxtadd;
+      if (items.savesubtitle !== undefined) document.getElementById("savesubtitle").checked = items?.savesubtitle;
+      if (items.savesubtitle !== undefined) document.getElementById("savesubtitleadd").checked = items?.savesubtitleadd;
+      if (items.lastmodule) document.getElementById("lastmodule").value = items?.lastmodule;
+      if (items.lasttopic) document.getElementById("lasttopic").value = items?.lasttopic;
       if (items.lastfileid !== undefined) document.getElementById("lastfileid").value = Number(items.lastfileid);
-      if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items.usesaveid;
-    }
-  );
+      if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items?.usesaveid;
+    });
 }
 
 function clear_options() {
@@ -131,7 +130,7 @@ function clear_options() {
 async function clearstorage() {
   //console.log('before data removed on storage.local');
   await new Promise((resolve, reject) => {
-    chrome.storage.local.clear(function () {
+    browser.storage.local.clear(function () {
       console.log("All data removed on storage.local");
       resolve();
     });
@@ -156,12 +155,12 @@ function localizeHtmlPage(elm) {
 }
 
 function sendMessageBackground(command, message) {
-  let port = chrome.runtime.connect({ name: "csa-background" });
+  let port = browser.runtime.connect({ name: "csa-background" });
   port.postMessage({ command: command, message: message });
 }
 
 function localizeString(_, str) {
-  return str ? chrome.i18n.getMessage(str) : "";
+  return str ? browser.i18n.getMessage(str) : "";
 }
 
 function installListsEvent() {
@@ -171,6 +170,9 @@ function installListsEvent() {
 }
 
 function languageDetect() {
+  //document.querySelector("title").innerHTML.replace(messageRegex, localizeString);
+  document.querySelector("title").innerHTML =
+    browser.i18n.getMessage("plug_name") + " : " + browser.i18n.getMessage("OPTIONS");
   const urls = {
     ru: "https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%9F%D0%BE%D0%BC%D1%96%D1%87%D0%BD%D0%B8%D0%BA-CSA",
     uk: "https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%9F%D0%BE%D0%BC%D1%96%D1%87%D0%BD%D0%B8%D0%BA-CSA",
@@ -186,7 +188,7 @@ function languageDetect() {
 }
 
 function readManifest() {
-  let m = chrome.runtime.getManifest();
+  let m = browser.runtime.getManifest();
   if (m) {
     //console.log('readManifest',m);
     let host = m.host_permissions[0].split("/*")[1];
@@ -196,10 +198,15 @@ function readManifest() {
 
 function init() {
   localizeHtmlPage(document.body);
+
   languageDetect();
   readManifest();
   installListsEvent();
   restore_options();
 }
+
+const browser = chrome;
+const SAVED_TXT = browser.i18n.getMessage("SAVED_TXT");
+const RESTORED_DEFAULT_TXT = browser.i18n.getMessage("RESTORED_DEFAULT_TXT");
 
 document.addEventListener("DOMContentLoaded", init);

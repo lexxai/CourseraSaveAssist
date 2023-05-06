@@ -106,5 +106,8 @@
   },
   "AUTHOR": {
     "message": "Author"
+  },
+  "COURSE": {
+    "message": "Course name prefix"
   }
 }

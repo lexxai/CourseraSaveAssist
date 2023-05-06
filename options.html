@@ -1,97 +1,84 @@
 <!DOCTYPE html>
 <html>
   <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <link rel="stylesheet" href="options.css" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>__MSG_plug_name__ : __MSG_OPTIONS__ __MSG_AUTHOR__</title>
   </head>
   <body>
     <div class="main">
-      <div class="item-container">
-        <label for="lastmodule">__MSG_LASTMODULE__:</label>
-        <div>
-          <input type="number" id="lastmodule" min="0" max="99" size="5" value="" />
+      <main>
+        <div class="item-container">
+          <label for="course">__MSG_COURSE__:</label>
+          <div><input type="text" id="course" minlength="0" maxlength="63" value="" /></div>
+          <label for="lastmodule">__MSG_LASTMODULE__:</label>
+          <div><input type="number" id="lastmodule" min="0" max="99" size="5" value="" /></div>
+          <label for="lasttopic">__MSG_LASTTITLE__:</label>
+          <div><input type="text" id="lasttopic" minlength="0" maxlength="63" value="" /></div>
+          <label for="lastfileid">__MSG_LASTFILEID__:</label>
+          <div><input type="number" id="lastfileid" min="0" max="99" value="0" /></div>
+          <label for="usesaveid">__MSG_USEFILEID__:</label>
+          <div><input type="checkbox" id="usesaveid" checked /></div>
+          <label for="module">__MSG_MODULE__:</label>
+          <div>
+            <input type="text" id="module" placeholder="module-" minlength="0" maxlength="63" value="module-" />
+          </div>
+          <label for="modulesep">__MSG_MODULESEPCHAR__:</label>
+          <div><input type="text" id="modulesep" placeholder="_" minlength="0" maxlength="1" size="1" value="_" /></div>
+          <label for="spacesep">__MSG_SPACESEPCHAR__:</label>
+          <div><input type="text" id="spacesep" placeholder="_" minlength="0" maxlength="1" size="1" value="_" /></div>
+          <label for="savevideo">__MSG_SAVEVIDEO__:</label>
+          <div><input type="checkbox" id="savevideo" checked /></div>
+          <label for="videores">__MSG_VIDEORES__:</label>
+          <div><input type="checkbox" id="videores" checked /></div>
+          <label for="savevideotxt">__MSG_SAVEVIDEOTXT__:</label>
+          <div><input type="checkbox" id="savevideotxt" checked /></div>
+          <label for="savevideotxtadd">__MSG_SAVEVIDEOTXT_ADD__:</label>
+          <div><input type="checkbox" id="savevideotxtadd" checked /></div>
+          <label for="savesubtitle">__MSG_SAVESUBTITLE__:</label>
+          <div><input type="checkbox" id="savesubtitle" checked /></div>
+          <label for="savesubtitleadd">__MSG_SAVESUBTITLE_ADD__:</label>
+          <div><input type="checkbox" id="savesubtitleadd" checked /></div>
+          <label title="ISO 631-1. __MSG_MULTLANG__" for="subtitle_lang">
+            __MSG_LANG_ADD__: (<a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">?</a>)
+          </label>
+          <div>
+            <input
+              title="ISO 631-1. __MSG_MULTLANG__"
+              type="text"
+              id="subtitle_lang"
+              placeholder="en"
+              minlength="2"
+              maxlength="99"
+              value="en"
+            />
+          </div>
         </div>
-        <label for="lasttopic">__MSG_LASTTITLE__:</label>
-        <div>
-          <input type="text" id="lasttopic" minlength="0" maxlength="63" size="15" value="" />
+      </main>
+      <footer>
+        <div class="flex-container">
+          <div class="wiki">
+            __MSG_AUTHOR__:
+            <a title="https://lexxai.blogspot.com" href="https://lexxai.blogspot.com" target="_blank">lexxai</a>
+          </div>
+          <div class="wiki">
+            <a id="awiki" href="https://github.com/lexxai/CourseraSaveAssist/wiki" target="_blank">Wiki</a>
+          </div>
+          <div class="flex-right ver" id="version"></div>
         </div>
-        <label for="lastfileid">__MSG_LASTFILEID__:</label>
-        <div>
-          <input type="number" id="lastfileid" min="0" max="99" value="0" />
+        <div class="statc">
+          <div class="stat" id="status"></div>
         </div>
-        <label for="usesaveid">__MSG_USEFILEID__:</label>
-        <div>
-          <input type="checkbox" id="usesaveid" checked />
+      </footer>
+      <nav>
+        <div class="hc">
+          <button id="clear" title="__MSG_CLEAR_DESCR__">__MSG_CLEAR__</button> |
+          <button id="reset">__MSG_RESET__</button> |
+          <button id="save">__MSG_SAVE__</button>
         </div>
-        <label for="module">__MSG_MODULE__:</label>
-        <div>
-          <input type="text" id="module" placeholder="module-" minlength="0" maxlength="15" size="10" value="module-" />
-        </div>
-        <label for="modulesep">__MSG_MODULESEPCHAR__:</label>
-        <div>
-          <input type="text" id="modulesep" placeholder="_" minlength="0" maxlength="1" size="1" value="_" />
-        </div>
-        <label for="spacesep">__MSG_SPACESEPCHAR__:</label>
-        <div>
-          <input type="text" id="spacesep" placeholder="_" minlength="0" maxlength="1" size="1" value="_" />
-        </div>
-        <label for="savevideo">__MSG_SAVEVIDEO__:</label>
-        <div>
-          <input type="checkbox" id="savevideo" checked />
-        </div>
-        <label for="videores">__MSG_VIDEORES__:</label>
-        <div>
-          <input type="checkbox" id="videores" checked />
-        </div>
-        <label for="savevideotxt">__MSG_SAVEVIDEOTXT__:</label>
-        <div>
-          <input type="checkbox" id="savevideotxt" checked />
-        </div>
-        <label for="savevideotxtadd">__MSG_SAVEVIDEOTXT_ADD__:</label>
-        <div>
-          <input type="checkbox" id="savevideotxtadd" checked />
-        </div>
-        <label for="savesubtitle">__MSG_SAVESUBTITLE__:</label>
-        <div>
-          <input type="checkbox" id="savesubtitle" checked />
-        </div>
-        <label for="savesubtitleadd">__MSG_SAVESUBTITLE_ADD__:</label>
-        <div>
-          <input type="checkbox" id="savesubtitleadd" checked />
-        </div>
-        <label title="ISO 631-1. __MSG_MULTLANG__" for="subtitle_lang">
-          __MSG_LANG_ADD__: (<a href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes" target="_blank">?</a>)
-        </label>
-        <div>
-          <input
-            title="ISO 631-1. __MSG_MULTLANG__"
-            type="text"
-            id="subtitle_lang"
-            placeholder="en"
-            minlength="2"
-            maxlength="99"
-            size="15"
-            value="en"
-          />
-        </div>
-      </div>
-      <div class="flex-container">
-        <div class="wiki">
-          __MSG_AUTHOR__:
-          <a title="https://lexxai.blogspot.com" href="https://lexxai.blogspot.com" target="_blank">lexxai</a>
-        </div>
-        <div class="wiki">
-          <a id="awiki" href="https://github.com/lexxai/CourseraSaveAssist/wiki" target="_blank">Wiki</a>
-        </div>
-        <div class="flex-right ver" id="version"></div>
-      </div>
-      <div class="stat" id="status"></div>
-      <br />
-      <div class="hc">
-        <button id="clear" title="__MSG_CLEAR_DESCR__">__MSG_CLEAR__</button> |
-        <button id="reset">__MSG_RESET__</button> |
-        <button id="save">__MSG_SAVE__</button>
-      </div>
+      </nav>
     </div>
   </body>
   <script src="options.js"></script>
