@@ -177,6 +177,7 @@ function languageDetect() {
     default: "https://github.com/lexxai/CourseraSaveAssist/wiki",
   };
   let language = window.navigator.userLanguage || window.navigator.language;
+  language = language.split("-")[0];
   let url = urls[language] ? urls[language] : urls["default"];
   const wiki = document.getElementById("awiki");
   wiki?.setAttribute("href", url);
