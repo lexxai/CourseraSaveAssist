@@ -30,11 +30,13 @@ chrome.runtime.onConnect.addListener(async (port) => {
         busymgs.push(request.message);
         break;
       case "dosave":
-        console.log("dosave background ", busymgs);
-        doSaveIt(request.message);
+        console.log("dosave background ", busymgs.length);
+        setTimeout(() => {
+          doSaveIt(request.message);
+        }, 0);
         break;
     }
-    return true;
+    return false;
   });
 });
 
@@ -57,16 +59,11 @@ chrome.downloads.onChanged.addListener((e) => {
 });
 
 async function doSaveIt(items) {
-  // busymgs.forEach(async (item) => {
-  //   console.log("doSaveIt  ", item);
-  //   await saving(item);
-  // });
-  //let i = 0;
+  if (busymgs?.length != items) console.log("ALARM doSaveIt not have all of elements", items);
   while (busymgs?.length) {
+    console.log("doSaveIt  total:", busymgs?.length);
     let item = busymgs.pop();
-    console.log("doSaveIt  ", item);
     await saving(item);
-    //i++;
   }
 }
 
@@ -85,7 +82,7 @@ function checkSavedState(id) {
 async function saving(obj) {
   tabid = obj.tabid;
   let url = String(obj.url).startsWith("http") ? obj.url : obj.baseurl + obj.url;
-  console.log("saving :", url, obj);
+  //console.log("saving :", url, obj);
   await chrome.downloads
     .download({
       url: url,
@@ -110,9 +107,9 @@ function setState(c, tabid = 0) {
   chrome.action.setBadgeText({ text: String(c).trim() });
   setStateColor(1);
   if (waitTimerSytate1) clearTimeout(waitTimerSytate1);
-  if (waitTimerSytate2) clearTimeout(waitTimerSytate2);
   waitTimerSytate1 = setTimeout(() => {
-    waitTimerSytate2 = setStateColor(2);
+    waitTimerSytate1 = 0;
+    setStateColor(2);
   }, 500);
 }
 
@@ -179,13 +176,13 @@ async function getCurrentTab() {
 }
 
 async function save_downloadId(downloadId) {
-  console.log("save_downloadId begin", downloadId);
+  //console.log("save_downloadId begin", downloadId);
   await chrome.storage.session
     .get({
       downloadingnow: [downloadId],
     })
     .then(async (items) => {
-      console.log("save_downloadId then", items);
+      //console.log("save_downloadId then", items);
       //console.log("save_downloadId get", downloadId, items?.downloadingnow);
       if (items?.downloadingnow) {
         if (!items.downloadingnow.includes(downloadId)) {
