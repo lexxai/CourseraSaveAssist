@@ -55,6 +55,7 @@ Example:
 - https://youtube.com/shorts/0R2FYYBiBNw
 
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
+[![Crowdin](https://badges.crowdin.net/courserasaveassist/localized.svg)](https://crowdin.com/project/courserasaveassist)
 
 ![CSA-MENU1-UA-1-6](https://user-images.githubusercontent.com/3278842/236651277-6c3d7f20-1121-4cbe-8b38-478713342ec1.png)
 ![CSA-OPTION-1-6-UA](https://user-images.githubusercontent.com/3278842/236651278-8085b166-27d9-4e5f-9c16-99ea2b8561a9.png)
