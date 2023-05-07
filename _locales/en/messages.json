@@ -108,6 +108,9 @@
     "message": "Author"
   },
   "COURSE": {
-    "message": "Course name prefix"
+    "message": "Prefix for the course name"
+  },
+  "PREVIOSFILE": {
+    "message": "Name of the previous item"
   }
 }

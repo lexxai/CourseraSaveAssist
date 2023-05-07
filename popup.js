@@ -205,6 +205,7 @@ function debuglog(text) {
 }
 
 async function Initialize() {
+  render_previos_item_name();
   let tab = await getCurrentTab();
   tabid = tab.id;
   taburl = tab.url;
@@ -324,6 +325,7 @@ function search_module() {
 
 function implode_save(saveparam, fileConfig, tabid = 0) {
   //console.log("implode_save: ", saveparam);
+  const browser = chrome;
   let port;
   function sendMessageBackground(command, message) {
     if (!(port && port.name)) port = chrome.runtime.connect({ name: "csa-background" });
@@ -485,6 +487,7 @@ async function save_options() {
 }
 
 function implode_getCourseInfo(saveObjectsReq) {
+  const browser = chrome;
   function sendMessage(m) {
     chrome.runtime.sendMessage({ greeting: "csa", message: m });
   }
@@ -628,6 +631,24 @@ function clearWait(e) {
   if (e) clearTimeout(e);
 }
 
+function render_previos_item_name() {
+  //console.log("render_previos_item_name");
+  let last_saved_file = fileConfig.course_prefix;
+  last_saved_file += fileConfig.module_prefix;
+  last_saved_file += String(fileConfig.lastmodule).padStart(2, "0");
+  if (saveObjectsReq.usesaveid) {
+    last_saved_file += fileConfig.title_delimeter;
+    last_saved_file += String(fileConfig.lastfileid).padStart(2, "0");
+  }
+  last_saved_file += fileConfig.title_delimeter;
+  last_saved_file += fileConfig.lasttopic;
+  if (last_saved_file) {
+    last_saved_file = browser.i18n.getMessage("PREVIOSFILE") + ": " + last_saved_file;
+    document.getElementById("hname")?.setAttribute("title", last_saved_file);
+  }
+}
+
 // functions end
 
+const browser = chrome;
 document.addEventListener("DOMContentLoaded", restore_options);
