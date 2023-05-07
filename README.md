@@ -13,6 +13,8 @@ Version for development: ![current version](https://img.shields.io/github/manife
 
 ### The application is publicly available in the Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
 
+The application has also been additionally initiated to be added to the stores for other browsers. Now stores are previewing the app before publishing it.
+
 The application has also been additionally tested in the following browsers:
 - Microsoft Egde (112.0.1722.68, Windows 11 x64)
 - Opera (98.0.4759.15, Windows 11 x64)
@@ -40,6 +42,8 @@ Example:
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
 
 ### Додаток є в публічному доступі в Chrome Google Web Store [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
+
+Додаток також було додатково ініційованно до додавання у магазини інших браузерів. Зараз магазини превряють додаток перед публікацією.
 
 Також додатково перевірено роботу додатка в наступних браузерах:
 - Microsoft Egde (112.0.1722.68, Windows 11 x64)
