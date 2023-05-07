@@ -20,9 +20,12 @@ The application has also been additionally tested in the following browsers:
 Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
-![CSA-MENU-EN-1280x800](https://user-images.githubusercontent.com/3278842/235016537-25628c4c-112c-4ad6-b56c-0492131ca91d.png)
-![Screenshot 2023-04-29 044432](https://user-images.githubusercontent.com/3278842/235278835-ae2b81a6-eb53-448b-bfdf-d48e90980be1.png)
-![CSA-MENU-EN-1-5](https://user-images.githubusercontent.com/3278842/235378174-cbecc5f9-9eca-4afe-94fa-60f070142ae4.png)
+- https://youtube.com/shorts/0R2FYYBiBNw
+
+![CSA-MENU1-EN-1-6](https://user-images.githubusercontent.com/3278842/236651226-d08b0ac9-33a9-4c0d-9cee-e4f6cd1774dd.png)
+![CSA-OPTION-1-6-EN](https://user-images.githubusercontent.com/3278842/236651238-289f12a7-b864-4966-8373-398c7d983317.png)
+
+
 
 
 
@@ -33,7 +36,7 @@ Example:
 
 **[Завантаження](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F) | [Можливості](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [Що нового?](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%A9%D0%BE-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%3F) | [Допомога проєкту](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%94%D0%BE%D0%BF%D0%BE%D0%BC%D0%BE%D0%B3%D0%B0-%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82%D1%83)**
 
-Чи знаєте що доступ до відео матеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
+Чи знаєте що доступ до відеоматеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
 Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
 
 ### Додаток є в публічному доступі в Chrome Google Web Store [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
@@ -45,10 +48,16 @@ Example:
 Приклдади:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
+- https://youtube.com/shorts/0R2FYYBiBNw
 
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
-![CSA-MENU-UA-1280x800](https://user-images.githubusercontent.com/3278842/235016549-f0b272c3-493f-4dbb-85bb-76a769a3dcf6.png)
-![CSA-OPTION-1-4-UA-1280x800](https://user-images.githubusercontent.com/3278842/235306163-e7d1ddae-4c39-4364-ab2b-74825e4e9f97.png)
-![Screenshot 2023-04-29 211020](https://user-images.githubusercontent.com/3278842/235319274-38fbe424-7275-45a0-b91b-eb62ee24d811.png)
+
+![CSA-MENU1-UA-1-6](https://user-images.githubusercontent.com/3278842/236651277-6c3d7f20-1121-4cbe-8b38-478713342ec1.png)
+![CSA-OPTION-1-6-UA](https://user-images.githubusercontent.com/3278842/236651278-8085b166-27d9-4e5f-9c16-99ea2b8561a9.png)
+
+
+
+
+
 
 versions icons: https://shields.io/category/version
