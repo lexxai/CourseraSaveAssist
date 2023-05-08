@@ -203,6 +203,30 @@ function readManifest() {
   }
 }
 
+chrome.storage.onChanged.addListener(async (changes, namespace) => {
+  if (namespace != "session") {
+    for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
+      // console.log(
+      //   `Storage key "${key}" in namespace "${namespace}" changed.`,
+      //   `Old value was "${oldValue}", new value is "${newValue}".` + newValue.length
+      // );
+
+      if (key == "lastmodule") {
+        document.getElementById("lastmodule").value = newValue;
+        console.log("lastmodule item changed", newValue);
+      }
+      if (key == "lasttopic") {
+        document.getElementById("lasttopic").value = newValue;
+        console.log("lasttopic item changed", newValue);
+      }
+      if (key == "lastfileid") {
+        document.getElementById("lastfileid").value = Number(newValue);
+        console.log("lastfileid item changed", newValue);
+      }
+    }
+  }
+});
+
 function init() {
   localizeHtmlPage(document.body);
   languageDetect();
