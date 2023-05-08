@@ -22,6 +22,7 @@ function save_options(e) {
   let lasttopic = document.getElementById("lasttopic")?.value;
   let lastfileid = document.getElementById("lastfileid")?.value;
   let usesaveid = document.getElementById("usesaveid")?.checked;
+  let savemode = document.getElementById("savemode")?.checked ? 1 : 0;
   let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd || savevideotxtadd;
   if (!isSave) {
     const status = document.getElementById("status");
@@ -51,6 +52,7 @@ function save_options(e) {
       lasttopic: lasttopic,
       lastfileid: lastfileid,
       usesaveid: usesaveid,
+      savemode: savemode,
     })
     .then(() => {
       // Update status to let user know options were saved.
@@ -96,12 +98,13 @@ function restore_options() {
       videores: true,
       savevideotxt: true,
       savesubtitle: true,
-      savevideotxtadd: true,
-      savesubtitleadd: true,
+      savevideotxtadd: false,
+      savesubtitleadd: false,
       lastmodule: "",
       lasttopic: "",
       lastfileid: 0,
       usesaveid: true,
+      savemode: 0,
     })
     .then((items) => {
       if (items.course !== undefined) document.getElementById("course").value = items?.course;
@@ -120,6 +123,7 @@ function restore_options() {
       if (items.lasttopic) document.getElementById("lasttopic").value = items?.lasttopic;
       if (items.lastfileid !== undefined) document.getElementById("lastfileid").value = Number(items.lastfileid);
       if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items?.usesaveid;
+      if (items.savemode !== undefined) document.getElementById("savemode").checked = items?.savemode != 0;
     });
 }
 

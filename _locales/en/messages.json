@@ -112,5 +112,11 @@
   },
   "PREVIOSFILE": {
     "message": "Name of the previous item"
+  },
+  "SAVEMODE": {
+    "message": "Compatible save mode"
+  },
+  "SAVEMODE_DESCR": {
+    "message": "Compatible save mode is used if you have problems\nwith saving files. For example, it will help you save in macOS"
   }
 }

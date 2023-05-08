@@ -1,6 +1,7 @@
 let tabid = 0;
 let taburl = "";
 let waitCourseInfoID = 0;
+let waitSavingStartID = 0;
 
 const saveObjects = {
   filename: "",
@@ -39,6 +40,7 @@ const fileConfig = {
   lastfileid: 0,
   lastmodule: "",
   lasttopic: "",
+  savemode: 1,
 };
 
 //Functions....
@@ -63,11 +65,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   //     : "from the extension"
   // );
   //console.log("POP MESSAGE:", request, sender);
-  if (taburl != sender.tab.url) {
+  if (sender.tab && taburl != sender.tab?.url) {
     console.log("message not for me, skip");
     return true;
   }
-  switch (request.greeting) {
+  switch (request?.greeting) {
     case "csa":
       //sendResponse({ ret: "OK" });
       clearWait(waitCourseInfoID);
@@ -125,20 +127,58 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       break;
     case "csa-save":
       debuglog("");
-      if (request.message.state === "saving") {
-        fileConfig.lastmodule = saveObjects.module;
-        fileConfig.lasttopic = saveObjects.topic;
-        fileConfig.lastfileid = saveObjects.fileid;
-        save_options();
-        sendMessageBackground("setFilesCount", request.message.items);
-        debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
+      if (request?.message.state === "saving") {
+        if (request?.message == 0) {
+          debuglog("SAVING ERROR: Zero files have been downloaded");
+          setTimeout(() => {
+            window.close();
+          }, 20000);
+          break;
+        }
+
+        if (request?.message.confirm) {
+          // withconfirmation
+          fileConfig.lastmodule = saveObjects.module;
+          fileConfig.lasttopic = saveObjects.topic;
+          fileConfig.lastfileid = saveObjects.fileid;
+          save_options();
+          debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
+          if (waitSavingStartID) {
+            clearTimeout(waitSavingStartID);
+            waitSavingStartID = 0;
+          }
+          setTimeout(() => {
+            window.close();
+          }, 750);
+        } else {
+          // without confirmation still
+          debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
+          waitSavingStartID = setTimeout(() => {
+            debuglog("SAVING TIMEOUT ERROR");
+            setTimeout(() => {
+              window.close();
+            }, 30000);
+          }, 10000);
+        }
+      }
+      break;
+    case "csa-saving":
+      let timeoutclose = 750;
+      console.log("MESSAGE from csa-saving:", request?.message);
+      if (waitSavingStartID) {
+        clearTimeout(waitSavingStartID);
+        waitSavingStartID = 0;
+        if (request?.message == 0) {
+          debuglog("SAVING ERROR: Zero files have been downloaded");
+          timeoutclose = 20000;
+        }
         setTimeout(() => {
           window.close();
-        }, 750);
+        }, timeoutclose);
       }
       break;
   }
-  return true;
+  return false;
 });
 
 function localization() {
@@ -335,8 +375,18 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
   function sendMessage(m) {
     chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
   }
+  /**
+   * @param {*} saveMode: 0 - default API method , 1 - compatible BLOB method
+   */
+  function saveAsFile(url, filename, saveMode = 0) {
+    if (saveMode == 0) {
+      saveAsFileByAPIonBackground(url, filename);
+    } else {
+      saveAsFileByBLOBAtHere(url, filename);
+    }
+  }
 
-  function saveAsFile(url, filename, savingItems = 1) {
+  function saveAsFileByAPIonBackground(url, filename) {
     let loc = new URL(window.location);
     let baseurl = loc.protocol + "//" + loc.hostname;
 
@@ -349,36 +399,37 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
     sendMessageBackground("saving", obj);
   }
 
-  // function xsaveAsFile(url, filename) {
-  //   console.log("implode_save :: saveAsFile", url, filename);
-  //   fetch(url)
-  //     .then((response) => response.blob())
-  //     .then((blob) => {
-  //       const url = window.URL.createObjectURL(blob);
-  //       const a = document.createElement("a");
-  //       a.href = url;
-  //       a.download = filename;
-  //       document.body.appendChild(a);
-  //       a.click();
-  //       setTimeout(() => {
-  //         document.body.removeChild(a);
-  //         window.URL.revokeObjectURL(url);
-  //       }, 0);
-  //     });
-  // }
+  function saveAsFileByBLOBAtHere(url, filename) {
+    console.log("implode_save :: saveAsFile", url, filename);
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 0);
+      });
+  }
 
   let savingItems = 0;
+  let saveMode = fileConfig.savemode;
   if (saveparam.video) {
     savingItems++;
-    saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video, savingItems);
+    saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video, saveMode);
   }
   if (saveparam.subtitle) {
     savingItems++;
-    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub, savingItems);
+    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub, saveMode);
   }
   if (saveparam.videotext) {
     savingItems++;
-    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text, savingItems);
+    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text, saveMode);
   }
   if (saveparam.videotext_addon) {
     Object.keys(saveparam.videotext_addon).forEach((lang) => {
@@ -386,7 +437,7 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
       saveAsFile(
         saveparam.videotext_addon[lang],
         saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_text,
-        savingItems
+        saveMode
       );
     });
   }
@@ -396,12 +447,19 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
       saveAsFile(
         saveparam.subtitle_addon[lang],
         saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_sub,
-        savingItems
+        saveMode
       );
     });
   }
-  if (savingItems) sendMessageBackground("dosave", savingItems);
-  sendMessage({ state: "saving", items: savingItems });
+
+  if (saveMode == 0) {
+    sendMessage({ state: "saving", items: savingItems, confirm: false });
+    if (savingItems) {
+      sendMessageBackground("dosave", savingItems);
+    }
+  } else {
+    sendMessage({ state: "saving", items: savingItems, confirm: true });
+  }
 }
 
 function save_module() {
@@ -453,6 +511,7 @@ function restore_options() {
       lasttopic: "",
       lastfileid: 0,
       usesaveid: true,
+      savemode: 0,
     })
     .then((items) => {
       fileConfig.course_prefix = items?.course;
@@ -471,6 +530,7 @@ function restore_options() {
       fileConfig.lastmodule = items?.lastmodule;
       fileConfig.lasttopic = items?.lasttopic;
       fileConfig.lastfileid = items?.lastfileid;
+      fileConfig.savemode = items?.savemode;
       console.log("RESTORE_OPT", saveObjectsReq, fileConfig);
       init();
     });

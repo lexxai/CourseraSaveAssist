@@ -7,9 +7,15 @@ chrome.runtime.onInstalled.addListener(() => {
   clear_download_store();
 });
 
-chrome.runtime.onConnect.addListener(async (port) => {
+chrome.runtime.onConnect.addListener((port) => {
   console.assert(port.name === "csa-background");
-  port.onMessage.addListener(async (request) => {
+
+  port.onDisconnect.addListener((port) => {
+    console.assert(port.name === "csa-background");
+    console.log("onDisconnect", port.name);
+  });
+
+  port.onMessage.addListener((request) => {
     switch (request.command) {
       case "counterClear":
         clear_download_store();
@@ -19,20 +25,17 @@ chrome.runtime.onConnect.addListener(async (port) => {
         tabid = request.message;
         //console.log("mgs background tabid:", tabid);
         break;
-      case "setFilesCount":
-        let count = request.message;
-        //console.log("mgs background setFilesCount:", count);
-        //setState(count);
-        break;
       case "saving":
         console.log("saving background port", busymgs.length);
         busymgs.push(request.message);
         break;
       case "dosave":
         console.log("dosave background ", busymgs.length);
-        setTimeout(() => {
-          doSaveIt(request.message);
-        }, 0);
+        sendMessage({ state: "saving", items: busymgs.length, confirm: true });
+        doSaveIt(request.message).then((msg) => {
+          console.log("dosave background after doSaveIt", busymgs.length, msg);
+        });
+        // setTimeout(() => {}, 0);
         break;
     }
     return false;
@@ -64,6 +67,7 @@ async function doSaveIt(items) {
     let item = busymgs.pop();
     await saving(item);
   }
+  return items;
 }
 
 function checkSavedState(id) {
@@ -157,11 +161,8 @@ function clearState(tabid = 0) {
   });
 }
 
-function sentMsg(cmd, tabid = 0) {
-  tabid = tabid ? tabid : getCurrentTab()?.id;
-  chrome.runtime.sendMessage({ greeting: "csa-bg", command: cmd, tabid: tabid }, function (response) {
-    console.log("runtime.sentMsg response", response);
-  });
+function sendMessage(m) {
+  chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
 }
 
 async function getCurrentTab() {
