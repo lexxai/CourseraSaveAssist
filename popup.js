@@ -130,11 +130,11 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         fileConfig.lasttopic = saveObjects.topic;
         fileConfig.lastfileid = saveObjects.fileid;
         save_options();
-        debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
         sendMessageBackground("setFilesCount", request.message.items);
+        debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
         setTimeout(() => {
           window.close();
-        }, 1500);
+        }, 750);
       }
       break;
   }
