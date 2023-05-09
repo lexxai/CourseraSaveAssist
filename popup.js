@@ -126,7 +126,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       }, 100);
       break;
     case "csa-save":
-      debuglog("");
       if (request?.message.state === "saving") {
         if (request?.message == 0) {
           debuglog("SAVING ERROR: Zero files have been downloaded");
@@ -135,7 +134,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           }, 20000);
           break;
         }
-
+        debuglog("");
+        console.log("saving messaga", request?.message);
         if (request?.message.confirm) {
           // withconfirmation
           fileConfig.lastmodule = saveObjects.module;
@@ -160,21 +160,6 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
             }, 30000);
           }, 10000);
         }
-      }
-      break;
-    case "csa-saving":
-      let timeoutclose = 750;
-      console.log("MESSAGE from csa-saving:", request?.message);
-      if (waitSavingStartID) {
-        clearTimeout(waitSavingStartID);
-        waitSavingStartID = 0;
-        if (request?.message == 0) {
-          debuglog("SAVING ERROR: Zero files have been downloaded");
-          timeoutclose = 20000;
-        }
-        setTimeout(() => {
-          window.close();
-        }, timeoutclose);
       }
       break;
   }
@@ -396,7 +381,7 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
       filename: filename,
       baseurl: baseurl,
     };
-    sendMessageBackground("saving", obj);
+    sendMessageBackground("saveFile", obj);
   }
 
   function saveAsFileByBLOBAtHere(url, filename) {
