@@ -16,6 +16,7 @@ Version for development: ![current version](https://img.shields.io/github/manife
 The application has also been additionally initiated to be added to the stores for other browsers. Now stores are previewing the app before publishing it.
 
 The application has also been additionally tested in the following browsers:
+- Google Chrome (113.0.5672.92 (Official Build) x86-64, macOS Ventura v.13.3.1, 13.0.1)
 - Microsoft Egde (112.0.1722.68, Windows 11 x64)
 - Opera (98.0.4759.15, Windows 11 x64)
 
@@ -46,6 +47,7 @@ Example:
 Додаток також було додатково ініційованно до додавання у магазини інших браузерів. Зараз магазини превряють додаток перед публікацією.
 
 Також додатково перевірено роботу додатка в наступних браузерах:
+- Google Chrome (113.0.5672.92 (Official Build) x86-64, macOS Ventura v.13.3.1, 13.0.1)
 - Microsoft Egde (112.0.1722.68, Windows 11 x64)
 - Opera (98.0.4759.15, Windows 11 x64)
 
