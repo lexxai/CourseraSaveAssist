@@ -37,10 +37,10 @@ chrome.runtime.onConnect.addListener((port) => {
       case "dosave":
         console.log("dosave background ", downloadQueue.length);
         sendMessage({ state: "saving", items: downloadQueue.length, confirm: true });
-        setTimeout(() => {
-          downloadQueueSave(request.message).then((msg) => {
-            console.log("dosave background after downloadQueueSave", downloadQueue.length, msg);
-          });
+        // setTimeout(() => {
+        downloadQueueSave(request.message).then((msg) => {
+          console.log("dosave background after downloadQueueSave", downloadQueue.length, msg);
+          // });
         }, 0);
         break;
     }
@@ -202,10 +202,11 @@ async function getCurrentTab() {
 }
 
 async function downloadId_add_download(downloadId) {
-  console.log("downloadId_add_download begin", downloadId, downloadingList);
+  //console.log("downloadId_add_download begin", downloadId, downloadingList);
   if (downloadingList) {
     if (!downloadingList.includes(downloadId)) {
       downloadingList.push(downloadId);
+      console.log("downloadId_add_download added", downloadId, downloadingList);
       stateCalc(downloadingList.length);
     }
   }
@@ -249,12 +250,12 @@ function downloadId_initialze() {
 }
 
 function downloadId_clear_downloaded(downloadId) {
-  console.log("downloadId_clear_downloaded get", downloadId, downloadingList);
+  //console.log("downloadId_clear_downloaded get", downloadId, downloadingList);
   if (downloadingList.length) {
     let index = downloadingList.indexOf(downloadId);
     if (index != -1) {
       downloadingList.splice(index, 1);
-      console.log("downloadId_clear_downloaded set", downloadId, index, downloadingList);
+      //console.log("downloadId_clear_downloaded set", downloadId, index, downloadingList);
     }
   }
   return downloadingList.length;
