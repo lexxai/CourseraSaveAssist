@@ -686,7 +686,9 @@ function render_previos_item_name() {
     last_saved_file += String(fileConfig.lastfileid).padStart(2, "0");
   }
   last_saved_file += fileConfig.title_delimeter;
-  last_saved_file += fileConfig.lasttopic;
+  let last_topic = fileConfig.lasttopic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
+  last_topic = last_topic.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
+  last_saved_file += last_topic;
   if (last_saved_file) {
     last_saved_file = browser.i18n.getMessage("PREVIOSFILE") + ": " + last_saved_file;
     document.getElementById("hname")?.setAttribute("title", last_saved_file);
