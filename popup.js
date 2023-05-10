@@ -242,10 +242,10 @@ async function Initialize() {
     if (newitem) {
       if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
         newitem.classList.replace("hidden", "dot-green");
-        newitem.setAttribute("title", "New");
+        newitem.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW"));
       } else {
         newitem.classList.replace("hidden", "dot-red");
-        newitem.setAttribute("title", "The same");
+        newitem.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME"));
       }
     }
   }

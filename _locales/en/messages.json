@@ -118,5 +118,11 @@
   },
   "SAVEMODE_DESCR": {
     "message": "Compatible save mode is used if you have problems\nwith saving files. For example, it will help you save in macOS"
+  },
+  "TITLE_NEW": {
+    "message": "New"
+  },
+  "TITLE_SAME": {
+    "message": "The same"
   }
 }
