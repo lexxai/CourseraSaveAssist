@@ -176,9 +176,7 @@ function localization() {
   const subtitleAction = document.getElementById("subtitleAction");
   const textAction = document.getElementById("textAction");
   const options = document.getElementById("options");
-  const htitle = document.getElementById("htitle");
-
-  const bImg = document.getElementById("bImg");
+  // const htitle = document.getElementById("htitle");
 
   document.getElementsByTagName("body")[0]?.setAttribute("data-darkmode", isDarkTheme());
 
@@ -215,8 +213,6 @@ function localization() {
       //window.open("options.html", "options");
     });
   }
-
-  if (bImg) bImg.src = "chrome-extension://" + chrome.i18n.getMessage("@@extension_id") + "/images/button-ico-128.png";
 }
 
 function debuglog(text) {
@@ -241,10 +237,10 @@ async function Initialize() {
     htitle.innerHTML = tab.title.split("|")[0]?.trim();
     if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
       htitle.classList.add("ht-new");
-      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ": ");
+      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ". ");
     } else {
       htitle.classList.add("ht-same");
-      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME") + ": ");
+      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME") + ". ");
     }
   }
   console.log("tab taburl: ", taburl);
