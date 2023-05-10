@@ -59,7 +59,8 @@ body {
   background-image: url("images/button-ico-512-bg.png");
   background-repeat: no-repeat;
   background-attachment: fixed;
-  background-size: 100% 100%;
+  /* background-size: 100% 100%; */
+  background-size: 100% max(100%, 512px);
   background-color: rgba(0, 0, 0, 0.1);
   overflow: auto;
   /* overflow-y: hidden; */
@@ -95,4 +96,11 @@ body {
 a:-webkit-any-link:active,
 a:-webkit-any-link {
   color: rgb(213, 213, 213);
+}
+
+@media screen and (min-height: 550px) {
+  body {
+    overflow-y: hidden;
+    background-size: 100% 100%;
+  }
 }
