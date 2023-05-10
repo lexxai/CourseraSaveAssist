@@ -132,6 +132,13 @@ button:focus {
   background: #00ff00;
   border-radius: 50%;
 }
+.dot-red {
+  /* use on empty div */
+  width: 10px;
+  height: 10px;
+  background: #ff0000;
+  border-radius: 50%;
+}
 
 @media screen and (max-width: var(--csa-sidebar-width)) {
   .spacer {

@@ -241,6 +241,10 @@ async function Initialize() {
   if (newitem) {
     if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
       newitem.classList.replace("hidden", "dot-green");
+      newitem.setAttribute("title", "New");
+    } else {
+      newitem.classList.replace("hidden", "dot-red");
+      newitem.setAttribute("title", "The same");
     }
   }
   console.log("tab taburl: ", taburl);
