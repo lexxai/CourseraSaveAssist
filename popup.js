@@ -236,7 +236,7 @@ async function Initialize() {
   taburl = tab.url;
   console.log("tabid: ", tabid);
   console.log("tab title: ", tab.title);
-  if (htitle && tabid && tab.title != undefined) htitle.innerHTML = tab.title;
+  if (htitle && tabid && tab.title != undefined) htitle.innerHTML = tab.title.split("|")[0].trim();
   const newitem = document.getElementById("newitem");
   if (newitem) {
     if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
