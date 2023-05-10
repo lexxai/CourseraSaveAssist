@@ -83,7 +83,8 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       const htitle = document.getElementById("htitle");
       if (htitle) {
         const avl = chrome.i18n.getMessage("AVLANGUAGES");
-        htitle.setAttribute("title", avl + " " + request.message.languages);
+        const title = htitle.getAttribute("title");
+        htitle.setAttribute("title", title + avl + " " + request.message.languages);
       }
 
       let module = request.message.module;
@@ -238,15 +239,12 @@ async function Initialize() {
   console.log("tab title: ", tab.title);
   if (htitle && tabid && tab.title != undefined) {
     htitle.innerHTML = tab.title.split("|")[0]?.trim();
-    const newitem = document.getElementById("newitem");
-    if (newitem) {
-      if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
-        newitem.classList.replace("hidden", "dot-green");
-        newitem.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW"));
-      } else {
-        newitem.classList.replace("hidden", "dot-red");
-        newitem.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME"));
-      }
+    if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
+      htitle.classList.add("ht-new");
+      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ": ");
+    } else {
+      htitle.classList.add("ht-same");
+      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME") + ": ");
     }
   }
   console.log("tab taburl: ", taburl);

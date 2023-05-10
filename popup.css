@@ -119,25 +119,28 @@ button:focus {
 .ht {
   font-size: medium;
   font-style: italic;
-  margin-left: 12px;
-  margin-right: 12px;
+  margin-left: 0;
+  margin-right: 0;
   margin-bottom: 8px;
   margin-top: 4px;
 }
 
-.dot-green {
-  /* use on empty div */
-  width: 10px;
-  height: 10px;
-  background: #00ff00;
-  border-radius: 50%;
+.ht-new,
+.ht-same {
+  margin-top: 0px;
+  margin-right: 0px;
 }
-.dot-red {
-  /* use on empty div */
-  width: 10px;
-  height: 10px;
-  background: #ff0000;
-  border-radius: 50%;
+
+.ht-new::before {
+  content: "\25CF  ";
+  font-size: 20px;
+  color: #00ff00;
+}
+
+.ht-same::before {
+  content: "\25CF  ";
+  font-size: 20px;
+  color: #ff0000;
 }
 
 @media screen and (max-width: var(--csa-sidebar-width)) {
