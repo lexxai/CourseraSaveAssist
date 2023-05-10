@@ -4,7 +4,7 @@ Do you know that access to video materials ends after the course is over, and if
 I did this too, and I realized how inconvenient it is to change the default file name to logical names, and sooner or later you will make a mistake. That's why I came up with the idea to create an application that would help make this easier in a legal way.
 
 ## Google Chrome Extension 
-### "CSA - Assistant for saving files from Сoursera"
+### "CSA - Asst. for saving files from Сoursera"
 Latest release: ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist) 
 
 Version for development: ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
