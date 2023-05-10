@@ -237,6 +237,12 @@ async function Initialize() {
   console.log("tabid: ", tabid);
   console.log("tab title: ", tab.title);
   if (htitle && tabid && tab.title != undefined) htitle.innerHTML = tab.title;
+  const newitem = document.getElementById("newitem");
+  if (newitem) {
+    if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
+      newitem.classList.replace("hidden", "dot-green");
+    }
+  }
   console.log("tab taburl: ", taburl);
   let ownersite = "";
   try {

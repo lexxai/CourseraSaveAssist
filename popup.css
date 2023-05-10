@@ -87,12 +87,6 @@ h1 {
   text-align: center;
 }
 
-h2 {
-  font-size: medium;
-  text-align: center;
-  font-style: italic;
-}
-
 button#options:hover,
 button#options:focus,
 button:hover,
@@ -120,6 +114,23 @@ button:focus {
   cursor: default;
   opacity: 0.8;
   background-color: var(--csa-pdebug-background);
+}
+
+.ht {
+  font-size: medium;
+  font-style: italic;
+  margin-left: 12px;
+  margin-right: 12px;
+  margin-bottom: 8px;
+  margin-top: 4px;
+}
+
+.dot-green {
+  /* use on empty div */
+  width: 10px;
+  height: 10px;
+  background: #00ff00;
+  border-radius: 50%;
 }
 
 @media screen and (max-width: var(--csa-sidebar-width)) {
