@@ -1,4 +1,4 @@
-# Assistant for saving files from Сoursera
+# CSA - Assistant for saving files from Сoursera
 
 Do you know that access to video materials ends after the course is over, and if you want to recall the knowledge later, users record video materials to their own media if they have such an opportunity.
 I did this too, and I realized how inconvenient it is to change the default file name to logical names, and sooner or later you will make a mistake. That's why I came up with the idea to create an application that would help make this easier in a legal way.
@@ -32,7 +32,7 @@ Example:
 
 
 
-# Помічник для збереження файлів з Сoursera (CSA) 
+# CSA - Помічник для збереження файлів з Сoursera
 Останній реліз: ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist) 
 
 Версія в розробці: ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
