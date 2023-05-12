@@ -24,12 +24,9 @@ Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
 - https://youtube.com/shorts/0R2FYYBiBNw
-
-![CSA-MENU1-EN-1-6](https://user-images.githubusercontent.com/3278842/236651226-d08b0ac9-33a9-4c0d-9cee-e4f6cd1774dd.png)
-![CSA-OPTION-1-6-EN](https://user-images.githubusercontent.com/3278842/236651238-289f12a7-b864-4966-8373-398c7d983317.png)
-
-
-
+- 
+![CSA-MENU1-EN-1-7](https://github.com/lexxai/CourseraSaveAssist/assets/3278842/cbadca27-0264-4ae7-9cbb-6b17de77e905)
+![CSA-OPTION-EN-1-7](https://github.com/lexxai/CourseraSaveAssist/assets/3278842/2abc6a4b-e8c4-4f8d-adf1-265a3be8182c)
 
 
 # CSA - Помічник для збереження файлів з Сoursera
