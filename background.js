@@ -143,13 +143,17 @@ function stateSet(c, tabid = 0) {
     waitTimerSytateOK = 0;
   }
   //tabid = tabid ? tabid : getCurrentTab()?.id;  , tabId: tabid
-  chrome.action.setBadgeText({ text: String(c).trim() });
+  stateSetText(c);
   stateSetColor(1);
   if (waitTimerSytate1) clearTimeout(waitTimerSytate1);
   waitTimerSytate1 = setTimeout(() => {
     waitTimerSytate1 = 0;
     stateSetColor(2);
   }, 500);
+}
+
+function stateSetText(c) {
+  chrome.action.setBadgeText({ text: String(c).trim() });
 }
 
 function stateSetColor(color = 0, tabid = 0) {
@@ -268,11 +272,16 @@ async function downloadId_add_download(downloadId) {
 // }
 
 async function downloadId_initialze() {
-  stateSet("OK");
   waitTimerSytateOK = setTimeout(() => {
-    waitTimerSytateOK = 0;
-    stateSet("");
-  }, 5000);
+    stateSet("OK");
+    waitTimerSytateOK = setTimeout(() => {
+      waitTimerSytateOK = 0;
+      stateSet("");
+    }, 5000);
+  }, 1000);
+
+  stateSetText("");
+
   //await acquireWriteLock();
   //downloadingList.splice(0, downloadingList.length);
   //isWriteInProgress = false;
