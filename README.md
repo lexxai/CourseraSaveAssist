@@ -5,9 +5,9 @@ I did this too, and I realized how inconvenient it is to change the default file
 
 ## Google Chrome Extension 
 ### "CSA - Asst. for saving files from Сoursera"
-Latest release: ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist) 
+Latest release: [![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist)](https://github.com/lexxai/CourseraSaveAssist/releases/latest)
 
-Version for development: ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
+Version for development: [![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)](https://github.com/lexxai/CourseraSaveAssist/archive/refs/heads/main.zip)
 
 **[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new%3F) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
 
@@ -30,9 +30,9 @@ Example:
 
 
 # CSA - Помічник для збереження файлів з Сoursera
-Останній реліз: ![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist) 
+Останній реліз: [![GitHub release (latest by date)](https://img.shields.io/github/v/release/lexxai/CourseraSaveAssist)](https://github.com/lexxai/CourseraSaveAssist/releases/latest)
 
-Версія в розробці: ![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)
+Версія в розробці: [![current version](https://img.shields.io/github/manifest-json/v/lexxai/CourseraSaveAssist)](https://github.com/lexxai/CourseraSaveAssist/archive/refs/heads/main.zip)
 
 **[Завантаження](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F) | [Можливості](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [Що нового?](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%A9%D0%BE-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%3F) | [Допомога проєкту](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%94%D0%BE%D0%BF%D0%BE%D0%BC%D0%BE%D0%B3%D0%B0-%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82%D1%83)**
 
