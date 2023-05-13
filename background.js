@@ -1,7 +1,9 @@
 let waitTimerSytate1 = 0;
+let waitTimerSytateOK = 0;
 let tabid = 0;
 const downloadQueue = [];
 const downloadingList = [];
+let isWriteInProgress = false;
 
 chrome.runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
@@ -14,10 +16,11 @@ chrome.runtime.onInstalled.addListener(() => {
 chrome.runtime.onConnect.addListener((port) => {
   console.assert(port.name === "csa-background");
 
-  port.onDisconnect.addListener((port) => {
-    console.assert(port.name === "csa-background");
-    console.log("onDisconnect", port.name);
-  });
+  // port.onDisconnect.addListener((port) => {
+  //   console.assert(port.name === "csa-background");
+  //   console.log("onDisconnect", port.name);
+  //   console.log("onDisconnect downloadingList", downloadingList);
+  // });
 
   port.onMessage.addListener((request) => {
     switch (request.command) {
@@ -84,14 +87,16 @@ async function downloadQueueSave(items) {
   return items;
 }
 
-function downloadId_check(id) {
+async function downloadId_check(id) {
+  await acquireWriteLock();
   if (downloadingList.length) {
     if (downloadingList.includes(id)) {
       console.log("Download id" + id + " was mine, clearing...");
-      let size = downloadId_clear_downloaded(id);
-      stateSetValue(size);
+      await downloadId_clear_downloaded(id);
+      stateSetValue(downloadingList.length);
     }
   }
+  isWriteInProgress = false;
 }
 
 // function xdownloadId_check(id) {
@@ -133,6 +138,10 @@ async function saveFile(obj) {
 }
 
 function stateSet(c, tabid = 0) {
+  if (waitTimerSytateOK) {
+    clearTimeout(waitTimerSytateOK);
+    waitTimerSytateOK = 0;
+  }
   //tabid = tabid ? tabid : getCurrentTab()?.id;  , tabId: tabid
   chrome.action.setBadgeText({ text: String(c).trim() });
   stateSetColor(1);
@@ -153,7 +162,7 @@ function stateSetColor(color = 0, tabid = 0) {
 
 function stateSetValue(c) {
   console.log("stateSetValue", c);
-  c = Number(isNaN(c) ? 0 : c) - 1;
+  c = Number(isNaN(c) ? 0 : c);
   if (c <= 0) {
     downloadId_initialze();
   } else {
@@ -172,6 +181,7 @@ function stateSetValue(c) {
 // }
 
 function stateCalc(c) {
+  console.log("stateCalc", c);
   c = Number(isNaN(c) ? 0 : c);
   if (c > 30 || c <= 0) {
     c = "";
@@ -201,15 +211,34 @@ async function getCurrentTab() {
   return tab;
 }
 
+// Asynchronous function to acquire the write lock
+async function acquireWriteLock() {
+  return new Promise((resolve) => {
+    const checkLock = () => {
+      if (!isWriteInProgress) {
+        isWriteInProgress = true;
+        resolve();
+      } else {
+        console.log("acquireWriteLock - locked, wait");
+        setTimeout(checkLock, 10);
+      }
+    };
+    checkLock();
+  });
+}
+
 async function downloadId_add_download(downloadId) {
-  //console.log("downloadId_add_download begin", downloadId, downloadingList);
+  console.log("downloadId_add_download begin", downloadId, downloadingList);
+  await acquireWriteLock();
+  //console.log("downloadId_add_download after lock", downloadId, downloadingList);
   if (downloadingList) {
     if (!downloadingList.includes(downloadId)) {
       downloadingList.push(downloadId);
-      console.log("downloadId_add_download added", downloadId, downloadingList);
+      //console.log("downloadId_add_download added", downloadId, downloadingList);
       stateCalc(downloadingList.length);
     }
   }
+  isWriteInProgress = false;
 }
 
 // async function downloadId_add_download(downloadId) {
@@ -238,27 +267,32 @@ async function downloadId_add_download(downloadId) {
 //     });
 // }
 
-function downloadId_initialze() {
+async function downloadId_initialze() {
   stateSet("OK");
-  setTimeout(() => {
+  waitTimerSytateOK = setTimeout(() => {
+    waitTimerSytateOK = 0;
     stateSet("");
   }, 5000);
-  downloadingList.splice(0, downloadingList.length);
+  //await acquireWriteLock();
+  //downloadingList.splice(0, downloadingList.length);
+  //isWriteInProgress = false;
   // chrome.storage.session.set({
   //   downloadingnow: [],
   // });
 }
 
-function downloadId_clear_downloaded(downloadId) {
-  //console.log("downloadId_clear_downloaded get", downloadId, downloadingList);
-  if (downloadingList.length) {
-    let index = downloadingList.indexOf(downloadId);
-    if (index != -1) {
-      downloadingList.splice(index, 1);
-      //console.log("downloadId_clear_downloaded set", downloadId, index, downloadingList);
+async function downloadId_clear_downloaded(downloadId) {
+  console.log("downloadId_clear_downloaded get", downloadId, downloadingList);
+  return new Promise((resolve) => {
+    if (downloadingList.length) {
+      let index = downloadingList.indexOf(downloadId);
+      if (index != -1) {
+        downloadingList.splice(index, 1);
+        console.log("downloadId_clear_downloaded set", downloadId, index, downloadingList);
+      }
     }
-  }
-  return downloadingList.length;
+    resolve();
+  });
 }
 
 // async function downloadId_clear_downloaded(downloadId) {
