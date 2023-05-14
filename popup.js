@@ -84,7 +84,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (htitle) {
         const avl = chrome.i18n.getMessage("AVLANGUAGES");
         const title = htitle.getAttribute("title");
-        htitle.setAttribute("title", title + avl + " " + request.message.languages);
+        htitle.setAttribute("title", (title ? title : "") + avl + " " + request.message.languages);
       }
 
       let module = request.message.module;
@@ -235,12 +235,14 @@ async function Initialize() {
   console.log("tab title: ", tab.title);
   if (htitle && tabid && tab.title != undefined) {
     htitle.innerHTML = tab.title.split("|")[0]?.trim();
-    if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
-      htitle.classList.add("ht-new");
-      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ". ");
-    } else {
-      htitle.classList.add("ht-same");
-      htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME") + ". ");
+    if (fileConfig.lastmodule != "" || fileConfig.lasttopic != "" || fileConfig.lastfileid != 0) {
+      if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
+        htitle.classList.add("ht-new");
+        htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ". ");
+      } else {
+        htitle.classList.add("ht-same");
+        htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME") + ". ");
+      }
     }
   }
   console.log("tab taburl: ", taburl);
@@ -684,6 +686,9 @@ function clearWait(e) {
 
 function render_previos_item_name() {
   //console.log("render_previos_item_name");
+  if (fileConfig.lastmodule == "" && fileConfig.lasttopic == "" && fileConfig.lastfileid == 0) {
+    return;
+  }
   let last_saved_file = fileConfig.course_prefix;
   last_saved_file += fileConfig.module_prefix;
   last_saved_file += String(fileConfig.lastmodule).padStart(2, "0");
