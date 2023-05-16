@@ -231,12 +231,13 @@ async function Initialize() {
   let tab = await getCurrentTab();
   tabid = tab.id;
   taburl = tab.url;
-  console.log("tabid: ", tabid);
+  // console.log("tabid: ", tabid);
   console.log("tab title: ", tab.title);
   if (htitle && tabid && tab.title != undefined) {
     htitle.innerHTML = tab.title.split("|")[0]?.trim();
     if (fileConfig.lastmodule != "" || fileConfig.lasttopic != "" || fileConfig.lastfileid != 0) {
-      if (String(tab.title).indexOf(fileConfig.lasttopic) === -1) {
+      // String(tab.title).indexOf(fileConfig.lasttopic) === -1)
+      if (htitle.innerHTML.trim().normalize("NFC") != fileConfig.lasttopic.trim().normalize("NFC")) {
         htitle.classList.add("ht-new");
         htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ". ");
       } else {
