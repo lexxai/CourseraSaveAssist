@@ -1,7 +1,14 @@
 # CSA - Assistant for saving files from Сoursera
 
-Do you know that access to video materials ends after the course is over, and if you want to recall the knowledge later, users record video materials to their own media if they have such an opportunity.
-I did this too, and I realized how inconvenient it is to change the default file name to logical names, and sooner or later you will make a mistake. That's why I came up with the idea to create an application that would help make this easier in a legal way.
+"CSA - Assistant for saving files from Сoursera" - a browser extension for Google Chrome that makes saving Coursera video materials easy and convenient.
+
+Did you know that once you finish a course, you lose access to its video materials? If you want to retain those valuable insights for future reference, you may have resorted to recording videos onto your own storage devices. However, this process can be inconvenient, especially when it comes to renaming files or making mistakes.
+
+With "CSA - Assistant for saving files from Сoursera", you can effortlessly tackle this challenge in a legal and user-friendly manner. Our extension enables you to save Coursera videos with logical and intuitive file names. Say goodbye to tedious renaming and errors - our assistant takes care of it all!
+
+To get started with the extension, simply visit the [Chrome Web Store](https://chrome.google.com/webstore/detail/assistant-for-saving-file/dmoebncbmkgfpjhjikkjljmbaacncohl) and install it. Saving Coursera video materials has never been easier!
+
+We understand the importance of retaining knowledge, and our mission is to empower you in your learning journey. Join thousands of satisfied users who have embraced "CSA - Assistant for saving files from Сoursera" and enjoy seamless video saving from Coursera. Experience the convenience and peace of mind today!
 
 ## Google Chrome Extension 
 ### "CSA - Asst. for saving files from Сoursera"
@@ -17,6 +24,7 @@ The application has also been additionally initiated to be added to the stores f
 
 The application has also been additionally tested in the following browsers:
 - Google Chrome (113.0.5672.92 (Official Build) x86-64, macOS Ventura v.13.3.1, 13.0.1)
+- Google Chrome (113.0.5672.92 (Official Build) x86-64, macOS Monterey v.12.6.1)
 - Microsoft Egde (112.0.1722.68, Windows 11 x64)
 - Opera (98.0.4759.15, Windows 11 x64)
 
@@ -36,8 +44,13 @@ Example:
 
 **[Завантаження](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F) | [Можливості](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [Що нового?](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%A9%D0%BE-%D0%BD%D0%BE%D0%B2%D0%BE%D0%B3%D0%BE%3F) | [Допомога проєкту](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%94%D0%BE%D0%BF%D0%BE%D0%BC%D0%BE%D0%B3%D0%B0-%D0%BF%D1%80%D0%BE%D1%94%D0%BA%D1%82%D1%83)**
 
-Чи знаєте що доступ до відеоматеріалів у Вас закінчується після закінчення курсу, а якщо хочеш відновити у пам'яті згодом знання, то користувачі записують собі відеоматеріали до власних носіїв якщо є така можливість.
-Я теж робив такі дії, і зрозумів як це дуже не зручно змінювати ім'я файлів за замовчуванням до логічних назв, і рано чи пізно зробиш помилку. Тому виникла така ідея створити додаток що допоможе зробити цю справу легше у легальний спосіб.
+"CSA - Помічник для збереження файлів з Coursera" - розширення для браузера Google Chrome, яке робить збереження відеоматеріалів з Coursera легким та зручним.
+
+Чи знаєте ви, що після закінчення курсу ви втрачаєте доступ до відео матеріалів? Якщо ви бажаєте зберегти ці цінні знання на майбутнє, вам, можливо, доводилося записувати відео на власні носії. Але цей процес часто буває незручним, особливо коли потрібно змінювати імена файлів або робити помилки.
+
+"CSA - Помічник для збереження файлів з Coursera" допоможе вам зробити це все швидко, легко та в легальний спосіб. Розширення дозволяє вам зберігати відеоматеріали з Coursera зі зручними та логічними назвами файлів. Ви можете забути про марудні перейменування та помилки - мій помічник зробить все за вас!
+
+Щоб почати використовувати розширення, просто перейдіть за посиланням у [Chrome Web Store](https://chrome.google.com/webstore/detail/assistant-for-saving-file/dmoebncbmkgfpjhjikkjljmbaacncohl) та встановіть його. Збереження відеоматеріалів з Coursera ніколи не було таким простим!
 
 ### Додаток є в публічному доступі в Chrome Google Web Store [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
 
@@ -45,6 +58,7 @@ Example:
 
 Також додатково перевірено роботу додатка в наступних браузерах:
 - Google Chrome (113.0.5672.92 (Official Build) x86-64, macOS Ventura v.13.3.1, 13.0.1)
+- Google Chrome (113.0.5672.92 (Official Build) x86-64, macOS Monterey v.12.6.1)
 - Microsoft Egde (112.0.1722.68, Windows 11 x64)
 - Opera (98.0.4759.15, Windows 11 x64)
 
