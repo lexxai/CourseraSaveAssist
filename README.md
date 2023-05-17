@@ -32,6 +32,7 @@ Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
 - https://youtube.com/shorts/0R2FYYBiBNw
+- https://youtu.be/zKw2jqzErW0
 - 
 ![CSA-MENU1-EN-1-7](https://github.com/lexxai/CourseraSaveAssist/assets/3278842/cbadca27-0264-4ae7-9cbb-6b17de77e905)
 ![CSA-OPTION-EN-1-7](https://github.com/lexxai/CourseraSaveAssist/assets/3278842/2abc6a4b-e8c4-4f8d-adf1-265a3be8182c)
@@ -66,6 +67,7 @@ Example:
 - https://lexxai.blogspot.com/2023/04/chrome-edge-oursera.html
 - https://youtu.be/rm9IyYF9Vco
 - https://youtube.com/shorts/0R2FYYBiBNw
+- https://youtu.be/zKw2jqzErW0
 
 Локалізацію створено за допомогою: [https://crowdin.com/project/courserasaveassist](https://crowdin.com/project/courserasaveassist)
 [![Crowdin](https://badges.crowdin.net/courserasaveassist/localized.svg)](https://crowdin.com/project/courserasaveassist)
