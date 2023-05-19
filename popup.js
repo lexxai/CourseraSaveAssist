@@ -44,6 +44,11 @@ const fileConfig = {
 };
 
 //Functions....
+
+window.browser = (function () {
+  return typeof window.browser === "undefined" ? window.chrome : window.browser;
+})();
+
 function init() {
   localization();
   Initialize();
@@ -51,14 +56,14 @@ function init() {
 }
 
 function sendMessageBackground(command, message) {
-  let port = chrome.runtime.connect({ name: "csa-background" });
+  let port = browser.runtime.connect({ name: "csa-background" });
   port.postMessage({ command: command, message: message });
   // port.onMessage.addListener(function (msg) {
   //   console.log("port.onMessage", msg);
   // });
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   // console.log(
   //   sender.tab
   //     ? "from a content script:" + sender.tab.url
@@ -75,14 +80,14 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       clearWait(waitCourseInfoID);
       console.log("getCourseInfo recieved");
       if (request.message.error) {
-        debuglog(chrome.i18n.getMessage("NOVIDEO"));
+        debuglog(browser.i18n.getMessage("NOVIDEO"));
         return true;
       }
       videoAction.removeAttribute("hidden");
       debuglog("");
       const htitle = document.getElementById("htitle");
       if (htitle) {
-        const avl = chrome.i18n.getMessage("AVLANGUAGES");
+        const avl = browser.i18n.getMessage("AVLANGUAGES");
         const title = htitle.getAttribute("title");
         htitle.setAttribute("title", (title ? title : "") + avl + " " + request.message.languages);
       }
@@ -143,7 +148,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           fileConfig.lasttopic = saveObjects.topic;
           fileConfig.lastfileid = saveObjects.fileid;
           save_options();
-          debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
+          debuglog(browser.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
           if (waitSavingStartID) {
             clearTimeout(waitSavingStartID);
             waitSavingStartID = 0;
@@ -153,7 +158,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           }, 750);
         } else {
           // without confirmation still
-          debuglog(chrome.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
+          debuglog(browser.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
           waitSavingStartID = setTimeout(() => {
             debuglog("SAVING TIMEOUT ERROR");
             setTimeout(() => {
@@ -169,7 +174,7 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
 function localization() {
   const hname = document.getElementById("hname");
-  if (hname) hname.innerHTML = chrome.i18n.getMessage("plug_name");
+  if (hname) hname.innerHTML = browser.i18n.getMessage("plug_name");
 
   // Initialize button with user's preferred color
   const videoAction = document.getElementById("videoAction");
@@ -182,34 +187,34 @@ function localization() {
 
   if (videoAction) {
     let cnt = 0;
-    videoAction.innerHTML = chrome.i18n.getMessage("videoAction");
+    videoAction.innerHTML = browser.i18n.getMessage("videoAction");
     if (saveObjectsReq.video) {
-      videoAction.innerHTML += (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEO");
+      videoAction.innerHTML += (cnt++ ? ", " : " ") + browser.i18n.getMessage("VIDEO");
     }
     if (saveObjectsReq.subtitle) {
-      videoAction.innerHTML += (cnt++ ? ", " : " ") + chrome.i18n.getMessage("SUBTILE");
+      videoAction.innerHTML += (cnt++ ? ", " : " ") + browser.i18n.getMessage("SUBTILE");
     }
     if (saveObjectsReq.videotext) {
-      videoAction.innerHTML += (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEOTEXT");
+      videoAction.innerHTML += (cnt++ ? ", " : " ") + browser.i18n.getMessage("VIDEOTEXT");
     }
     if (saveObjectsReq.subtitle_addon) {
       videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("SUBTILE") + ":" + saveObjectsReq.subtitle_addon_lang;
+        (cnt++ ? ", " : " ") + browser.i18n.getMessage("SUBTILE") + ":" + saveObjectsReq.subtitle_addon_lang;
     }
     if (saveObjectsReq.videotext_addon) {
       videoAction.innerHTML +=
-        (cnt++ ? ", " : " ") + chrome.i18n.getMessage("VIDEOTEXT") + ":" + saveObjectsReq.videotext_addon_lang;
+        (cnt++ ? ", " : " ") + browser.i18n.getMessage("VIDEOTEXT") + ":" + saveObjectsReq.videotext_addon_lang;
     }
 
     videoAction.setAttribute("hidden", "");
   }
-  if (subtitleAction) subtitleAction.innerHTML = chrome.i18n.getMessage("subtitleAction");
-  if (textAction) textAction.innerHTML = chrome.i18n.getMessage("textAction");
+  if (subtitleAction) subtitleAction.innerHTML = browser.i18n.getMessage("subtitleAction");
+  if (textAction) textAction.innerHTML = browser.i18n.getMessage("textAction");
 
   if (options) {
-    options.setAttribute("title", chrome.i18n.getMessage("OPTIONS"));
+    options.setAttribute("title", browser.i18n.getMessage("OPTIONS"));
     options.addEventListener("click", () => {
-      chrome.runtime.openOptionsPage();
+      browser.runtime.openOptionsPage();
       //window.open("options.html", "options");
     });
   }
@@ -239,10 +244,10 @@ async function Initialize() {
       // String(tab.title).indexOf(fileConfig.lasttopic) === -1)
       if (htitle.innerHTML.trim().normalize("NFC") != fileConfig.lasttopic.trim().normalize("NFC")) {
         htitle.classList.add("ht-new");
-        htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_NEW") + ". ");
+        htitle.setAttribute("title", browser.i18n.getMessage("TITLE_NEW") + ". ");
       } else {
         htitle.classList.add("ht-same");
-        htitle.setAttribute("title", chrome.i18n.getMessage("TITLE_SAME") + ". ");
+        htitle.setAttribute("title", browser.i18n.getMessage("TITLE_SAME") + ". ");
       }
     }
   }
@@ -252,13 +257,14 @@ async function Initialize() {
     ownersite = new URL(taburl).hostname;
   } catch (e) {}
   if (ownersite.indexOf(fileConfig.host_url) !== -1) {
-    debuglog(chrome.i18n.getMessage("SEARCHVIDEO"));
+    debuglog(browser.i18n.getMessage("SEARCHVIDEO"));
     getCourseInfo();
     //search_module();
   } else {
-    debuglog(chrome.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
+    debuglog(browser.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
   }
-  sendMessageBackground("tabid", tabid);
+  let scrolltotitle = true;
+  sendMessageBackground("tabid", { tabid: tabid, scrolltotitle: scrolltotitle });
 }
 
 function implode_search(saveObjectsReq) {
@@ -268,7 +274,7 @@ function implode_search(saveObjectsReq) {
   }
 
   function sendMessage(m) {
-    chrome.runtime.sendMessage({ greeting: "csa", message: m });
+    browser.runtime.sendMessage({ greeting: "csa", message: m });
   }
 
   function searchInVideo(langreq) {
@@ -348,7 +354,7 @@ function implode_search(saveObjectsReq) {
 }
 
 function search_module() {
-  chrome.scripting.executeScript({
+  browser.scripting.executeScript({
     target: {
       tabId: tabid,
     },
@@ -362,12 +368,12 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
   const browser = chrome;
   let port;
   function sendMessageBackground(command, message) {
-    if (!(port && port.name)) port = chrome.runtime.connect({ name: "csa-background" });
+    if (!(port && port.name)) port = browser.runtime.connect({ name: "csa-background" });
     port.postMessage({ command: command, message: message });
   }
 
   function sendMessage(m) {
-    chrome.runtime.sendMessage({ greeting: "csa-save", message: m });
+    browser.runtime.sendMessage({ greeting: "csa-save", message: m });
   }
   /**
    * @param {*} saveMode: 0 - default API method , 1 - compatible BLOB method
@@ -457,7 +463,7 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
 }
 
 function save_module() {
-  chrome.scripting.executeScript({
+  browser.scripting.executeScript({
     target: {
       tabId: tabid,
     },
@@ -472,13 +478,13 @@ function addListeners() {
     //console.log("addEventListener by videoAction tabid:" + tabid);
     save_module();
     videoAction.setAttribute("hidden", "");
-    debuglog(chrome.i18n.getMessage("SAVING"));
+    debuglog(browser.i18n.getMessage("SAVING"));
   });
 }
 
 async function getCurrentTab() {
   let queryOptions = { active: true, currentWindow: true };
-  let [tab] = await chrome.tabs.query(queryOptions);
+  let [tab] = await browser.tabs.query(queryOptions);
   return tab;
 }
 
@@ -488,7 +494,7 @@ function escapeRegExp(string) {
 
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
-  chrome.storage.sync
+  browser.storage.sync
     .get({
       course: "",
       module: "M",
@@ -531,7 +537,7 @@ function restore_options() {
 }
 
 async function save_options() {
-  await chrome.storage.sync
+  await browser.storage.sync
     .set({
       lastmodule: fileConfig.lastmodule,
       lasttopic: fileConfig.lasttopic,
@@ -543,7 +549,7 @@ async function save_options() {
 function implode_getCourseInfo(saveObjectsReq) {
   const browser = chrome;
   function sendMessage(m) {
-    chrome.runtime.sendMessage({ greeting: "csa", message: m });
+    browser.runtime.sendMessage({ greeting: "csa", message: m });
   }
 
   function searchCourseLanguage() {
@@ -666,9 +672,9 @@ function getCourseInfo() {
   console.log("getCourseInfo start");
   waitCourseInfoID = setTimeout(() => {
     console.log("Timeout of get Course Info");
-    debuglog(chrome.i18n.getMessage("NOVIDEO"));
+    debuglog(browser.i18n.getMessage("NOVIDEO"));
   }, 8000);
-  chrome.scripting.executeScript({
+  browser.scripting.executeScript({
     target: {
       tabId: tabid,
     },
@@ -709,5 +715,4 @@ function render_previos_item_name() {
 
 // functions end
 
-const browser = chrome;
 document.addEventListener("DOMContentLoaded", restore_options);

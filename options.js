@@ -1,8 +1,12 @@
+window.browser = (function () {
+  return typeof window.browser === "undefined" ? window.chrome : window.browser;
+})();
+
 function isDarkTheme() {
   return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches;
 }
 
-// Saves options to chrome.storage
+// Saves options to browser.storage
 function save_options(e) {
   console.log("save_options");
   e.preventDefault();
@@ -84,7 +88,7 @@ function reset_options(e) {
 }
 
 // Restores select box and checkbox state using the preferences
-// stored in chrome.storage.
+// stored in browser.storage.
 function restore_options() {
   // Use default value color = 'red' and likesColor = true.
   browser.storage.sync
@@ -203,7 +207,7 @@ function readManifest() {
   }
 }
 
-chrome.storage.onChanged.addListener(async (changes, namespace) => {
+browser.storage.onChanged.addListener(async (changes, namespace) => {
   if (namespace != "session") {
     for (let [key, { oldValue, newValue }] of Object.entries(changes)) {
       // console.log(
@@ -235,7 +239,6 @@ function init() {
   restore_options();
 }
 
-const browser = chrome;
 const SAVED_TXT = browser.i18n.getMessage("SAVED_TXT");
 const RESTORED_DEFAULT_TXT = browser.i18n.getMessage("RESTORED_DEFAULT_TXT");
 
