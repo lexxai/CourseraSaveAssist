@@ -26,6 +26,7 @@ const saveObjectsReq = {
   subtitle_addon: true,
   subtitle_addon_lang: "en",
   usesaveid: true,
+  scrolltotitle: false,
 };
 
 const fileConfig = {
@@ -263,7 +264,7 @@ async function Initialize() {
   } else {
     debuglog(browser.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
   }
-  let scrolltotitle = true;
+  const scrolltotitle = saveObjectsReq.scrolltotitle;
   sendMessageBackground("tabid", { tabid: tabid, scrolltotitle: scrolltotitle });
 }
 
@@ -512,6 +513,7 @@ function restore_options() {
       lastfileid: 0,
       usesaveid: true,
       savemode: 0,
+      scrolltotitle: false,
     })
     .then((items) => {
       fileConfig.course_prefix = items?.course;
@@ -527,6 +529,7 @@ function restore_options() {
       saveObjectsReq.subtitle_addon = items?.savesubtitleadd;
       saveObjectsReq.subtitle_addon_lang = items?.subtitle_lang;
       saveObjectsReq.usesaveid = items?.usesaveid;
+      saveObjectsReq.scrolltotitle = items?.scrolltotitle;
       fileConfig.lastmodule = items?.lastmodule;
       fileConfig.lasttopic = items?.lasttopic;
       fileConfig.lastfileid = items?.lastfileid;

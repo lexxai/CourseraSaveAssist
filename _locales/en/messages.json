@@ -124,5 +124,11 @@
   },
   "TITLE_SAME": {
     "message": "The same"
+  },
+  "SCROLLTOTILE": {
+    "message": "Search for videos in the list?"
+  },
+  "SCROLLTOTILE_DESCR": {
+    "message": "Find the titles of the videos in the list in the left pane and scroll to the title of the current video"
   }
 }

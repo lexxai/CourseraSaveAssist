@@ -27,6 +27,7 @@ function save_options(e) {
   let lastfileid = document.getElementById("lastfileid")?.value;
   let usesaveid = document.getElementById("usesaveid")?.checked;
   let savemode = document.getElementById("savemode")?.checked ? 1 : 0;
+  let scrolltotitle = document.getElementById("scrolltotitle")?.checked;
   let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd || savevideotxtadd;
   if (!isSave) {
     const status = document.getElementById("status");
@@ -57,6 +58,7 @@ function save_options(e) {
       lastfileid: lastfileid,
       usesaveid: usesaveid,
       savemode: savemode,
+      scrolltotitle: scrolltotitle,
     })
     .then(() => {
       // Update status to let user know options were saved.
@@ -109,6 +111,7 @@ function restore_options() {
       lastfileid: 0,
       usesaveid: true,
       savemode: 0,
+      scrolltotitle: false,
     })
     .then((items) => {
       if (items.course !== undefined) document.getElementById("course").value = items?.course;
@@ -128,6 +131,7 @@ function restore_options() {
       if (items.lastfileid !== undefined) document.getElementById("lastfileid").value = Number(items.lastfileid);
       if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items?.usesaveid;
       if (items.savemode !== undefined) document.getElementById("savemode").checked = items?.savemode != 0;
+      if (items.scrolltotitle !== undefined) document.getElementById("scrolltotitle").checked = items?.scrolltotitle;
     });
 }
 
