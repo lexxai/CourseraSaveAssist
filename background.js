@@ -17,8 +17,11 @@ let scrolltotile = false;
 
 browserf().runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
+  saveVariable("tabid", tabid);
   downloadId_initialze();
 });
+
+browserf().tabs.onUpdated.addListener(tab_onUpdated);
 
 /**
  * Messages long-live port
@@ -42,11 +45,11 @@ browserf().runtime.onConnect.addListener((port) => {
 
         tabid = request.message?.tabid;
         scrolltotile = request.message?.scrolltotitle;
-        //console.log("tabid message  :", request.message, tabid, scrolltotile);
+        console.log("tabid message  :", request.message, tabid, scrolltotile);
         tab_check(tabid, scrolltotile);
         saveVariable("tabid", tabid);
         saveVariable("scrolltotile", scrolltotile);
-        // console.log("after saveVariable tabid:", r);
+        console.log("after saveVariable tabid:");
         //console.log("mgs background tabid:", tabid);
         break;
       case "saveFile":
@@ -90,22 +93,22 @@ browserf().downloads.onChanged.addListener((e) => {
 });
 
 async function saveVariable(key, value) {
-  item = {};
+  let item = {};
   item[key] = value;
   return browserf()
     .storage.local.set(item)
     .then(() => {
-      console.log("saveSession: saved items", item);
+      console.log("saveSession: saved item", key, value, item);
     });
 }
 
 async function getVariable(key) {
-  item = {};
+  let item = {};
   item[key] = "";
   return browserf()
     .storage.local.get(item)
     .then((item) => {
-      console.log("getVariable: items", item);
+      console.log("getVariable: item", key, item[key]);
       return item[key];
     });
 }
@@ -412,21 +415,27 @@ function tab_check(tabid, scrolltotile = false) {
 }
 
 async function tab_onUpdated(id, changeInfo, tab) {
-  if (scrolltotile && id == tabid && changeInfo?.status == "complete") {
-    console.log("tab_onUpdated", id, tab?.title);
-    scrolltotile = await getVariable("scrolltotile");
-    console.log("tab_onUpdated afrer read scrolltotile", scrolltotile);
-    if (scrolltotile) {
-      tab_select_current_video(id, tab?.title, true);
-    } else {
-      console.log("tab_onUpdated scrolltotile", scrolltotile);
+  //console.log("tab_onUpdated init", id, tabid, tab?.title, changeInfo?.status);
+
+  //console.log("tab_onUpdated init get memory", id, tabid, tab?.title, changeInfo?.status);
+  if (changeInfo?.status == "complete") {
+    if (!tabid) {
+      tabid = await getVariable("tabid");
+    }
+    if (id == tabid) {
+      console.log("tab_onUpdated", id, tab?.title, scrolltotile);
+      scrolltotile = await getVariable("scrolltotile");
+      //console.log("tab_onUpdated afrer read scrolltotile", scrolltotile);
+      if (scrolltotile) {
+        tab_select_current_video(id, tab?.title, true);
+      } else {
+        console.log("tab_onUpdated scrolltotile", scrolltotile);
+      }
     }
   }
 }
 
 function downloadId_initialze() {
-  browserf().tabs.onUpdated.addListener(tab_onUpdated);
-
   waitTimerSytateOK = setTimeout(() => {
     stateSet("OK");
     waitTimerSytateOK = setTimeout(() => {
