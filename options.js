@@ -18,6 +18,7 @@ function save_options(e) {
   subtitle_lang = subtitle_lang.replace(/\s+/gi, "").replace(/[^a-z0-9A-Z,-]+/gi, "");
   let savevideo = document.getElementById("savevideo")?.checked;
   let videores = document.getElementById("videores")?.checked;
+  let videoduration = document.getElementById("videoduration")?.checked;
   let savevideotxt = document.getElementById("savevideotxt")?.checked;
   let savevideotxtadd = document.getElementById("savevideotxtadd")?.checked;
   let savesubtitle = document.getElementById("savesubtitle")?.checked;
@@ -49,6 +50,7 @@ function save_options(e) {
       subtitle_lang: subtitle_lang,
       savevideo: savevideo,
       videores: videores,
+      videoduration: videoduration,
       savevideotxt: savevideotxt,
       savevideotxtadd: savevideotxtadd,
       savesubtitle: savesubtitle,
@@ -102,6 +104,7 @@ function restore_options() {
       subtitle_lang: "en",
       savevideo: true,
       videores: true,
+      videoduration: false,
       savevideotxt: true,
       savesubtitle: true,
       savevideotxtadd: false,
@@ -121,6 +124,7 @@ function restore_options() {
       if (items.subtitle_lang) document.getElementById("subtitle_lang").value = items?.subtitle_lang;
       if (items.savevideo !== undefined) document.getElementById("savevideo").checked = items?.savevideo;
       if (items.videores !== undefined) document.getElementById("videores").checked = items?.videores;
+      if (items.videoduration !== undefined) document.getElementById("videoduration").checked = items?.videoduration;
       if (items.savevideotxt !== undefined) document.getElementById("savevideotxt").checked = items?.savevideotxt;
       if (items.savevideotxtadd !== undefined)
         document.getElementById("savevideotxtadd").checked = items?.savevideotxtadd;

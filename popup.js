@@ -19,6 +19,7 @@ const saveObjects = {
 const saveObjectsReq = {
   video: true,
   video_res: true,
+  videoduration: false,
   subtitle: true,
   videotext: true,
   videotext_addon: true,
@@ -119,6 +120,9 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (saveObjectsReq.usesaveid)
         saveObjects.filename += fileConfig.title_delimeter + String(saveObjects.fileid).padStart(2, "0");
       saveObjects.filename += fileConfig.title_delimeter + topic;
+      if (saveObjectsReq.videoduration && request.message?.videoduration)
+        saveObjects.filename +=
+          fileConfig.title_delimeter + String(request.message?.videoduration).padStart(2, "0") + "min";
       //debuglog("READY to SAVE: " + subtitle);
       if (request.message.videotext_addon) saveObjects.videotext_addon = request.message.videotext_addon;
       if (request.message.videotext_addon_lang) saveObjects.videotext_addon_lang = request.message.videotext_addon_lang;
@@ -504,6 +508,7 @@ function restore_options() {
       subtitle_lang: "en",
       savevideo: true,
       videores: true,
+      videoduration: false,
       savevideotxt: true,
       savevideotxtadd: false,
       savesubtitle: true,
@@ -522,6 +527,7 @@ function restore_options() {
       if (items?.spacesep !== undefined) fileConfig.space_delimeter = escapeRegExp(items.spacesep);
       saveObjectsReq.video = items?.savevideo;
       saveObjectsReq.videores = items?.videores;
+      saveObjectsReq.videoduration = items?.videoduration;
       saveObjectsReq.subtitle = items?.savesubtitle;
       saveObjectsReq.videotext = items?.savevideotxt;
       saveObjectsReq.videotext_addon = items?.savevideotxtadd;
@@ -559,6 +565,15 @@ function implode_getCourseInfo(saveObjectsReq) {
     return document.querySelector("#select-language")?.selectedOptions[0]?.value;
   }
 
+  function searchVideoDuratiom() {
+    let duration;
+    let video = document.getElementById("video_player_html5_api");
+    if (video && video.readyState > 0) {
+      duration = Math.round(video.duration / 60);
+    }
+    return duration;
+  }
+
   function searchCourseID() {
     let result = { success: false };
     let ci = document.querySelector("div.m-a-0.body > a")?.getAttribute("data-click-value");
@@ -576,6 +591,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     let result = {};
     result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
     result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
+    result.videoduration = searchVideoDuratiom();
     return result;
   }
 
