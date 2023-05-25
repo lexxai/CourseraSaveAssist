@@ -102,6 +102,17 @@ async function saveVariable(key, value) {
     });
 }
 
+async function getOptions(key) {
+  let item = {};
+  item[key] = "";
+  return browserf()
+    .storage.sync.get(item)
+    .then((item) => {
+      console.log("getOptions: item", key, item[key]);
+      return item[key];
+    });
+}
+
 async function getVariable(key) {
   let item = {};
   item[key] = "";
@@ -312,10 +323,20 @@ async function downloadId_add_download(downloadId) {
 //     });
 // }
 
-function tab_select_current_video_implode(stitle = "", isupdated = false) {
+function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdated = false) {
   if (stitle == "") return;
   let title = stitle.trim();
-  console.log("tab_select_current_video_implode", stitle, title, "isupdated", isupdated);
+  let savedTitle = typeof ssavedTitle == "string" ? ssavedTitle.trim() : "";
+  console.log(
+    "tab_select_current_video_implode",
+    stitle,
+    "title:",
+    title,
+    "savedTitle:",
+    savedTitle,
+    "isupdated:",
+    isupdated
+  );
 
   function getModouleInfo() {
     let result = {};
@@ -332,7 +353,7 @@ function tab_select_current_video_implode(stitle = "", isupdated = false) {
   }
 
   async function isReady(title) {
-    let cont = 5;
+    let cont = 25;
     while (cont > 0) {
       const items = document.querySelectorAll("div.rc-NavItemName");
       if (items && items.length) {
@@ -346,6 +367,21 @@ function tab_select_current_video_implode(stitle = "", isupdated = false) {
     }
     const items = document.querySelectorAll("div.rc-NavItemName");
     searchtitle(title, items);
+  }
+
+  function markItemSaved(item, mode = 0) {
+    let obj = item?.closest(".rc-NavSingleItemDisplay")?.getElementsByClassName("rc-NavItemIcon");
+    console.log("markItemSaved", item, mode);
+    if (obj.length) {
+      let w = obj[0].style.width;
+      obj[0].style.backgroundColor = mode ? "lightgreen" : "#ff00005c";
+      obj[0].style.borderRadius = "30px";
+      obj[0].style.paddingLeft = "6px";
+      obj[0].style.paddingTop = "14px";
+      obj[0].style.paddingTop = "14px";
+      obj[0].style.width = w;
+      //console.log("markItemSaved style", item, obj[0].style);
+    }
   }
 
   function searchtitle(stitle, items) {
@@ -363,8 +399,12 @@ function tab_select_current_video_implode(stitle = "", isupdated = false) {
         if (title && titles) {
           //console.log("item titles", title, titles);
           if (title.normalize("NFC") == titles.normalize("NFC")) {
-            console.log("item - found");
+            console.log("item - found. title:", title, "savedTitle:", savedTitle);
             item.scrollIntoView({ behavior: "smooth", block: "center" });
+            if (true && savedTitle) {
+              let isNew = savedTitle.normalize("NFC") != title.normalize("NFC");
+              markItemSaved(item, isNew);
+            }
             return true;
           }
         }
@@ -390,14 +430,16 @@ function tab_select_current_video_implode(stitle = "", isupdated = false) {
   // }
 }
 
-function tab_select_current_video(id, title, isupdated = false) {
+async function tab_select_current_video(id, title, isupdated = false) {
   if (title == "") return;
   title = String(title).split("|")[0].trim();
+  let savedTitle = await getOptions("lasttopic");
+  if (savedTitle) savedTitle = String(savedTitle)?.split("|")[0].trim();
   console.log("tab_select_current_video", id, title);
 
   browserf().scripting.executeScript({
     target: { tabId: id },
-    args: [title, isupdated],
+    args: [title, savedTitle, isupdated],
     func: tab_select_current_video_implode,
   });
 }
@@ -406,7 +448,7 @@ function tab_check(tabid, scrolltotile = false) {
   if (tabid && scrolltotile) {
     browserf().tabs.get(tabid, (tab) => {
       if (tab.id == tabid && tab?.status == "complete") {
-        title = tab?.title;
+        let title = tab?.title;
         console.log("tab_checked", tabid, title);
         tab_select_current_video(tabid, title);
       }
