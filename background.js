@@ -13,7 +13,7 @@ const downloadQueue = [];
 const downloadingList = [];
 let isWriteInProgress = false;
 let tabid = 0; //browserf().tabs.TAB_ID_NONE;
-let scrolltotile = false;
+let scrolltotitle = false;
 
 browserf().runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
@@ -44,11 +44,11 @@ browserf().runtime.onConnect.addListener((port) => {
         //stateClear();
 
         tabid = request.message?.tabid;
-        scrolltotile = request.message?.scrolltotitle;
-        console.log("tabid message  :", request.message, tabid, scrolltotile);
-        tab_check(tabid, scrolltotile);
+        //scrolltotitle = request.message?.scrolltotitle;
+        console.log("tabid message  :", request.message, tabid);
+        tab_check(tabid);
         saveVariable("tabid", tabid);
-        saveVariable("scrolltotile", scrolltotile);
+        // saveVariable("scrolltotitle", scrolltotitle);
         console.log("after saveVariable tabid:");
         //console.log("mgs background tabid:", tabid);
         break;
@@ -450,15 +450,18 @@ async function tab_select_current_video(id, title, isupdated = false) {
   });
 }
 
-function tab_check(tabid, scrolltotile = false) {
-  if (tabid && scrolltotile) {
-    browserf().tabs.get(tabid, (tab) => {
-      if (tab.id == tabid && tab?.status == "complete") {
-        let title = tab?.title;
-        console.log("tab_checked", tabid, title);
-        tab_select_current_video(tabid, title);
-      }
-    });
+async function tab_check(tabid) {
+  if (tabid) {
+    let scrolltotitle = await getOptions("scrolltotitle");
+    if (scrolltotitle) {
+      browserf().tabs.get(tabid, (tab) => {
+        if (tab.id == tabid && tab?.status == "complete") {
+          let title = tab?.title;
+          console.log("tab_checked", tabid, title);
+          tab_select_current_video(tabid, title);
+        }
+      });
+    }
   }
 }
 
@@ -467,10 +470,7 @@ async function tab_onSaveDone() {
     tabid = await getVariable("tabid");
   }
   if (tabid) {
-    scrolltotile = await getVariable("scrolltotile");
-    if (scrolltotile) {
-      tab_check(tabid, scrolltotile);
-    }
+    tab_check(tabid);
   }
 }
 
@@ -483,13 +483,13 @@ async function tab_onUpdated(id, changeInfo, tab) {
       tabid = await getVariable("tabid");
     }
     if (id == tabid) {
-      console.log("tab_onUpdated", id, tab?.title, scrolltotile);
-      scrolltotile = await getVariable("scrolltotile");
-      //console.log("tab_onUpdated afrer read scrolltotile", scrolltotile);
-      if (scrolltotile) {
+      // console.log("tab_onUpdated", id, tab?.title, scrolltotitle);
+      scrolltotitle = await getOptions("scrolltotitle");
+      console.log("tab_onUpdated afrer read scrolltotitle", scrolltotitle);
+      if (scrolltotitle) {
         tab_select_current_video(id, tab?.title, true);
       } else {
-        console.log("tab_onUpdated scrolltotile", scrolltotile);
+        console.log("tab_onUpdated but scrolltotitle:", scrolltotitle);
       }
     }
   }
