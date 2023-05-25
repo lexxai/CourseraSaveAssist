@@ -462,6 +462,18 @@ function tab_check(tabid, scrolltotile = false) {
   }
 }
 
+async function tab_onSaveDone() {
+  if (!tabid) {
+    tabid = await getVariable("tabid");
+  }
+  if (tabid) {
+    scrolltotile = await getVariable("scrolltotile");
+    if (scrolltotile) {
+      tab_check(tabid, scrolltotile);
+    }
+  }
+}
+
 async function tab_onUpdated(id, changeInfo, tab) {
   //console.log("tab_onUpdated init", id, tabid, tab?.title, changeInfo?.status);
 
@@ -489,6 +501,7 @@ function downloadId_initialze() {
     waitTimerSytateOK = setTimeout(() => {
       waitTimerSytateOK = 0;
       stateSet("");
+      tab_onSaveDone();
     }, 5000);
   }, 1000);
 
