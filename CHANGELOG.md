@@ -2,7 +2,7 @@
 
 - Нова можливість додати до назви файлу тривалість відео в хвилинах. Тривалість округляється до цілого числа.
 - Якщо увімкнено функцію пошуку відео, тоді до списку відео що у лівій панелі, додається кольорова позначка, яка вказує на те, чи було вже завантажено файл. Ця позначка змінюється при завантаженні сторінки, а також після того, як всі файли буде завантажено. Статус завантажено було файл чи ні вираховується тільки на основі попередньо збереженого відеофайлу.
-
+---
 - New option to add a video duration in minutes to the file name. The duration is rounded to the nearest whole number.
 - If the video search function is enabled, a color mark is added to the list of videos in the left pane to indicate whether the file has already been downloaded. This marker changes when the page loads and when all the files are uploaded. The status of whether a file has been uploaded or not is calculated based only on the previously saved video file.
 
