@@ -328,7 +328,7 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
   let title = stitle.trim();
   let savedTitle = typeof ssavedTitle == "string" ? ssavedTitle.trim() : "";
   console.log(
-    "tab_select_current_video_implode",
+    "tab_select_current_video_implode. stitle:",
     stitle,
     "title:",
     title,
@@ -371,16 +371,22 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
 
   function markItemSaved(item, mode = 0) {
     let obj = item?.closest(".rc-NavSingleItemDisplay")?.getElementsByClassName("rc-NavItemIcon");
-    console.log("markItemSaved", item, mode);
+    //console.log("markItemSaved", item, mode);
     if (obj.length) {
-      let w = obj[0].style.width;
-      obj[0].style.backgroundColor = mode ? "lightgreen" : "#ff00005c";
-      obj[0].style.borderRadius = "30px";
-      obj[0].style.paddingLeft = "6px";
-      obj[0].style.paddingTop = "14px";
-      obj[0].style.paddingTop = "14px";
-      obj[0].style.width = w;
-      //console.log("markItemSaved style", item, obj[0].style);
+      let o = obj[0];
+      let w = o.width;
+      o.style.backgroundColor = mode ? "lightgreen" : "#ff00005c";
+      o.style.borderRadius = "30px";
+      o.style.paddingLeft = "4px";
+      o.style.margin = "0";
+      o.style.marginRight = "4px";
+      o.style.paddingTop = "4px";
+      if (w) {
+        o.style.width = w - 4 + "px";
+      } else {
+        o.style.width = "28px";
+      }
+      //console.log("markItemSaved style", item, o.style);
     }
   }
 
