@@ -131,6 +131,8 @@ async function getVariable(key) {
  */
 async function downloadQueueSave(items) {
   if (downloadQueue?.length != items) console.log("ALARM downloadQueueSave not have all of elements", items);
+  //console.log(" downloadQueueSave run  tab_onSaveDone preparing_mode:");
+  tab_onSaveDone(true);
   while (downloadQueue?.length) {
     console.log("downloadQueueSave  total:", downloadQueue?.length);
     let item = downloadQueue.pop();
@@ -323,20 +325,22 @@ async function downloadId_add_download(downloadId) {
 //     });
 // }
 
-function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdated = false) {
+function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdated = false, preparing_mode = false) {
   if (stitle == "") return;
   let title = stitle.trim();
   let savedTitle = typeof ssavedTitle == "string" ? ssavedTitle.trim() : "";
-  console.log(
-    "tab_select_current_video_implode. stitle:",
-    stitle,
-    "title:",
-    title,
-    "savedTitle:",
-    savedTitle,
-    "isupdated:",
-    isupdated
-  );
+  // console.log(
+  //   "tab_select_current_video_implode. stitle:",
+  //   stitle,
+  //   "title:",
+  //   title,
+  //   "savedTitle:",
+  //   savedTitle,
+  //   "isupdated:",
+  //   isupdated,
+  //   "preparing_mode",
+  //   preparing_mode
+  // );
 
   function getModouleInfo() {
     let result = {};
@@ -370,12 +374,13 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
   }
 
   function markItemSaved(item, mode = 0) {
+    const colorsmodes = ["#ff00005c", "lightgreen", "#f7ff005c"];
     let obj = item?.closest(".rc-NavSingleItemDisplay")?.getElementsByClassName("rc-NavItemIcon");
     //console.log("markItemSaved", item, mode);
     if (obj.length) {
       let o = obj[0];
       let w = o.width;
-      o.style.backgroundColor = mode ? "lightgreen" : "#ff00005c";
+      o.style.backgroundColor = colorsmodes[mode];
       o.style.borderRadius = "30px";
       o.style.paddingLeft = "4px";
       o.style.margin = "0";
@@ -405,11 +410,12 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
         if (title && titles) {
           //console.log("item titles", title, titles);
           if (title.normalize("NFC") == titles.normalize("NFC")) {
-            console.log("item - found. title:", title, "savedTitle:", savedTitle);
+            //console.log("item - found. title:", title, "savedTitle:", savedTitle, "preparing_mode:", preparing_mode);
             item.scrollIntoView({ behavior: "smooth", block: "center" });
             if (true && savedTitle) {
-              let isNew = savedTitle.normalize("NFC") != title.normalize("NFC");
-              markItemSaved(item, isNew);
+              let colormode = savedTitle.normalize("NFC") != title.normalize("NFC") ? 1 : 0;
+              if (preparing_mode) colormode = 2;
+              markItemSaved(item, colormode);
             }
             return true;
           }
@@ -436,41 +442,42 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
   // }
 }
 
-async function tab_select_current_video(id, title, isupdated = false) {
+async function tab_select_current_video(id, title, isupdated = false, preparing_mode = false) {
   if (title == "") return;
   title = String(title).split("|")[0].trim();
   let savedTitle = await getOptions("lasttopic");
   if (savedTitle) savedTitle = String(savedTitle)?.split("|")[0].trim();
-  console.log("tab_select_current_video", id, title);
+  //console.log("tab_select_current_video", id, title, "preparing_mode:", preparing_mode);
 
   browserf().scripting.executeScript({
     target: { tabId: id },
-    args: [title, savedTitle, isupdated],
+    args: [title, savedTitle, isupdated, preparing_mode],
     func: tab_select_current_video_implode,
   });
 }
 
-async function tab_check(tabid) {
+async function tab_check(tabid, preparing_mode = false) {
   if (tabid) {
     let scrolltotitle = await getOptions("scrolltotitle");
     if (scrolltotitle) {
       browserf().tabs.get(tabid, (tab) => {
         if (tab.id == tabid && tab?.status == "complete") {
           let title = tab?.title;
-          console.log("tab_checked", tabid, title);
-          tab_select_current_video(tabid, title);
+          //console.log("tab_checked", tabid, title, "preparing_mode:", preparing_mode);
+          tab_select_current_video(tabid, title, false, preparing_mode);
         }
       });
     }
   }
 }
 
-async function tab_onSaveDone() {
+async function tab_onSaveDone(preparing_mode = false) {
   if (!tabid) {
     tabid = await getVariable("tabid");
   }
   if (tabid) {
-    tab_check(tabid);
+    //sconsole.log("tab_onSaveDone preparing_mode:", preparing_mode);
+    tab_check(tabid, preparing_mode);
   }
 }
 
