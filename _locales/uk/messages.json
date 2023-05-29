@@ -136,5 +136,11 @@
   },
   "VIDEODUR_DESCR": {
     "message": "Чи додавати до назви файлу тривалість відео з округленням до хвилин?"
+  },
+  "AUTOMATIC": {
+    "message": "AUTOMATIC"
+  },
+  "AUTOMATIC_DESCR": {
+    "message": "AUTOMATIC"
   }
 }
