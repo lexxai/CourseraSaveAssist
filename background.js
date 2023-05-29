@@ -334,11 +334,23 @@ async function downloadId_add_download(downloadId) {
 //    automaic: automaic,
 //  };
 function tab_select_current_video_implode(params) {
-  let title = params.title;
-  let savedTitle = params.savedTitle;
-  //let isupdated = Boolean(params.isupdated);
-  let preparing_mode = Boolean(params.preparing_mode);
-  let automaic = Boolean(params.automaic);
+  let stitle = "",
+    ssavedTitle = "",
+    // isupdated = false,
+    preparing_mode = false,
+    automaic = false;
+
+  if (params) {
+    console.log("tab_select_current_video_implode", params);
+    stitle = params.title;
+    ssavedTitle = params.savedTitle;
+    // isupdated = Boolean(params.isupdated);
+    preparing_mode = params.preparing_mode ? params.preparing_mode : preparing_mode;
+    automaic = params.automaic ? params.automaic : automaic;
+  } else {
+    console.log("tab_select_current_video_implode empty", params);
+    return;
+  }
 
   if (stitle == "") return;
   let title = stitle.trim();
