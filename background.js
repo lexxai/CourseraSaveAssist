@@ -342,6 +342,204 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
   //   preparing_mode
   // );
 
+  function analyseURL(type = "video") {
+    const loc = new URL(window.location);
+    let finding = "";
+    switch (type) {
+      case "video":
+        finding = "/lecture/";
+        break;
+      case "read":
+        finding = "/supplement/";
+        break;
+      case "quiz":
+        finding = "/quiz/";
+        break;
+      case "test":
+        finding = "/exam/";
+        break;
+      case "ungradedWidget":
+        finding = "/ungradedWidget/";
+        break;
+      case "ungradedLti":
+        finding = "/ungradedLti/";
+        break;
+      case "discussion":
+        finding = "/discussionPrompt/";
+        break;
+    }
+    //console.log(`It page analyseURL - ${finding} ${loc.pathname} : ${loc.pathname.includes(finding)}`);
+    return finding ? loc.pathname.includes(finding) : false;
+  }
+
+  async function isReadyVideo() {
+    if (!analyseURL("video")) {
+      console.log("It page without of video content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      let video = document.getElementById("video_player_html5_api");
+      if (video && video.readyState > 0) {
+        setVideoPos(video);
+        break;
+      } else {
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+  async function isReadyRead() {
+    if (!analyseURL("read")) {
+      console.log("It page without of read content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      let btn = document.querySelector('button.cds-button-disableElevation[type="submit"]');
+      if (btn) {
+        setTimeout(() => {
+          console.log("It page click to ", btn);
+          btn.click();
+          setTimeout(() => {
+            let btn = document.querySelector('button.cds-button-disableElevation[type="submit"]');
+            console.log("It page click to next", btn);
+            btn.click();
+          }, 6000);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page button not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+  async function isReadyUWidget() {
+    if (!analyseURL("ungradedWidget")) {
+      console.log("It page without of ungradedWidget content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      // rc - WidgetCompleteButton;
+      let btn = document.querySelector('button.mark-complete[type="button"]');
+      if (btn) {
+        setTimeout(() => {
+          console.log("It page click to ", btn);
+          btn.click();
+          setTimeout(() => {
+            let btn = document.querySelector('button.next-item[type="submit"]');
+            console.log("It page click to next", btn);
+            btn.click();
+          }, 6000);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page ungradedWidget button not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+  async function isReadyDiscussion() {
+    if (!analyseURL("discussion")) {
+      console.log("It page without of discussion content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
+      if (btn) {
+        setTimeout(() => {
+          console.log("It discussion page click to ", btn);
+          btn.click();
+          //btn.onclick.call(btn);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page a href not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+  async function isReadyQuiz() {
+    if (!analyseURL("quiz")) {
+      console.log("It page without of quiz content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
+      if (btn) {
+        setTimeout(() => {
+          console.log("It quiz page click to ", btn);
+          btn.click();
+          //btn.onclick.call(btn);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page a href not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+
+  async function isReadyTest() {
+    if (!analyseURL("test")) {
+      console.log("It page without of test content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
+      if (btn) {
+        setTimeout(() => {
+          console.log("It test page click to ", btn);
+          btn.click();
+          //btn.onclick.call(btn);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page a href not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+  async function isReadyULti() {
+    if (!analyseURL("ungradedLti")) {
+      console.log("It page without of ULti content");
+      return;
+    }
+    let cont = 15;
+    while (cont > 0) {
+      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
+      if (btn) {
+        setTimeout(() => {
+          console.log("It Ulti page click to ", btn);
+          btn.click();
+          //btn.onclick.call(btn);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page a href not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+
+  function setVideoPos(video, pos = 0.95) {
+    if (video && video.readyState > 0) {
+      let duration = video.duration;
+      let position = Math.ceil(duration * pos);
+      video.currentTime = position;
+    }
+  }
+
   function getModouleInfo() {
     let result = {};
     //result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
@@ -371,6 +569,13 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
     }
     const items = document.querySelectorAll("div.rc-NavItemName");
     searchtitle(title, items);
+    isReadyVideo();
+    isReadyRead();
+    isReadyQuiz();
+    isReadyUWidget();
+    isReadyTest();
+    isReadyULti();
+    isReadyDiscussion();
   }
 
   function markItemSaved(item, mode = 0) {
