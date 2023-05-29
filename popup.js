@@ -477,6 +477,30 @@ function save_module() {
   });
 }
 
+async function onClickAutomaticMode(e) {
+  e.preventDefault();
+  //console.log("onClickAutomaticMode", e);
+  let item = e?.target;
+  //let state = await getVariable("automaic", "");
+  if (item) {
+    let state = !item?.classList.toggle("off");
+    // let state = !item?.classList.contains("off");
+    await saveVariable("automaic", Boolean(state));
+    // state = await getVariable("automaic", "");
+    console.log("onClickAutomaticMode read state", state);
+  }
+}
+
+async function checkAutomaticMode(item) {
+  if (item) {
+    let state = await getVariable("automaic", "");
+    item?.classList.toggle("off", !state);
+    // let state = !item?.classList.contains("off");
+    // await saveVariable("automaic", Boolean(state));
+    console.log("checkAutomaticMode read state", state);
+  }
+}
+
 function addListeners() {
   // When the button is clicked, inject startAction into current page
   videoAction?.addEventListener("click", () => {
@@ -485,6 +509,19 @@ function addListeners() {
     videoAction.setAttribute("hidden", "");
     debuglog(browser.i18n.getMessage("SAVING"));
   });
+  const automatic = document.getElementById("automatic");
+  if (automatic) {
+    checkAutomaticMode(automatic);
+    //automatic.setAttribute("hidden", "");
+    automatic.removeAttribute("hidden");
+    automatic?.addEventListener(
+      "click",
+      (e) => {
+        onClickAutomaticMode(e);
+      },
+      false
+    );
+  }
 }
 
 async function getCurrentTab() {
@@ -730,6 +767,32 @@ function render_previos_item_name() {
     last_saved_file = browser.i18n.getMessage("PREVIOSFILE") + ": " + last_saved_file;
     document.getElementById("hname")?.setAttribute("title", last_saved_file);
   }
+}
+
+async function saveVariable(key, value) {
+  let item = {};
+  item[key] = value;
+  return browser.storage.local.set(item).then(() => {
+    console.log("saveSession: saved item", key, value, item);
+  });
+}
+
+async function getVariable(key, defaultval = "") {
+  let item = {};
+  item[key] = defaultval;
+  return browser.storage.local.get(item).then((item) => {
+    console.log("getVariable: item", key, item[key]);
+    return item[key];
+  });
+}
+
+async function getOptions(key) {
+  let item = {};
+  item[key] = "";
+  return browser.storage.sync.get(item).then((item) => {
+    console.log("getOptions: item", key, item[key]);
+    return item[key];
+  });
 }
 
 // functions end

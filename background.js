@@ -113,9 +113,9 @@ async function getOptions(key) {
     });
 }
 
-async function getVariable(key) {
+async function getVariable(key, defaultValue = "") {
   let item = {};
-  item[key] = "";
+  item[key] = defaultValue;
   return browserf()
     .storage.local.get(item)
     .then((item) => {
@@ -325,7 +325,21 @@ async function downloadId_add_download(downloadId) {
 //     });
 // }
 
-function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdated = false, preparing_mode = false) {
+//stitle = "", ssavedTitle = "", isupdated = false, preparing_mode = false)
+//  params = {
+//    title: title,
+//    savedTitle: savedTitle,
+//    isupdated: isupdated,
+//    preparing_mode: preparing_mode,
+//    automaic: automaic,
+//  };
+function tab_select_current_video_implode(params) {
+  let title = params.title;
+  let savedTitle = params.savedTitle;
+  //let isupdated = Boolean(params.isupdated);
+  let preparing_mode = Boolean(params.preparing_mode);
+  let automaic = Boolean(params.automaic);
+
   if (stitle == "") return;
   let title = stitle.trim();
   let savedTitle = typeof ssavedTitle == "string" ? ssavedTitle.trim() : "";
@@ -569,13 +583,15 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
     }
     const items = document.querySelectorAll("div.rc-NavItemName");
     searchtitle(title, items);
-    isReadyVideo();
-    isReadyRead();
-    isReadyQuiz();
-    isReadyUWidget();
-    isReadyTest();
-    isReadyULti();
-    isReadyDiscussion();
+    if (automaic) {
+      isReadyVideo();
+      isReadyRead();
+      isReadyQuiz();
+      isReadyUWidget();
+      isReadyTest();
+      isReadyULti();
+      isReadyDiscussion();
+    }
   }
 
   function markItemSaved(item, mode = 0) {
@@ -653,11 +669,19 @@ async function tab_select_current_video(id, title, isupdated = false, preparing_
   title = String(title).split("|")[0].trim();
   let savedTitle = await getOptions("lasttopic");
   if (savedTitle) savedTitle = String(savedTitle)?.split("|")[0].trim();
+  let automaic = await getVariable("automaic");
   //console.log("tab_select_current_video", id, title, "preparing_mode:", preparing_mode);
+  const params = {
+    title: title,
+    savedTitle: savedTitle,
+    isupdated: isupdated,
+    preparing_mode: preparing_mode,
+    automaic: automaic,
+  };
 
   browserf().scripting.executeScript({
     target: { tabId: id },
-    args: [title, savedTitle, isupdated, preparing_mode],
+    args: [params],
     func: tab_select_current_video_implode,
   });
 }

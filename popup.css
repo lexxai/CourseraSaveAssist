@@ -42,6 +42,8 @@ button#options {
   height: 22px;
   border: 0;
   background-image: url(images/gear.svg?background#background);
+  background-size: 22px 22px;
+  background-color: transparent;
   background-repeat: no-repeat;
   transition: opacity 0.1s ease-in;
   position: absolute;
@@ -49,6 +51,27 @@ button#options {
   right: 20px;
   border-radius: 0;
   filter: invert(var(--csa-color-invert));
+}
+
+button#automatic {
+  width: 22px;
+  height: 22px;
+  border: 0;
+  background-image: url(images/iconauto.svg);
+  /* background-size: 22px 22px; */
+  background-size: cover;
+  background-color: transparent;
+  -webkit-background-size: 100% 100%;
+  background-repeat: no-repeat;
+  transition: opacity 0.1s ease-in;
+  position: absolute;
+  margin: 0;
+  right: 48px;
+  border-radius: 0;
+  filter: invert(var(--csa-color-invert));
+}
+button#automatic.off {
+  filter: invert(var(--csa-color-invert)) sepia(99%) saturate(3966%) hue-rotate(356deg) brightness(123%) contrast(111%);
 }
 
 button {
