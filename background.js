@@ -401,7 +401,8 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
     //const items = document.querySelectorAll("div.rc-NavItemName");
     // console.log("searchtitle, items:", title, items.length);
     if (title) {
-      items.forEach((item) => {
+      for (const item of items) {
+        // items.forEach((item) => {
         let titles = item.innerText.split("\n");
         if (titles.length < 2) {
           titles = item.innerHTML.split("</strong>");
@@ -420,7 +421,7 @@ function tab_select_current_video_implode(stitle = "", ssavedTitle = "", isupdat
             return true;
           }
         }
-      });
+      }
     }
   }
 
