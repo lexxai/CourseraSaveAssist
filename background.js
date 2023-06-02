@@ -646,12 +646,12 @@ function tab_select_current_video_implode(params) {
           if (title.normalize("NFC") == titles.normalize("NFC")) {
             //console.log("item - found. title:", title, "savedTitle:", savedTitle, "preparing_mode:", preparing_mode);
             item.scrollIntoView({ behavior: "smooth", block: "center" });
-            if (true && savedTitle) {
+            if (analyseURL("video") && savedTitle) {
               let colormode = savedTitle.normalize("NFC") != title.normalize("NFC") ? 1 : 0;
               if (preparing_mode) colormode = 2;
               markItemSaved(item, colormode);
+              return true;
             }
-            return true;
           }
         }
       }
