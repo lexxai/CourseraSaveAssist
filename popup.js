@@ -27,7 +27,6 @@ const saveObjectsReq = {
   subtitle_addon: true,
   subtitle_addon_lang: "en",
   usesaveid: true,
-  scrolltotitle: false,
 };
 
 const fileConfig = {
@@ -43,6 +42,12 @@ const fileConfig = {
   lastmodule: "",
   lasttopic: "",
   savemode: 1,
+};
+
+const otherConfig = {
+  scrolltotitle: false,
+  automatic: false,
+  automatic_mode: "a_mark",
 };
 
 //Functions....
@@ -268,7 +273,7 @@ async function Initialize() {
   } else {
     debuglog(browser.i18n.getMessage("WRONGSITE") + " " + fileConfig.host_url);
   }
-  const scrolltotitle = saveObjectsReq.scrolltotitle;
+  const scrolltotitle = otherConfig.scrolltotitle;
   sendMessageBackground("tabid", { tabid: tabid, scrolltotitle: scrolltotitle });
 }
 
@@ -477,6 +482,16 @@ function save_module() {
   });
 }
 
+function show_status_on_tile(item, state) {
+  if (item) {
+    const delimter = " - ";
+    item.title =
+      item.title.split(delimter)[0] +
+      delimter +
+      (state ? browser.i18n.getMessage("AUTOMATIC_TEXT_ON") : browser.i18n.getMessage("AUTOMATIC_TEXT_OFF"));
+  }
+}
+
 async function onClickAutomaticMode(e) {
   e.preventDefault();
   //console.log("onClickAutomaticMode", e);
@@ -484,6 +499,7 @@ async function onClickAutomaticMode(e) {
   //let state = await getVariable("automaic", "");
   if (item) {
     let state = !item?.classList.toggle("off");
+    show_status_on_tile(item, state);
     // let state = !item?.classList.contains("off");
     await saveVariable("automaic", Boolean(state));
     // state = await getVariable("automaic", "");
@@ -492,26 +508,29 @@ async function onClickAutomaticMode(e) {
 }
 
 async function checkAutomaticMode(item) {
+  let result = false;
   if (item) {
     let state = await getVariable("automaic", "");
     item?.classList.toggle("off", !state);
+    result = state;
     // let state = !item?.classList.contains("off");
     // await saveVariable("automaic", Boolean(state));
     console.log("checkAutomaticMode read state", state);
   }
+  return result;
 }
 
-function addListeners() {
+async function addListeners() {
   // When the button is clicked, inject startAction into current page
   videoAction?.addEventListener("click", () => {
-    //console.log("addEventListener by videoAction tabid:" + tabid);
+    //console.log("addEventListener otherConfig:", otherConfig);
     save_module();
     videoAction.setAttribute("hidden", "");
     debuglog(browser.i18n.getMessage("SAVING"));
   });
   const automatic = document.getElementById("automatic");
-  if (automatic) {
-    checkAutomaticMode(automatic);
+  if (automatic && otherConfig.automatic) {
+    const mode_enabled = await checkAutomaticMode(automatic);
     //automatic.setAttribute("hidden", "");
     automatic.removeAttribute("hidden");
     automatic?.addEventListener(
@@ -521,6 +540,19 @@ function addListeners() {
       },
       false
     );
+
+    let mode_text = browser.i18n.getMessage("AUTOMATIC_TEXT");
+    switch (otherConfig.automatic_mode) {
+      case "a_mark":
+        mode_text = mode_text + " " + browser.i18n.getMessage("AUTOMATIC_MODE_MARK");
+        break;
+      case "a_save":
+        mode_text = mode_text + " " + browser.i18n.getMessage("AUTOMATIC_MODE_SAVE");
+        break;
+    }
+    automatic.title = mode_text;
+    show_status_on_tile(automatic, mode_enabled);
+    //console.log("addEventListener mode_text:", otherConfig.automatic_mode, automatic.classList, mode_enabled);
   }
 }
 
@@ -556,6 +588,8 @@ function restore_options() {
       usesaveid: true,
       savemode: 0,
       scrolltotitle: false,
+      automatic: false,
+      automatic_mode: "a_mark",
     })
     .then((items) => {
       fileConfig.course_prefix = items?.course;
@@ -572,12 +606,14 @@ function restore_options() {
       saveObjectsReq.subtitle_addon = items?.savesubtitleadd;
       saveObjectsReq.subtitle_addon_lang = items?.subtitle_lang;
       saveObjectsReq.usesaveid = items?.usesaveid;
-      saveObjectsReq.scrolltotitle = items?.scrolltotitle;
       fileConfig.lastmodule = items?.lastmodule;
       fileConfig.lasttopic = items?.lasttopic;
       fileConfig.lastfileid = items?.lastfileid;
       fileConfig.savemode = items?.savemode;
-      console.log("RESTORE_OPT", saveObjectsReq, fileConfig);
+      otherConfig.automatic = items?.automatic;
+      otherConfig.automatic_mode = items?.automatic_mode;
+      otherConfig.scrolltotitle = items?.scrolltotitle;
+      console.log("RESTORED_OPT");
       init();
     });
 }

@@ -136,5 +136,32 @@
   },
   "VIDEODUR_DESCR": {
     "message": "Does the file name contain the video duration rounded to minutes?"
+  },
+  "AUTOMATIC": {
+    "message": "Add automatic mode?"
+  },
+  "AUTOMATIC_DESCR": {
+    "message": "Allows you to add an additional button for activating/deactivating the automatic mode in the main menu"
+  },
+  "AUTOMATIC_MODE_SAVE": {
+    "message": "operating mode: save"
+  },
+  "AUTOMATIC_MODE_SAVE_DESCR": {
+    "message": "Automatic mode in which all course materials are saved sequentially. Page by page"
+  },
+  "AUTOMATIC_MODE_MARK": {
+    "message": "operation mode: mark"
+  },
+  "AUTOMATIC_MODE_MARK_DESCR": {
+    "message": "Automatic mode in which all course materials are consistently marked as completed. Page by page. Except for tests."
+  },
+  "AUTOMATIC_TEXT": {
+    "message": "Automatic"
+  },
+  "AUTOMATIC_TEXT_ON": {
+    "message": "enabled"
+  },
+  "AUTOMATIC_TEXT_OFF": {
+    "message": "disabled"
   }
 }

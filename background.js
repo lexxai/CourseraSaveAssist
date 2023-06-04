@@ -3,7 +3,15 @@
 // })();
 
 browserf = function () {
-  return typeof browser === "undefined" ? chrome : browser;
+  let b = undefined;
+  try {
+    if (typeof browser !== "undefined") b = browser;
+    else if (typeof chrome !== "undefined") b = chrome;
+    else if (typeof edje !== "undefined") b = edje;
+  } catch (error) {
+    error.log("browserf", error);
+  }
+  return b;
 };
 
 let waitTimerSytate1 = 0;
