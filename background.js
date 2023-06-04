@@ -65,6 +65,9 @@ browserf().runtime.onConnect.addListener((port) => {
         //add message to Download Queue
         downloadQueue.push(request.message);
         break;
+      case "dosavevieo":
+        console.log("dosavevieo background port from content", request.message);
+        break;
       case "dosave":
         console.log("dosave background ", downloadQueue.length);
         sendMessage({ state: "saving", items: downloadQueue.length, confirm: true });
@@ -339,14 +342,15 @@ async function downloadId_add_download(downloadId) {
 //    savedTitle: savedTitle,
 //    isupdated: isupdated,
 //    preparing_mode: preparing_mode,
-//    automaic: automaic,
+//    automatic: automatic,
 //  };
 function tab_select_current_video_implode(params) {
   let stitle = "",
     ssavedTitle = "",
     // isupdated = false,
     preparing_mode = false,
-    automaic = false;
+    automatic = false,
+    automatic_mode = "a_mark";
 
   if (params) {
     console.log("tab_select_current_video_implode", params);
@@ -354,7 +358,8 @@ function tab_select_current_video_implode(params) {
     ssavedTitle = params.savedTitle;
     // isupdated = Boolean(params.isupdated);
     preparing_mode = params.preparing_mode ? params.preparing_mode : preparing_mode;
-    automaic = params.automaic ? params.automaic : automaic;
+    automatic = params.automatic ? params.automatic : automatic;
+    automatic_mode = params.automatic_mode ? params.automatic_mode : automatic_mode;
   } else {
     console.log("tab_select_current_video_implode empty", params);
     return;
@@ -375,6 +380,22 @@ function tab_select_current_video_implode(params) {
   //   "preparing_mode",
   //   preparing_mode
   // );
+
+  window.browser = (function () {
+    return typeof window.browser === "undefined" ? window.chrome : window.browser;
+  })();
+
+  function sendMessage(command, message) {
+    let port = browser.runtime.connect({ name: "csa-background" });
+    port.postMessage({ command: command, message: message });
+  }
+
+  // function sendMessage(command,message) {
+  //   browser.runtime.sendMessage({
+  //     id: "from_content",
+  //     message: message,
+  //   });
+  // }
 
   function analyseURL(type = "video") {
     const loc = new URL(window.location);
@@ -404,6 +425,47 @@ function tab_select_current_video_implode(params) {
     }
     //console.log(`It page analyseURL - ${finding} ${loc.pathname} : ${loc.pathname.includes(finding)}`);
     return finding ? loc.pathname.includes(finding) : false;
+  }
+
+  async function isReadySkipPage() {
+    let cont = 15;
+    while (cont > 0) {
+      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
+      if (btn) {
+        setTimeout(() => {
+          console.log("It discussion page click to ", btn);
+          btn.click();
+          //btn.onclick.call(btn);
+        }, 2000);
+        break;
+      } else {
+        console.log("It page a href not found :", btn, cont);
+        await dcelay(1000, 1);
+      }
+      cont--;
+    }
+  }
+  async function isReadySaveVideo() {
+    if (!analyseURL("video")) {
+      console.log("It page without of video content, skip");
+      isReadySkipPage();
+    } else {
+      let cont = 15;
+      while (cont > 0) {
+        let video = document.getElementById("video_player_html5_api");
+        if (video && video.readyState > 0) {
+          console.log("Can save your video", video);
+          sendMessage("dosavevieo", document.title);
+          setTimeout(() => {
+            isReadySkipPage();
+          }, 5000);
+          break;
+        } else {
+          await dcelay(1000, 1);
+        }
+        cont--;
+      }
+    }
   }
 
   async function isReadyVideo() {
@@ -603,14 +665,20 @@ function tab_select_current_video_implode(params) {
     }
     const items = document.querySelectorAll("div.rc-NavItemName");
     searchtitle(title, items);
-    if (automaic) {
-      isReadyVideo();
-      isReadyRead();
-      isReadyQuiz();
-      isReadyUWidget();
-      isReadyTest();
-      isReadyULti();
-      isReadyDiscussion();
+    if (automatic) {
+      console.log("automatic_mode", automatic_mode);
+      if (automatic_mode == "a_save") {
+        console.log("automatic_mode save");
+        isReadySaveVideo();
+      } else {
+        isReadyVideo();
+        isReadyRead();
+        isReadyQuiz();
+        isReadyUWidget();
+        isReadyTest();
+        isReadyULti();
+        isReadyDiscussion();
+      }
     }
   }
 
@@ -689,14 +757,16 @@ async function tab_select_current_video(id, title, isupdated = false, preparing_
   title = String(title).split("|")[0].trim();
   let savedTitle = await getOptions("lasttopic");
   if (savedTitle) savedTitle = String(savedTitle)?.split("|")[0].trim();
-  let automaic = await getVariable("automaic");
+  const automatic = await getVariable("automatic");
+  const automatic_mode = await getOptions("automatic_mode");
   //console.log("tab_select_current_video", id, title, "preparing_mode:", preparing_mode);
   const params = {
     title: title,
     savedTitle: savedTitle,
     isupdated: isupdated,
     preparing_mode: preparing_mode,
-    automaic: automaic,
+    automatic: automatic,
+    automatic_mode: automatic_mode,
   };
 
   browserf().scripting.executeScript({
