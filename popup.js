@@ -496,13 +496,13 @@ async function onClickAutomaticMode(e) {
   e.preventDefault();
   //console.log("onClickAutomaticMode", e);
   let item = e?.target;
-  //let state = await getVariable("automaic", "");
+  //let state = await getVariable("automatic", "");
   if (item) {
     let state = !item?.classList.toggle("off");
     show_status_on_tile(item, state);
     // let state = !item?.classList.contains("off");
-    await saveVariable("automaic", Boolean(state));
-    // state = await getVariable("automaic", "");
+    await saveVariable("automatic", Boolean(state));
+    // state = await getVariable("automatic", "");
     console.log("onClickAutomaticMode read state", state);
   }
 }
@@ -510,11 +510,11 @@ async function onClickAutomaticMode(e) {
 async function checkAutomaticMode(item) {
   let result = false;
   if (item) {
-    let state = await getVariable("automaic", "");
+    let state = await getVariable("automatic", "");
     item?.classList.toggle("off", !state);
     result = state;
     // let state = !item?.classList.contains("off");
-    // await saveVariable("automaic", Boolean(state));
+    // await saveVariable("automatic", Boolean(state));
     console.log("checkAutomaticMode read state", state);
   }
   return result;
