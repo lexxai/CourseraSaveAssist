@@ -74,6 +74,10 @@ body {
   /* margin-left: auto; */
 }
 
+.amode {
+  font-style: italic;
+}
+
 .hidden {
   display: none !important;
 }

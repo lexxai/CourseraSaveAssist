@@ -29,6 +29,8 @@ function save_options(e) {
   let usesaveid = document.getElementById("usesaveid")?.checked;
   let savemode = document.getElementById("savemode")?.checked ? 1 : 0;
   let scrolltotitle = document.getElementById("scrolltotitle")?.checked;
+  let automatic = document.getElementById("automatic")?.checked;
+  let automatic_mode = document.querySelector("input[name=automatic_mode]:checked")?.value;
   let isSave = savevideo || savevideotxt || savesubtitle || savesubtitleadd || savevideotxtadd;
   if (!isSave) {
     const status = document.getElementById("status");
@@ -61,6 +63,8 @@ function save_options(e) {
       usesaveid: usesaveid,
       savemode: savemode,
       scrolltotitle: scrolltotitle,
+      automatic: automatic,
+      automatic_mode: automatic_mode,
     })
     .then(() => {
       // Update status to let user know options were saved.
@@ -115,6 +119,8 @@ function restore_options() {
       usesaveid: true,
       savemode: 0,
       scrolltotitle: false,
+      automatic: false,
+      automatic_mode: "a_mark",
     })
     .then((items) => {
       if (items.course !== undefined) document.getElementById("course").value = items?.course;
@@ -135,7 +141,23 @@ function restore_options() {
       if (items.lastfileid !== undefined) document.getElementById("lastfileid").value = Number(items.lastfileid);
       if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items?.usesaveid;
       if (items.savemode !== undefined) document.getElementById("savemode").checked = items?.savemode != 0;
-      if (items.scrolltotitle !== undefined) document.getElementById("scrolltotitle").checked = items?.scrolltotitle;
+      if (items.scrolltotitle !== undefined) {
+        const scrolltotitle = document.getElementById("scrolltotitle");
+        scrolltotitle.checked = items?.scrolltotitle;
+        triggerEvent(scrolltotitle, "change");
+      }
+      if (items.automatic !== undefined) {
+        const automatic = document.getElementById("automatic");
+        automatic.checked = items?.automatic;
+        triggerEvent(automatic, "change");
+      }
+      if (items.automatic_mode !== undefined) {
+        const automatic_mode = document.getElementById(items.automatic_mode);
+        if (automatic_mode) {
+          automatic_mode.checked = true;
+          triggerEvent(automatic_mode, "change");
+        }
+      }
     });
 }
 
@@ -180,9 +202,11 @@ function localizeString(_, str) {
 }
 
 function installListsEvent() {
-  document.getElementById("save").addEventListener("click", save_options);
-  document.getElementById("reset").addEventListener("click", reset_options);
-  document.getElementById("clear").addEventListener("click", clear_options);
+  document.getElementById("save")?.addEventListener("click", save_options);
+  document.getElementById("reset")?.addEventListener("click", reset_options);
+  document.getElementById("clear")?.addEventListener("click", clear_options);
+  document.getElementById("scrolltotitle")?.addEventListener("change", scrolltotitle_options);
+  document.getElementById("automatic")?.addEventListener("change", automatic_options);
 }
 
 function languageDetect() {
@@ -212,6 +236,35 @@ function readManifest() {
     let homepage_url = m.homepage_url + "?csaplugin=option&lang=" + lang;
     document.getElementById("awiki").setAttribute("href", homepage_url);
     document.getElementById("version").innerHTML = "v. " + m.version + " [" + host + "]";
+  }
+}
+
+function triggerEvent(element, eventName) {
+  var event = new Event(eventName);
+  element.dispatchEvent(event);
+}
+
+function scrolltotitle_options(e) {
+  const t = e.target?.checked;
+  const automatic = document.getElementById("automatic");
+  if (!t && automatic) {
+    automatic.checked = false;
+    automatic.disabled = true;
+    triggerEvent(automatic, "change");
+  } else {
+    automatic.disabled = false;
+    triggerEvent(automatic, "change");
+  }
+}
+
+function automatic_options(e) {
+  let t = e.target?.checked;
+  const amode = document.getElementsByClassName("amode");
+  for (const item of amode) {
+    console.log("automatic_options item", item, t);
+    item.classList.toggle("hidden", !t);
+    const a_mode = document.getElementById("a_mark");
+    if (a_mode) a_mode.checked = true;
   }
 }
 

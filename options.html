@@ -65,7 +65,22 @@
           <label for="scrolltotitle" title="__MSG_SCROLLTOTILE_DESCR__">__MSG_SCROLLTOTILE__:</label>
           <div><input type="checkbox" id="scrolltotitle" /></div>
           <label for="automatic" title="__MSG_AUTOMATIC_DESCR__">__MSG_AUTOMATIC__:</label>
-          <div><input disabled type="checkbox" id="automatic" /></div>
+          <div><input type="checkbox" id="automatic" disabled /></div>
+          <label class="amode hidden" for="a_save" title="automatic_mode_save">- automatic_mode_save:</label>
+          <div class="amode hidden">
+            <input type="radio" id="a_save" title="automatic_mode_save" name="automatic_mode" value="a_save" />
+          </div>
+          <label class="amode hidden" for="a_mark" title="automatic_mode_mark">- automatic_mode_mark:</label>
+          <div class="amode hidden">
+            <input
+              type="radio"
+              id="a_mark"
+              title="automatic_mode_mark"
+              name="automatic_mode"
+              value="a_mark"
+              checked="checked"
+            />
+          </div>
           <div class="divider"><hr /></div>
         </div>
       </main>
