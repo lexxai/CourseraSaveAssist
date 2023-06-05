@@ -612,20 +612,25 @@ function tab_select_current_video_implode(params) {
       cont--;
     }
     const items = document.querySelectorAll("div.rc-NavItemName");
-    searchtitle(title, items);
+    let searchResult = searchtitle(title, items);
     if (automatic) {
       console.log("automatic_mode", automatic_mode);
       if (automatic_mode == "a_save") {
         console.log("automatic_mode save");
         isReadySaveVideo();
       } else {
-        isReadyVideo();
-        isReadyRead();
-        isReadyQuiz();
-        isReadyUWidget();
-        isReadyTest();
-        isReadyULti();
-        isReadyDiscussion();
+        if (searchResult && searchResult.pagemarked) {
+          console.log("Page already marked, skip it");
+          isReadySkipPage();
+        } else {
+          isReadyVideo();
+          isReadyRead();
+          isReadyQuiz();
+          isReadyUWidget();
+          isReadyTest();
+          isReadyULti();
+          isReadyDiscussion();
+        }
       }
     }
   }
@@ -654,6 +659,7 @@ function tab_select_current_video_implode(params) {
 
   function searchtitle(stitle, items) {
     let title = getModouleInfo()?.topic;
+    let pagemarked = undefined;
     if (title === undefined) title = stitle.trim();
     //const items = document.querySelectorAll("div.rc-NavItemName");
     // console.log("searchtitle, items:", title, items.length);
@@ -670,17 +676,18 @@ function tab_select_current_video_implode(params) {
           if (title.normalize("NFC") == titles.normalize("NFC")) {
             //console.log("item - found. title:", title, "savedTitle:", savedTitle, "preparing_mode:", preparing_mode);
             item.scrollIntoView({ behavior: "smooth", block: "center" });
-            let pagemarked = isPageMarked(item);
+            pagemarked = isPageMarked(item);
             if (analyseURL("video") && savedTitle) {
               let colormode = savedTitle.normalize("NFC") != title.normalize("NFC") ? 1 : 0;
               if (preparing_mode) colormode = 2;
               markItemSaved(item, colormode);
-              return true;
+              return { result: true, pagemarked: pagemarked };
             }
           }
         }
       }
     }
+    return { result: false, pagemarked: pagemarked };
   }
 
   if (document.readyState === "loading") {
