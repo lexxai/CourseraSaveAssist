@@ -427,13 +427,21 @@ function tab_select_current_video_implode(params) {
     return finding ? loc.pathname.includes(finding) : false;
   }
 
+  function isPageMarked(item) {
+    let obj = item?.closest(".rc-NavSingleItemDisplay");
+    let btn = obj.querySelector("div.rc-NavItemIcon > span.rc-TooltipWrapper");
+    result = btn === null;
+    console.log("isPageMarked", result);
+    return result;
+  }
+
   async function isReadySkipPage() {
     let cont = 15;
     while (cont > 0) {
       let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
       if (btn) {
         setTimeout(() => {
-          console.log("It discussion page click to ", btn);
+          console.log("It ready to skip this page click to ", btn);
           btn.click();
           //btn.onclick.call(btn);
         }, 2000);
@@ -543,44 +551,14 @@ function tab_select_current_video_implode(params) {
       console.log("It page without of discussion content");
       return;
     }
-    let cont = 15;
-    while (cont > 0) {
-      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
-      if (btn) {
-        setTimeout(() => {
-          console.log("It discussion page click to ", btn);
-          btn.click();
-          //btn.onclick.call(btn);
-        }, 2000);
-        break;
-      } else {
-        console.log("It page a href not found :", btn, cont);
-        await dcelay(1000, 1);
-      }
-      cont--;
-    }
+    isReadySkipPage();
   }
   async function isReadyQuiz() {
     if (!analyseURL("quiz")) {
       console.log("It page without of quiz content");
       return;
     }
-    let cont = 15;
-    while (cont > 0) {
-      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
-      if (btn) {
-        setTimeout(() => {
-          console.log("It quiz page click to ", btn);
-          btn.click();
-          //btn.onclick.call(btn);
-        }, 2000);
-        break;
-      } else {
-        console.log("It page a href not found :", btn, cont);
-        await dcelay(1000, 1);
-      }
-      cont--;
-    }
+    isReadySkipPage();
   }
 
   async function isReadyTest() {
@@ -588,44 +566,14 @@ function tab_select_current_video_implode(params) {
       console.log("It page without of test content");
       return;
     }
-    let cont = 15;
-    while (cont > 0) {
-      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
-      if (btn) {
-        setTimeout(() => {
-          console.log("It test page click to ", btn);
-          btn.click();
-          //btn.onclick.call(btn);
-        }, 2000);
-        break;
-      } else {
-        console.log("It page a href not found :", btn, cont);
-        await dcelay(1000, 1);
-      }
-      cont--;
-    }
+    isReadySkipPage();
   }
   async function isReadyULti() {
     if (!analyseURL("ungradedLti")) {
       console.log("It page without of ULti content");
       return;
     }
-    let cont = 15;
-    while (cont > 0) {
-      let btn = document.querySelectorAll("a.cds-button-disableElevation")[1];
-      if (btn) {
-        setTimeout(() => {
-          console.log("It Ulti page click to ", btn);
-          btn.click();
-          //btn.onclick.call(btn);
-        }, 2000);
-        break;
-      } else {
-        console.log("It page a href not found :", btn, cont);
-        await dcelay(1000, 1);
-      }
-      cont--;
-    }
+    isReadySkipPage();
   }
 
   function setVideoPos(video, pos = 0.95) {
@@ -722,6 +670,7 @@ function tab_select_current_video_implode(params) {
           if (title.normalize("NFC") == titles.normalize("NFC")) {
             //console.log("item - found. title:", title, "savedTitle:", savedTitle, "preparing_mode:", preparing_mode);
             item.scrollIntoView({ behavior: "smooth", block: "center" });
+            let pagemarked = isPageMarked(item);
             if (analyseURL("video") && savedTitle) {
               let colormode = savedTitle.normalize("NFC") != title.normalize("NFC") ? 1 : 0;
               if (preparing_mode) colormode = 2;
