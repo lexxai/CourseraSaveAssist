@@ -23,6 +23,58 @@ let isWriteInProgress = false;
 let tabid = 0; //browserf().tabs.TAB_ID_NONE;
 let scrolltotitle = false;
 
+const saveObjects = {
+  init: false,
+  filename: "",
+  video: "",
+  subtitle: "",
+  videotext: "",
+  videotext_addon: "",
+  videotext_addon_lang: "",
+  subtitle_addon: "",
+  subtitle_addon_lang: "",
+  module: "",
+  topic: "",
+};
+
+//const saveObjects = {};
+const saveObjectsReq = {
+  init: false,
+  // video: true,
+  // video_res: true,
+  // videoduration: false,
+  // subtitle: true,
+  // videotext: true,
+  // videotext_addon: true,
+  // videotext_addon_lang: "en",
+  // subtitle_addon: true,
+  // subtitle_addon_lang: "en",
+  // usesaveid: true,
+};
+
+const fileConfig = {
+  init: false,
+  // host_url: "coursera.org",
+  // course_prefix: "",
+  // module_prefix: "M",
+  // title_delimeter: "_",
+  // space_delimeter: "_",
+  // ext_video: ".mp4",
+  // ext_sub: ".vtt",
+  // ext_text: ".txt",
+  // lastfileid: 0,
+  // lastmodule: "",
+  // lasttopic: "",
+  // savemode: 1,
+};
+
+const otherConfig = {
+  init: false,
+  // scrolltotitle: false,
+  // automatic: false,
+  // automatic_mode: "a_mark",
+};
+
 browserf().runtime.onInstalled.addListener(() => {
   console.log("onInstalled background");
   saveVariable("tabid", tabid);
@@ -67,6 +119,7 @@ browserf().runtime.onConnect.addListener((port) => {
         break;
       case "dosavevieo":
         console.log("dosavevieo background port from content", request.message);
+        save_module();
         break;
       case "dosave":
         console.log("dosave background ", downloadQueue.length);
@@ -422,6 +475,9 @@ function tab_select_current_video_implode(params) {
       case "discussion":
         finding = "/discussionPrompt/";
         break;
+      case "gradedLti":
+        finding = "/gradedLti/";
+        break;
     }
     //console.log(`It page analyseURL - ${finding} ${loc.pathname} : ${loc.pathname.includes(finding)}`);
     return finding ? loc.pathname.includes(finding) : false;
@@ -569,7 +625,7 @@ function tab_select_current_video_implode(params) {
     isReadySkipPage();
   }
   async function isReadyULti() {
-    if (!analyseURL("ungradedLti")) {
+    if (!(analyseURL("ungradedLti") || analyseURL("gradedLti"))) {
       console.log("It page without of ULti content");
       return;
     }
@@ -809,6 +865,358 @@ async function downloadId_clear_downloaded(downloadId) {
       }
     }
     resolve();
+  });
+}
+
+// MOVE SAVING ACTIPON  from POPUP *******************************************************************************
+// TODO
+
+function escapeRegExp(string) {
+  return string.replace(/([\\\/*&:<>$#@^?!\[\]]+)/gi, "_");
+}
+
+/**
+ *
+ * @returns
+ */
+async function restore_options() {
+  // Use default value color = 'red' and likesColor = true.
+  return browserf()
+    .storage.sync.get({
+      course: "",
+      module: "M",
+      modulesep: "_",
+      spacesep: "_",
+      subtitle_lang: "en",
+      savevideo: true,
+      videores: true,
+      videoduration: false,
+      savevideotxt: true,
+      savevideotxtadd: false,
+      savesubtitle: true,
+      savesubtitleadd: false,
+      lastmodule: "",
+      lasttopic: "",
+      lastfileid: 0,
+      usesaveid: true,
+      savemode: 0,
+      scrolltotitle: false,
+      automatic: false,
+      automatic_mode: "a_mark",
+    })
+    .then((items) => {
+      fileConfig.course_prefix = items?.course;
+      fileConfig.module_prefix = items?.module;
+      if (items?.modulesep !== undefined) fileConfig.title_delimeter = escapeRegExp(items.modulesep);
+      if (items?.spacesep !== undefined) fileConfig.space_delimeter = escapeRegExp(items.spacesep);
+      saveObjectsReq.video = items?.savevideo;
+      saveObjectsReq.videores = items?.videores;
+      saveObjectsReq.videoduration = items?.videoduration;
+      saveObjectsReq.subtitle = items?.savesubtitle;
+      saveObjectsReq.videotext = items?.savevideotxt;
+      saveObjectsReq.videotext_addon = items?.savevideotxtadd;
+      saveObjectsReq.videotext_addon_lang = items?.subtitle_lang;
+      saveObjectsReq.subtitle_addon = items?.savesubtitleadd;
+      saveObjectsReq.subtitle_addon_lang = items?.subtitle_lang;
+      saveObjectsReq.usesaveid = items?.usesaveid;
+      fileConfig.lastmodule = items?.lastmodule;
+      fileConfig.lasttopic = items?.lasttopic;
+      fileConfig.lastfileid = items?.lastfileid;
+      fileConfig.savemode = items?.savemode;
+      otherConfig.automatic = items?.automatic;
+      otherConfig.automatic_mode = items?.automatic_mode;
+      otherConfig.scrolltotitle = items?.scrolltotitle;
+      console.log("RESTORED_OPT");
+      fileConfig.init = true;
+      otherConfig.init = true;
+      saveObjectsReq.init = true;
+      //init();
+    });
+}
+
+async function check_Options_state() {
+  if (!tabid) {
+    tabid = await getVariable("tabid");
+  }
+  console.log("check_Options_state", tabid, saveObjects);
+  if (tabid) {
+    if (fileConfig == undefined || !fileConfig["init"]) {
+      console.log("check_Options_state before restore_options", saveObjects, fileConfig, saveObjectsReq);
+      await restore_options();
+      console.log("check_Options_state afters restore_options", saveObjects, fileConfig, saveObjectsReq);
+    }
+  }
+}
+
+function implode_save(saveparam, fileConfig, tabid = 0) {
+  //console.log("implode_save: ", saveparam);
+  window.browser = (function () {
+    return typeof window.browser === "undefined" ? window.chrome : window.browser;
+  })();
+  let port;
+  function sendMessageBackground(command, message) {
+    if (!(port && port.name)) port = browser.runtime.connect({ name: "csa-background" });
+    port.postMessage({ command: command, message: message });
+  }
+
+  function sendMessage(m) {
+    browser.runtime.sendMessage({ greeting: "csa-save", message: m });
+  }
+  /**
+   * @param {*} saveMode: 0 - default API method , 1 - compatible BLOB method
+   */
+  function saveAsFile(url, filename, saveMode = 0) {
+    if (saveMode == 0) {
+      saveAsFileByAPIonBackground(url, filename);
+    } else {
+      saveAsFileByBLOBAtHere(url, filename);
+    }
+  }
+
+  function saveAsFileByAPIonBackground(url, filename) {
+    let loc = new URL(window.location);
+    let baseurl = loc.protocol + "//" + loc.hostname;
+
+    let obj = {
+      tabid: tabid,
+      url: url,
+      filename: filename,
+      baseurl: baseurl,
+    };
+    sendMessageBackground("saveFile", obj);
+  }
+
+  function saveAsFileByBLOBAtHere(url, filename) {
+    console.log("implode_save :: saveAsFile", url, filename);
+    fetch(url)
+      .then((response) => response.blob())
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          window.URL.revokeObjectURL(url);
+        }, 0);
+      });
+  }
+
+  let savingItems = 0;
+  let saveMode = fileConfig.savemode;
+  if (saveparam.video) {
+    savingItems++;
+    saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video, saveMode);
+  }
+  if (saveparam.subtitle) {
+    savingItems++;
+    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub, saveMode);
+  }
+  if (saveparam.videotext) {
+    savingItems++;
+    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text, saveMode);
+  }
+  if (saveparam.videotext_addon) {
+    Object.keys(saveparam.videotext_addon).forEach((lang) => {
+      savingItems++;
+      saveAsFile(
+        saveparam.videotext_addon[lang],
+        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_text,
+        saveMode
+      );
+    });
+  }
+  if (saveparam.subtitle_addon) {
+    Object.keys(saveparam.subtitle_addon).forEach((lang) => {
+      savingItems++;
+      saveAsFile(
+        saveparam.subtitle_addon[lang],
+        saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_sub,
+        saveMode
+      );
+    });
+  }
+
+  if (saveMode == 0) {
+    sendMessage({ state: "saving", items: savingItems, confirm: false });
+    if (savingItems) {
+      sendMessageBackground("dosave", savingItems);
+    }
+  } else {
+    sendMessage({ state: "saving", items: savingItems, confirm: true });
+  }
+}
+
+function save_module() {
+  check_Options_state();
+  if (tabid && saveObjects != undefined && saveObjects["init"]) {
+    browserf().scripting.executeScript({
+      target: {
+        tabId: tabid,
+      },
+      args: [saveObjects, fileConfig, tabid],
+      func: implode_save,
+    });
+  } else {
+    console.log("for save_module not ready incoming data yet ", tabid, saveObjects);
+  }
+}
+/**
+ *
+ * @param {*} saveObjectsReq
+ */
+function implode_getCourseInfo(saveObjectsReq) {
+  window.browser = (function () {
+    return typeof window.browser === "undefined" ? window.chrome : window.browser;
+  })();
+
+  function sendMessage(m) {
+    browser.runtime.sendMessage({ greeting: "csa", message: m });
+  }
+
+  function searchCourseLanguage() {
+    return document.querySelector("#select-language")?.selectedOptions[0]?.value;
+  }
+
+  function searchVideoDuratiom() {
+    let duration;
+    let video = document.getElementById("video_player_html5_api");
+    if (video && video.readyState > 0) {
+      duration = Math.round(video.duration / 60);
+    }
+    return duration;
+  }
+
+  function searchCourseID() {
+    let result = { success: false };
+    let ci = document.querySelector("div.m-a-0.body > a")?.getAttribute("data-click-value");
+    if (ci) {
+      ci = JSON.parse(ci);
+      //console.log("coureinfo cs", ci, ci?.course_id);
+      result.course_id = ci?.course_id;
+      result.item_id = ci?.item_id;
+      if (result.course_id && result.item_id) result.success = true;
+    }
+    return result;
+  }
+
+  function getModouleInfo() {
+    let result = {};
+    result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
+    result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
+    result.videoduration = searchVideoDuratiom();
+    return result;
+  }
+
+  function genAPIrequest(i) {
+    return (
+      "/api/onDemandLectureVideos.v1/" +
+      i.course_id +
+      "~" +
+      i.item_id +
+      "?includes=video&fields=onDemandVideos.v1(sources,subtitles,subtitlesVtt,subtitlesTxt)"
+    );
+  }
+
+  function getLanguageCodes(sub) {
+    const keys = [];
+    if (sub) {
+      Object.keys(sub).forEach((key) => {
+        if (keys.indexOf(key) == -1) {
+          keys.push(key);
+        }
+      });
+    }
+    return keys;
+  }
+
+  function parseCourseMedia(j) {
+    let video_res = saveObjectsReq.videores ? "720p" : "540p";
+    let obj = j.linked["onDemandVideos.v1"][0];
+    let sub = obj.subtitlesVtt;
+    let video = obj.sources.byResolution[video_res].mp4VideoUrl;
+    let text = obj.subtitlesTxt;
+    // console.log("parseCourseMedia video", video);
+    // console.log("parseCourseMedia subtitle", lang, sub[lang]);
+    // console.log("parseCourseMedia subtitle", lang_add, sub[lang_add]);
+    // console.log("parseCourseMedia text", lang, text[lang]);
+    // console.log("parseCourseMedia text", lang_add, text[lang_add]);
+    if (saveObjectsReq.video) result.video = video;
+    if (saveObjectsReq.subtitle) result.subtitle = sub[lang];
+    if (saveObjectsReq.videotext) result.videotext = text[lang];
+
+    const languages = getLanguageCodes(sub);
+    if (lang_add && languages && languages.length) {
+      result.languages = languages;
+      result.subtitle_addon = {};
+      result.videotext_addon = {};
+      const languages_req = lang_add.split(",", 20);
+      for (let i = 0; i < languages_req.length; i++) {
+        let langi = languages_req[i].trim();
+        //console.log("langi", langi);
+        if (languages.includes(langi)) {
+          if (saveObjectsReq.subtitle_addon) {
+            result.subtitle_addon[langi] = sub[langi];
+            result.subtitle_addon_lang = result.subtitle_addon_lang ? result.subtitle_addon_lang + "," + langi : langi;
+          }
+          if (saveObjectsReq.videotext_addon) {
+            result.videotext_addon[langi] = text[langi];
+            result.videotext_addon_lang = result.videotext_addon_lang
+              ? result.videotext_addon_lang + "," + langi
+              : langi;
+          }
+        }
+      }
+    }
+    result.error = "";
+    //console.log("RETURN MESSAGE", result);
+    sendMessage(result);
+  }
+
+  let result = { error: "404" };
+  let lang = searchCourseLanguage();
+  let lang_add = saveObjectsReq.subtitle_addon_lang;
+  result = getModouleInfo();
+  let courseinfo = searchCourseID();
+  if (courseinfo.success) {
+    let URL = genAPIrequest(courseinfo);
+    if (URL) {
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 5000);
+      fetch(URL, { signal: controller.signal })
+        .then((response) => response.json())
+        .then((json) => {
+          parseCourseMedia(json);
+        })
+        .catch(() => {
+          sendMessage({ error: "404" });
+        });
+    } else {
+      sendMessage({ error: "404" });
+    }
+  } else {
+    sendMessage({ error: "404" });
+  }
+  //console.log("coureinfo", courseinfo, URL);
+}
+
+/**
+ *
+ */
+function getCourseInfo() {
+  console.log("getCourseInfo start");
+  waitCourseInfoID = setTimeout(() => {
+    console.log("Timeout of get Course Info");
+    debuglog(browser.i18n.getMessage("NOVIDEO"));
+  }, 8000);
+  browserf().scripting.executeScript({
+    target: {
+      tabId: tabid,
+    },
+    args: [saveObjectsReq],
+    func: implode_getCourseInfo,
   });
 }
 

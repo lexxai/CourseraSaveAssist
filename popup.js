@@ -375,7 +375,10 @@ function search_module() {
 
 function implode_save(saveparam, fileConfig, tabid = 0) {
   //console.log("implode_save: ", saveparam);
-  const browser = chrome;
+  window.browser = (function () {
+    return typeof window.browser === "undefined" ? window.chrome : window.browser;
+  })();
+
   let port;
   function sendMessageBackground(command, message) {
     if (!(port && port.name)) port = browser.runtime.connect({ name: "csa-background" });
