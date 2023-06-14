@@ -130,7 +130,11 @@ function restore_options() {
     })
     .then((items) => {
       if (items.course !== undefined) document.getElementById("course").value = items?.course;
-      if (items.useautocourse !== undefined) document.getElementById("useautocourse").checked = items?.useautocourse;
+      if (items.useautocourse !== undefined) {
+        const useautocourse = document.getElementById("useautocourse");
+        useautocourse.checked = items?.useautocourse;
+        triggerEvent(useautocourse, "change");
+      }
       if (items.useshortcourse !== undefined) document.getElementById("useshortcourse").checked = items?.useshortcourse;
       if (items.module !== undefined) document.getElementById("module").value = items?.module;
       if (items.modulesep !== undefined) document.getElementById("modulesep").value = items?.modulesep;
@@ -215,6 +219,7 @@ function installListsEvent() {
   document.getElementById("clear")?.addEventListener("click", clear_options);
   document.getElementById("scrolltotitle")?.addEventListener("change", scrolltotitle_options);
   document.getElementById("automatic")?.addEventListener("change", automatic_options);
+  document.getElementById("useautocourse")?.addEventListener("change", useautocourse_options);
 }
 
 function languageDetect() {
@@ -273,6 +278,15 @@ function automatic_options(e) {
     item.classList.toggle("hidden", !t);
     const a_mode = document.getElementById("a_mark");
     if (a_mode) a_mode.checked = true;
+  }
+}
+
+function useautocourse_options(e) {
+  let t = e.target?.checked;
+  const amode = document.getElementsByClassName("shortcourse");
+  for (const item of amode) {
+    console.log("useautocourse_options item", item, t);
+    item.classList.toggle("hidden", !t);
   }
 }
 
