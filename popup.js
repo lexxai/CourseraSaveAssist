@@ -14,6 +14,7 @@ const saveObjects = {
   subtitle_addon_lang: "",
   module: "",
   topic: "",
+  course: "",
 };
 
 const saveObjectsReq = {
@@ -41,7 +42,10 @@ const fileConfig = {
   lastfileid: 0,
   lastmodule: "",
   lasttopic: "",
+  lastcourse: "",
   savemode: 1,
+  useautocourse: false,
+  useshortcourse: false,
 };
 
 const otherConfig = {
@@ -102,6 +106,12 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       let module = request.message.module;
       let topic = request.message.topic;
       let course = request.message.course;
+
+      if (fileConfig.lastcourse != course) {
+        saveObjects.course = course;
+      } else {
+        saveObjects.course = fileConfig.lastcourse;
+      }
 
       if (fileConfig.lasttopic != topic) {
         saveObjects.topic = topic;
@@ -182,6 +192,7 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
           fileConfig.lastmodule = saveObjects.module;
           fileConfig.lasttopic = saveObjects.topic;
           fileConfig.lastfileid = saveObjects.fileid;
+          fileConfig.lastcourse = saveObjects.course;
           save_options();
           debuglog(browser.i18n.getMessage("SAVINGFILES") + " " + request.message.items);
           if (waitSavingStartID) {
@@ -614,6 +625,7 @@ function restore_options() {
       savesubtitleadd: false,
       lastmodule: "",
       lasttopic: "",
+      lastcourse: "",
       lastfileid: 0,
       usesaveid: true,
       savemode: 0,
@@ -641,6 +653,7 @@ function restore_options() {
       fileConfig.lastmodule = items?.lastmodule;
       fileConfig.lasttopic = items?.lasttopic;
       fileConfig.lastfileid = items?.lastfileid;
+      fileConfig.lastcourse = items?.lastcourse;
       fileConfig.savemode = items?.savemode;
       otherConfig.automatic = items?.automatic;
       otherConfig.automatic_mode = items?.automatic_mode;
@@ -656,6 +669,7 @@ async function save_options() {
       lastmodule: fileConfig.lastmodule,
       lasttopic: fileConfig.lasttopic,
       lastfileid: fileConfig.lastfileid,
+      lastcourse: fileConfig.lastcourse,
     })
     .then(() => {});
 }
@@ -824,9 +838,29 @@ function render_previos_item_name() {
   if (fileConfig.lastmodule == "" && fileConfig.lasttopic == "" && fileConfig.lastfileid == 0) {
     return;
   }
+  let course = fileConfig.lastcourse;
+  if (fileConfig.useautocourse && fileConfig.useshortcourse) {
+    let course_ar = course.split(" ");
+    course = "";
+    for (const word of course_ar) {
+      course += course.length ? fileConfig.title_delimeter : "";
+      course += word.substr(0, 5);
+    }
+  }
+
+  if (fileConfig.useautocourse) {
+    course = course.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
+    course = course.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
+  }
+
   let last_saved_file = fileConfig.course_prefix;
-  last_saved_file += fileConfig.module_prefix;
+
+  if (fileConfig.useautocourse && course?.length) last_saved_file += course;
+
+  last_saved_file += (last_saved_file.length ? fileConfig.title_delimeter : "") + fileConfig.module_prefix;
+
   last_saved_file += String(fileConfig.lastmodule).padStart(2, "0");
+
   if (saveObjectsReq.usesaveid) {
     last_saved_file += fileConfig.title_delimeter;
     last_saved_file += String(fileConfig.lastfileid).padStart(2, "0");
