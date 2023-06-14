@@ -175,5 +175,8 @@
   },
   "USESHORTCOURSE_DESCR": {
     "message": "Automatically shorten the real name of the course. Take up to 5 characters from each word"
+  },
+  "LASTCOURSE": {
+    "message": "The last saved course"
   }
 }

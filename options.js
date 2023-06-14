@@ -27,6 +27,7 @@ function save_options(e) {
   let savesubtitleadd = document.getElementById("savesubtitleadd")?.checked;
   let lastmodule = document.getElementById("lastmodule")?.value;
   let lasttopic = document.getElementById("lasttopic")?.value;
+  let lastcourse = document.getElementById("lastcourse")?.value;
   let lastfileid = document.getElementById("lastfileid")?.value;
   let usesaveid = document.getElementById("usesaveid")?.checked;
   let savemode = document.getElementById("savemode")?.checked ? 1 : 0;
@@ -63,6 +64,7 @@ function save_options(e) {
       savesubtitleadd: savesubtitleadd,
       lastmodule: lastmodule,
       lasttopic: lasttopic,
+      lastcourse: lastcourse,
       lastfileid: lastfileid,
       usesaveid: usesaveid,
       savemode: savemode,
@@ -119,6 +121,7 @@ function restore_options() {
       savesubtitle: true,
       savevideotxtadd: false,
       savesubtitleadd: false,
+      lastcourse: "",
       lastmodule: "",
       lasttopic: "",
       lastfileid: 0,
@@ -150,6 +153,7 @@ function restore_options() {
       if (items.savesubtitle !== undefined) document.getElementById("savesubtitleadd").checked = items?.savesubtitleadd;
       if (items.lastmodule) document.getElementById("lastmodule").value = items?.lastmodule;
       if (items.lasttopic) document.getElementById("lasttopic").value = items?.lasttopic;
+      if (items.lastcourse) document.getElementById("lastcourse").value = items?.lastcourse;
       if (items.lastfileid !== undefined) document.getElementById("lastfileid").value = Number(items.lastfileid);
       if (items.usesaveid !== undefined) document.getElementById("usesaveid").checked = items?.usesaveid;
       if (items.savemode !== undefined) document.getElementById("savemode").checked = items?.savemode != 0;
@@ -309,6 +313,10 @@ browser.storage.onChanged.addListener(async (changes, namespace) => {
       if (key == "lastfileid") {
         document.getElementById("lastfileid").value = Number(newValue);
         console.log("lastfileid item changed", newValue);
+      }
+      if (key == "lastcourse") {
+        document.getElementById("lastcourse").value = newValue;
+        console.log("lastcourse item changed", newValue);
       }
     }
   }
