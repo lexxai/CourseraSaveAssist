@@ -134,8 +134,8 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
         let course_ar = course.split(" ");
         course = "";
         for (const word of course_ar) {
-          course += course.length ? fileConfig.title_delimeter : "";
-          course += word.substr(0, 5);
+          //course += course.length ? fileConfig.title_delimeter : "";
+          course += word.charAt(0).toUpperCase() + word.substring(1, 5);
         }
       }
 
@@ -843,8 +843,8 @@ function render_previos_item_name() {
     let course_ar = course.split(" ");
     course = "";
     for (const word of course_ar) {
-      course += course.length ? fileConfig.title_delimeter : "";
-      course += word.substr(0, 5);
+      //course += course.length ? fileConfig.title_delimeter : "";
+      course += word.charAt(0).toUpperCase() + word.substring(1, 5);
     }
   }
 

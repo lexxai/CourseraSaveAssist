@@ -899,6 +899,7 @@ async function restore_options() {
       savesubtitleadd: false,
       lastmodule: "",
       lasttopic: "",
+      lastcourse: "",
       lastfileid: 0,
       usesaveid: true,
       savemode: 0,
@@ -926,6 +927,7 @@ async function restore_options() {
       fileConfig.lastmodule = items?.lastmodule;
       fileConfig.lasttopic = items?.lasttopic;
       fileConfig.lastfileid = items?.lastfileid;
+      fileConfig.lastcourse = items?.lastcourse;
       fileConfig.savemode = items?.savemode;
       otherConfig.automatic = items?.automatic;
       otherConfig.automatic_mode = items?.automatic_mode;
