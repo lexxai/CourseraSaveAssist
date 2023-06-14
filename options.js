@@ -11,6 +11,8 @@ function save_options(e) {
   console.log("save_options");
   e.preventDefault();
   let course = document.getElementById("course")?.value.trim();
+  let useautocourse = document.getElementById("useautocourse")?.checked;
+  let useshortcourse = document.getElementById("useshortcourse")?.checked;
   let module = document.getElementById("module")?.value.trim();
   let modulesep = document.getElementById("modulesep")?.value;
   let spacesep = document.getElementById("spacesep")?.value;
@@ -46,6 +48,8 @@ function save_options(e) {
   browser.storage.sync
     .set({
       course: course,
+      useautocourse: useautocourse,
+      useshortcourse: useshortcourse,
       module: module,
       modulesep: modulesep,
       spacesep: spacesep,
@@ -102,6 +106,8 @@ function restore_options() {
   browser.storage.sync
     .get({
       course: "",
+      useautocourse: false,
+      useshortcourse: false,
       module: "M",
       modulesep: "_",
       spacesep: "_",
@@ -124,6 +130,8 @@ function restore_options() {
     })
     .then((items) => {
       if (items.course !== undefined) document.getElementById("course").value = items?.course;
+      if (items.useautocourse !== undefined) document.getElementById("useautocourse").checked = items?.useautocourse;
+      if (items.useshortcourse !== undefined) document.getElementById("useshortcourse").checked = items?.useshortcourse;
       if (items.module !== undefined) document.getElementById("module").value = items?.module;
       if (items.modulesep !== undefined) document.getElementById("modulesep").value = items?.modulesep;
       if (items.modulesep !== undefined) document.getElementById("spacesep").value = items?.spacesep;

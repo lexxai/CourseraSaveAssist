@@ -163,5 +163,17 @@
   },
   "AUTOMATIC_TEXT_OFF": {
     "message": "вимкнено"
+  },
+  "USEAUTOCOURSE": {
+    "message": "Використовувати назву курсу"
+  },
+  "USEAUTOCOURSE_DESCR": {
+    "message": "Автоматично використовувати реальну назву курсу у назві файлу"
+  },
+  "USESHORTCOURSE": {
+    "message": "Скорочувати назву курсу"
+  },
+  "USESHORTCOURSE_DESCR": {
+    "message": "Автоматично скорочувати реальну назву курсу. З кожного слова брати до 5 символів"
   }
 }

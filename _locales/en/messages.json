@@ -141,7 +141,7 @@
     "message": "Add automatic mode?"
   },
   "AUTOMATIC_DESCR": {
-    "message": "Allows you to add an additional button for activating/deactivating the automatic mode in the main menu"
+    "message": "Allows you to add new button for activating/deactivating the automatic mode in the main menu"
   },
   "AUTOMATIC_MODE_SAVE": {
     "message": "operating mode: save"
@@ -163,5 +163,17 @@
   },
   "AUTOMATIC_TEXT_OFF": {
     "message": "disabled"
+  },
+  "USEAUTOCOURSE": {
+    "message": "Use the name of the course"
+  },
+  "USEAUTOCOURSE_DESCR": {
+    "message": "Automatically use the real name of the course in the file name"
+  },
+  "USESHORTCOURSE": {
+    "message": "Shorten the course name"
+  },
+  "USESHORTCOURSE_DESCR": {
+    "message": "Automatically shorten the real name of the course. Take up to 5 characters from each word"
   }
 }

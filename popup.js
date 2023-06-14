@@ -101,6 +101,7 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
       let module = request.message.module;
       let topic = request.message.topic;
+      let course = request.message.course;
 
       if (fileConfig.lasttopic != topic) {
         saveObjects.topic = topic;
@@ -118,10 +119,34 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 
       topic = topic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
       topic = topic.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
+
+      if (fileConfig.useautocourse && fileConfig.useshortcourse) {
+        let course_ar = course.split(" ");
+        course = "";
+        for (const word of course_ar) {
+          course += course.length ? fileConfig.title_delimeter : "";
+          course += word.substr(0, 5);
+        }
+      }
+
+      if (fileConfig.useautocourse) {
+        course = course.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
+        course = course.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
+      }
+
       saveObjects.video = request.message.video;
       if (request.message.subtitle) saveObjects.subtitle = request.message.subtitle;
       if (request.message.videotext) saveObjects.videotext = request.message.videotext;
-      saveObjects.filename = fileConfig.course_prefix + fileConfig.module_prefix + String(module).padStart(2, "0");
+
+      saveObjects.filename = fileConfig.course_prefix;
+
+      if (fileConfig.useautocourse && course?.length) saveObjects.filename += course;
+
+      saveObjects.filename +=
+        (saveObjects.filename.length ? fileConfig.title_delimeter : "") +
+        fileConfig.module_prefix +
+        String(module).padStart(2, "0");
+
       if (saveObjectsReq.usesaveid)
         saveObjects.filename += fileConfig.title_delimeter + String(saveObjects.fileid).padStart(2, "0");
       saveObjects.filename += fileConfig.title_delimeter + topic;
@@ -574,6 +599,8 @@ function restore_options() {
   browser.storage.sync
     .get({
       course: "",
+      useautocourse: false,
+      useshortcourse: false,
       module: "M",
       modulesep: "_",
       spacesep: "_",
@@ -596,6 +623,8 @@ function restore_options() {
     })
     .then((items) => {
       fileConfig.course_prefix = items?.course;
+      fileConfig.useautocourse = items?.useautocourse;
+      fileConfig.useshortcourse = items?.useshortcourse;
       fileConfig.module_prefix = items?.module;
       if (items?.modulesep !== undefined) fileConfig.title_delimeter = escapeRegExp(items.modulesep);
       if (items?.spacesep !== undefined) fileConfig.space_delimeter = escapeRegExp(items.spacesep);
@@ -665,6 +694,9 @@ function implode_getCourseInfo(saveObjectsReq) {
 
   function getModouleInfo() {
     let result = {};
+    result.course = document
+      .querySelector("div.rc-ItemNavBreadcrumbs > div > ol.breadcrumb-list  > li:nth-child(1) > a")
+      ?.innerHTML.trim();
     result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
     result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
     result.videoduration = searchVideoDuratiom();
@@ -693,7 +725,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     return keys;
   }
 
-  function parseCourseMedia(j) {
+  function parseCourseMedia(j, result) {
     let video_res = saveObjectsReq.videores ? "720p" : "540p";
     let obj = j.linked["onDemandVideos.v1"][0];
     let sub = obj.subtitlesVtt;
@@ -736,6 +768,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     sendMessage(result);
   }
 
+  // main code of implode
   let result = { error: "404" };
   let lang = searchCourseLanguage();
   let lang_add = saveObjectsReq.subtitle_addon_lang;
@@ -749,7 +782,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       fetch(URL, { signal: controller.signal })
         .then((response) => response.json())
         .then((json) => {
-          parseCourseMedia(json);
+          parseCourseMedia(json, result);
         })
         .catch(() => {
           sendMessage({ error: "404" });
@@ -760,7 +793,7 @@ function implode_getCourseInfo(saveObjectsReq) {
   } else {
     sendMessage({ error: "404" });
   }
-  //console.log("coureinfo", courseinfo, URL);
+  //console.log("coureinfo", courseinfo, URL, result);
 }
 
 function getCourseInfo() {

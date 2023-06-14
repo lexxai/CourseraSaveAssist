@@ -884,6 +884,8 @@ async function restore_options() {
   return browserf()
     .storage.sync.get({
       course: "",
+      useautocourse: false,
+      useshortcourse: false,
       module: "M",
       modulesep: "_",
       spacesep: "_",
@@ -906,6 +908,8 @@ async function restore_options() {
     })
     .then((items) => {
       fileConfig.course_prefix = items?.course;
+      fileConfig.useautocourse = items?.useautocourse;
+      fileConfig.useshortcourse = items?.useshortcourse;
       fileConfig.module_prefix = items?.module;
       if (items?.modulesep !== undefined) fileConfig.title_delimeter = escapeRegExp(items.modulesep);
       if (items?.spacesep !== undefined) fileConfig.space_delimeter = escapeRegExp(items.spacesep);
@@ -1104,6 +1108,9 @@ function implode_getCourseInfo(saveObjectsReq) {
 
   function getModouleInfo() {
     let result = {};
+    result.course = document
+      .querySelector("div.rc-ItemNavBreadcrumbs > div > ol.breadcrumb-list  > li:nth-child(1) > a")
+      ?.innerHTML.trim();
     result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
     result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
     result.videoduration = searchVideoDuratiom();
@@ -1132,7 +1139,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     return keys;
   }
 
-  function parseCourseMedia(j) {
+  function parseCourseMedia(j, result) {
     let video_res = saveObjectsReq.videores ? "720p" : "540p";
     let obj = j.linked["onDemandVideos.v1"][0];
     let sub = obj.subtitlesVtt;
@@ -1175,6 +1182,7 @@ function implode_getCourseInfo(saveObjectsReq) {
     sendMessage(result);
   }
 
+  // main code of implode
   let result = { error: "404" };
   let lang = searchCourseLanguage();
   let lang_add = saveObjectsReq.subtitle_addon_lang;
@@ -1188,7 +1196,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       fetch(URL, { signal: controller.signal })
         .then((response) => response.json())
         .then((json) => {
-          parseCourseMedia(json);
+          parseCourseMedia(json, result);
         })
         .catch(() => {
           sendMessage({ error: "404" });
