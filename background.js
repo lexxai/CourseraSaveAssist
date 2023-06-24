@@ -668,6 +668,7 @@ function tab_select_current_video_implode(params) {
       cont--;
     }
     const items = document.querySelectorAll("div.rc-NavItemName");
+    searchSavedTitle(savedTitle, items);
     let searchResult = searchtitle(title, items);
     if (automatic) {
       console.log("automatic_mode", automatic_mode);
@@ -711,6 +712,38 @@ function tab_select_current_video_implode(params) {
       }
       //console.log("markItemSaved style", item, o.style);
     }
+  }
+
+  function searchSavedTitle(stitle, items) {
+    let title = stitle;
+    let pagemarked = undefined;
+    //const items = document.querySelectorAll("div.rc-NavItemName");
+    // console.log("searchtitle, items:", title, items.length);
+    if (title) {
+      for (const item of items) {
+        // items.forEach((item) => {
+        let titles = item.innerText.split("\n");
+        if (titles.length < 2) {
+          titles = item.innerHTML.split("</strong>");
+        }
+        titles = titles.pop().trim();
+        if (title && titles) {
+          //console.log("item titles", title, titles);
+          if (title.normalize("NFC") == titles.normalize("NFC")) {
+            //console.log("item - found. title:", title, "savedTitle:", savedTitle, "preparing_mode:", preparing_mode);
+            //item.scrollIntoView({ behavior: "smooth", block: "center" });
+            //pagemarked = isPageMarked(item);
+            if (stitle) {
+              let colormode = 0;
+              //if (preparing_mode) colormode = 2;
+              markItemSaved(item, colormode);
+              return { result: true, pagemarked: pagemarked };
+            }
+          }
+        }
+      }
+    }
+    return { result: false, pagemarked: pagemarked };
   }
 
   function searchtitle(stitle, items) {
@@ -949,7 +982,6 @@ async function check_Options_state() {
     if (fileConfig == undefined || !fileConfig["init"]) {
       console.log("check_Options_state before restore_options", saveObjects, fileConfig, saveObjectsReq);
       await restore_options();
-      console.log("check_Options_state afters restore_options", saveObjects, fileConfig, saveObjectsReq);
     }
   }
 }
