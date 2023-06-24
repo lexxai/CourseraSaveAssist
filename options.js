@@ -267,9 +267,11 @@ function scrolltotitle_options(e) {
   if (!t && automatic) {
     automatic.checked = false;
     automatic.disabled = true;
+    automatic.title = browser.i18n.getMessage("DISABLED_DEPENDED_PREV");
     triggerEvent(automatic, "change");
   } else {
     automatic.disabled = false;
+    automatic.title = "";
     triggerEvent(automatic, "change");
   }
 }

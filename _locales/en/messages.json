@@ -178,5 +178,8 @@
   },
   "LASTCOURSE": {
     "message": "The last saved course"
+  },
+  "DISABLED_DEPENDED_PREV": {
+    "message": "Locked because this menu depends on the previous menu, to unlock it, activate the previous menu"
   }
 }
