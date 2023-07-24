@@ -126,6 +126,16 @@ browserf().runtime.onConnect.addListener((port) => {
         console.log("dosavevieo background port from content", request.message);
         save_module();
         break;
+
+      case "cst_load":
+        console.log("cst_load background port from content", request.message);
+        if (!tabid) {
+          let tab = await getCurrentTab();
+          tabid = tab.id;
+        }
+        cst_load(tabid);
+        break;
+
       case "dotranslate":
         console.log("dotranslate background port from content", request.message);
         if (!tabid) {
@@ -183,6 +193,13 @@ browserf().downloads.onChanged.addListener((e) => {
     }
   }
 });
+
+function cst_load(tabid) {
+  browserf().scripting.executeScript({
+    target: { tabId: tabid },
+    files: ["module-cst.js"],
+  });
+}
 
 async function saveVariable(key, value) {
   let item = {};
@@ -471,40 +488,6 @@ function tab_select_current_video_implode(params) {
     port.postMessage({ command: command, message: message });
   }
 
-  function sendMessageToCST(command, message = "") {
-    // chrome.tabs.query({ active: true, currentWindow: true }).then((tabs) => {
-    //   chrome.tabs
-    //     .sendMessage(tabs[0].id, { command: command, message: message })
-    //     .then((response) => {
-    //       if (response?.command && response.command == "translated") {
-    //         console.log("translated");
-    //         //ok_state(checkButton);
-    //         //close_page();
-    //       } else {
-    //         console.log("TRanslated Answer not from target page?");
-    //         //some_error(checkButton);
-    //       }
-    //     })
-    //     .catch(() => {
-    //       console.log("Not connected target page");
-    //       some_error(checkButton);
-    //     });
-    // });
-    sendMessage("dotranslate", "");
-
-    // let port = browser.runtime.connect({ name: "cst" });
-    // port.postMessage({ command: command, message: message });
-
-    //browser.runtime.sendMessage({ command: command, message: message });
-  }
-
-  // function sendMessage(command,message) {
-  //   browser.runtime.sendMessage({
-  //     id: "from_content",
-  //     message: message,
-  //   });
-  // }
-
   function analyseURL(type = "video") {
     const loc = new URL(window.location);
     let finding = "";
@@ -593,9 +576,12 @@ function tab_select_current_video_implode(params) {
       return;
     }
     let cont = 15;
+
+    load_cst_module();
     while (cont > 0) {
+      let cst_state = check_cst_loaded();
       let video = document.getElementById("video_player_html5_api");
-      if (video && video.readyState > 0) {
+      if (cst_state && video && video.readyState > 0) {
         translateVideo();
         break;
       } else {
@@ -705,9 +691,24 @@ function tab_select_current_video_implode(params) {
     isReadySkipPage();
   }
 
+  function check_cst_loaded() {
+    result = document.body?.getAttribute("cst") === "loaded";
+    if (result) console.log("CST module is already marked as loaded, skip");
+    return result;
+  }
+
+  function load_cst_module() {
+    let cst_loaded = check_cst_loaded();
+    if (!cst_loaded) {
+      console.log("command load cst module");
+      sendMessage("cst_load", { cst_loaded: cst_loaded });
+    }
+  }
+
   function translateVideo() {
     console.log("command translate Video...");
-    sendMessageToCST("translate");
+    sendMessage("dotranslate");
+    //sendMessageToCST("translate");
   }
 
   function setVideoPos(video, pos = 0.95) {

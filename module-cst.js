@@ -167,6 +167,19 @@ function mark_translated() {
   }
 }
 
+function check_cst_loaded() {
+  result = document.body?.getAttribute("cst") === "loaded";
+  if (result) console.log("CST module is already marked as loaded, skip");
+  return result;
+}
+
+function mark_cst_loaded() {
+  if (document.body?.getAttribute("cst") != "loaded") {
+    console.log("CST module makr as loaded");
+    document.body.setAttribute("cst", "loaded");
+  }
+}
+
 function translate() {
   if (check_translated()) {
     return;
@@ -203,3 +216,4 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
 });
 
 console.log("CST MODULE LOADED ...");
+mark_cst_loaded();
