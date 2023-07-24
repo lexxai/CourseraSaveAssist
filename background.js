@@ -706,7 +706,7 @@ function tab_select_current_video_implode(params) {
   }
 
   function translateVideo() {
-    console.log("translateVideo...");
+    console.log("command translate Video...");
     sendMessageToCST("translate");
   }
 

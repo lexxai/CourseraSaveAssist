@@ -76,6 +76,7 @@ async function openBilingual() {
             }
           }
         }
+        mark_translated();
       });
     }
   }
@@ -124,7 +125,7 @@ function resizeSub(size) {
 }
 
 function getTranslation(words, callback) {
-  chrome.storage.sync.get({ cst_lang: "uk" }, function (result) {
+  browser.storage.sync.get({ cst_lang: "uk" }, function (result) {
     let lang = result.cst_lang;
     console.log("CST Lang:", lang);
     const xhr = new XMLHttpRequest();
@@ -151,8 +152,23 @@ function getTranslation(words, callback) {
   });
 }
 
+function check_translated() {
+  let video = document.getElementById("video_player_html5_api");
+  result = video?.getAttribute("cst") == "translated";
+  if (result) console.log("CST video is already marked as translated, skip");
+  return result;
+}
+
+function mark_translated() {
+  let video = document.getElementById("video_player_html5_api");
+  if (video && video?.getAttribute("cst") != "translated") {
+    console.log("CST mark video as translated");
+    video.setAttribute("cst", "translated");
+  }
+}
+
 function translate() {
-  if (document.body.getAttribute("cst") == "translated") {
+  if (check_translated()) {
     return;
   }
   browser.storage.sync
@@ -172,14 +188,11 @@ function translate() {
     });
 
   openBilingual();
-  if (document.body.getAttribute("cst") != "translated") {
-    document.body.setAttribute("cst", "translated");
-  }
 }
 
 // MAIN
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.command == "translate") {
     console.log("CST MODULE translating", request.command);
     translate();
