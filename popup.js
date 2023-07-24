@@ -582,6 +582,9 @@ async function addListeners() {
 
     let mode_text = browser.i18n.getMessage("AUTOMATIC_TEXT");
     switch (otherConfig.automatic_mode) {
+      case "a_cst":
+        mode_text = mode_text + " " + browser.i18n.getMessage("AUTOMATIC_MODE_CST");
+        break;
       case "a_mark":
         mode_text = mode_text + " " + browser.i18n.getMessage("AUTOMATIC_MODE_MARK");
         break;
