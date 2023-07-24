@@ -152,6 +152,9 @@ function getTranslation(words, callback) {
 }
 
 function translate() {
+  if (document.body.getAttribute("cst") == "translated") {
+    return;
+  }
   browser.storage.sync
     .get({
       cst_fontsize: 75,
@@ -169,6 +172,9 @@ function translate() {
     });
 
   openBilingual();
+  if (document.body.getAttribute("cst") != "translated") {
+    document.body.setAttribute("cst", "translated");
+  }
 }
 
 // MAIN
