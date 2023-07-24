@@ -8,7 +8,7 @@
   "permissions": ["scripting", "storage", "downloads"],
   "content_scripts": [
     {
-      "matches": ["*://www.coursera.org/*/*/lecture/*/*"],
+      "matches": ["*://www.coursera.org/*"],
       "js": ["module-cst.js"]
     }
   ],
