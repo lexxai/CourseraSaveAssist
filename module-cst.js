@@ -106,6 +106,7 @@ function getTexts(cues) {
 }
 
 function resizeSub(size) {
+  console.log("CST size:", size);
   //let size = result.size;
   size = size / 100;
   // alert('Value is set to ' + size);
@@ -123,8 +124,9 @@ function resizeSub(size) {
 }
 
 function getTranslation(words, callback) {
-  chrome.storage.sync.get(["cst_lang"], function (result) {
-    let lang = result.lang;
+  chrome.storage.sync.get({ cst_lang: "uk" }, function (result) {
+    let lang = result.cst_lang;
+    console.log("CST Lang:", lang);
     const xhr = new XMLHttpRequest();
     let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(
       words
@@ -149,7 +151,7 @@ function getTranslation(words, callback) {
   });
 }
 
-function init() {
+function translate() {
   browser.storage.sync
     .get({
       cst_fontsize: 75,
@@ -171,25 +173,14 @@ function init() {
 
 // MAIN
 
-browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
-  if (request.method == "translate") {
-    chrome.storage.sync
-      .get({ fontsize: 75 })
-      .then((result) => {
-        let fontsize = result.fontsize;
-        if (fontsize) {
-          resizeSub(fontsize);
-        } else {
-          resizeSub(75);
-        }
-      })
-      .catch(() => {
-        resizeSub(75);
-      });
-
-    openBilingual();
-    if (sendResponse) sendResponse({ method: "translated" });
+chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+  if (request.command == "translate") {
+    console.log("CST MODULE translating", request.command);
+    translate();
+    console.log("CST MODULE translated", request.command);
+    if (sendResponse) sendResponse({ command: "translated" });
   }
+  return false;
 });
 
-init();
+console.log("CST MODULE LOADED ...");

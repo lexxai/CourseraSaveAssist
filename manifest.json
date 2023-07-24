@@ -6,6 +6,12 @@
   "homepage_url": "https://github.com/lexxai/CourseraSaveAssist/wiki",
   "manifest_version": 3,
   "permissions": ["scripting", "storage", "downloads"],
+  "content_scripts": [
+    {
+      "matches": ["*://www.coursera.org/*/*/lecture/*/*"],
+      "js": ["module-cst.js"]
+    }
+  ],
   "background": {
     "service_worker": "background.js"
   },
