@@ -18,6 +18,7 @@ function save_options(e) {
   let spacesep = document.getElementById("spacesep")?.value;
   let subtitle_lang = document.getElementById("subtitle_lang")?.value.trim();
   let cst_lang = document.getElementById("cst_lang")?.value.trim();
+  let cst_fontsize = document.getElementById("cst_fontsize")?.value;
   subtitle_lang = subtitle_lang.replace(/\s+/gi, "").replace(/[^a-z0-9A-Z,-]+/gi, "");
   let savevideo = document.getElementById("savevideo")?.checked;
   let videores = document.getElementById("videores")?.checked;
@@ -57,6 +58,7 @@ function save_options(e) {
       spacesep: spacesep,
       subtitle_lang: subtitle_lang,
       cst_lang: cst_lang,
+      cst_fontsize: cst_fontsize,
       savevideo: savevideo,
       videores: videores,
       videoduration: videoduration,
@@ -117,6 +119,7 @@ function restore_options() {
       spacesep: "_",
       subtitle_lang: "en",
       cst_lang: "uk",
+      cst_fontsize: 75,
       savevideo: true,
       videores: true,
       videoduration: false,

@@ -3,6 +3,10 @@
 //author of fork with addons = lexxai
 //github=https://github.com/lexxai/coursera-subtitle-translate-extension
 
+window.browser = (function () {
+  return typeof window.browser === "undefined" ? window.chrome : window.browser;
+})();
+
 async function openBilingual() {
   let tracks = document.getElementsByTagName("track");
   let en;
@@ -119,7 +123,7 @@ function resizeSub(size) {
 }
 
 function getTranslation(words, callback) {
-  chrome.storage.sync.get(["lang"], function (result) {
+  chrome.storage.sync.get(["cst_lang"], function (result) {
     let lang = result.lang;
     const xhr = new XMLHttpRequest();
     let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=en&tl=${lang}&dt=t&q=${encodeURI(
@@ -145,7 +149,29 @@ function getTranslation(words, callback) {
   });
 }
 
-chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
+function init() {
+  browser.storage.sync
+    .get({
+      cst_fontsize: 75,
+    })
+    .then((result) => {
+      let fontsize = result.cst_fontsize;
+      if (fontsize) {
+        resizeSub(fontsize);
+      } else {
+        resizeSub(75);
+      }
+    })
+    .catch(() => {
+      resizeSub(75);
+    });
+
+  openBilingual();
+}
+
+// MAIN
+
+browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
   if (request.method == "translate") {
     chrome.storage.sync
       .get({ fontsize: 75 })
@@ -165,3 +191,5 @@ chrome.runtime.onMessage.addListener(function (request, sender, sendResponse) {
     if (sendResponse) sendResponse({ method: "translated" });
   }
 });
+
+init();
