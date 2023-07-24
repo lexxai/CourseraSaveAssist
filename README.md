@@ -18,7 +18,10 @@ Version for development: [![current version](https://img.shields.io/github/manif
 
 **[Download](https://github.com/lexxai/CourseraSaveAssist/wiki/Download) | [Features](https://github.com/lexxai/CourseraSaveAssist/wiki/Features) | [What's new?](https://github.com/lexxai/CourseraSaveAssist/wiki/What's-new%3F) | [Donate](https://github.com/lexxai/CourseraSaveAssist/wiki/Donate)**
 
-### The application is publicly available in the Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
+### The application is publicly available in the Store
+
+- Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
+- Microsoft Edge Web Store  [![Static Badge](https://img.shields.io/badge/microsoft%20web%20store_-v.2.0.2-blue)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
 
 The application has also been additionally initiated to be added to the stores for other browsers. Now stores are previewing the app before publishing it.
 
@@ -51,7 +54,10 @@ Example:
 
 Щоб почати використовувати розширення, просто перейдіть за посиланням у [Chrome Web Store](https://chrome.google.com/webstore/detail/assistant-for-saving-file/dmoebncbmkgfpjhjikkjljmbaacncohl) та встановіть його. Збереження відеоматеріалів з Coursera ніколи не було таким простим!
 
-### Додаток є в публічному доступі в Chrome Google Web Store [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
+### Додаток є в публічному доступі в Store 
+
+- Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
+- Microsoft Edge Web Store  [![Static Badge](https://img.shields.io/badge/microsoft%20web%20store_-v.2.0.2-blue)](https://github.com/lexxai/CourseraSaveAssist/wiki/%D0%97%D0%B0%D0%B2%D0%B0%D0%BD%D1%82%D0%B0%D0%B6%D0%B5%D0%BD%D0%BD%D1%8F)
 
 Додаток також було додатково ініційованно до додавання у магазини інших браузерів. Зараз магазини превряють додаток перед публікацією.
 
