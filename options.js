@@ -150,6 +150,7 @@ function restore_options() {
       if (items.modulesep !== undefined) document.getElementById("spacesep").value = items?.spacesep;
       if (items.subtitle_lang) document.getElementById("subtitle_lang").value = items?.subtitle_lang;
       if (items.cst_lang) document.getElementById("cst_lang").value = items?.cst_lang;
+      if (items.cst_fontsize) document.getElementById("cst_fontsize").value = items?.cst_fontsize;
       if (items.savevideo !== undefined) document.getElementById("savevideo").checked = items?.savevideo;
       if (items.videores !== undefined) document.getElementById("videores").checked = items?.videores;
       if (items.videoduration !== undefined) document.getElementById("videoduration").checked = items?.videoduration;
