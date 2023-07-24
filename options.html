@@ -97,7 +97,52 @@
               title="__MSG_AUTOMATIC_MODE_MARK_DESCR__"
               name="automatic_mode"
               value="a_mark"
+            />
+          </div>
+          <label class="amode cst" for="a_cst" title="__MSG_AUTOMATIC_MODE_CST_DESCR__"
+            >- __MSG_AUTOMATIC_MODE_CST__:</label
+          >
+          <div class="amode hidden">
+            <input
+              type="radio"
+              id="a_cst"
+              title="__MSG_AUTOMATIC_MODE_CST_DESCR__"
+              name="automatic_mode"
+              value="a_cst"
               checked="checked"
+            />
+          </div>
+          <label class="amode" for="cst_lang" title="__MSG_CST_LANG_DESCR__"
+            >&nbsp;&nbsp;* __MSG_CST_LANG__: (<a
+              href="https://en.wikipedia.org/wiki/List_of_ISO_639-1_codes"
+              target="_blank"
+              >?</a
+            >)</label
+          >
+          <div class="amode hidden">
+            <input
+              title="ISO 631-1. (Google translate)"
+              type="text"
+              id="cst_lang"
+              placeholder="uk"
+              minlength="2"
+              maxlength="6"
+              value="uk"
+            />
+          </div>
+          <label class="amode" for="cst_fontsize" title="__MSG_CST_FONTSIZE_DESCR__"
+            >&nbsp;&nbsp;* __MSG_CST_FONTSIZE__:</label
+          >
+          <div class="amode hidden">
+            <input
+              title="__MSG_CST_FONTSIZE_DESCR__"
+              type="number"
+              id="cst_fontsize"
+              placeholder="75"
+              min="10"
+              max="300"
+              size="5"
+              value="75"
             />
           </div>
           <div class="divider"><hr /></div>

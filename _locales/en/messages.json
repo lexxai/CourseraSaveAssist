@@ -181,5 +181,23 @@
   },
   "DISABLED_DEPENDED_PREV": {
     "message": "Locked because this menu depends on the previous menu, to unlock it, activate the previous menu"
+  },
+  "AUTOMATIC_MODE_CST": {
+    "message": "operation mode: translate"
+  },
+  "AUTOMATIC_MODE_CST_DESCR": {
+    "message": "Automatic mode, in which the subtitles of the video material on the current page are translated automatically by the CST module."
+  },
+  "CST_LANG": {
+    "message": "what language to translate into"
+  },
+  "CST_LANG_DESCR": {
+    "message": "Subtitles will be automatically translated by the CST module from English into the language of your choice."
+  },
+  "CST_FONTSIZE": {
+    "message": "the size of the subtitles"
+  },
+  "CST_FONTSIZE_DESCR": {
+    "message": "Subtitles will be translated automatically by the CST module and resized to the size you specify"
   }
 }

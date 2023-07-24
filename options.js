@@ -17,6 +17,7 @@ function save_options(e) {
   let modulesep = document.getElementById("modulesep")?.value;
   let spacesep = document.getElementById("spacesep")?.value;
   let subtitle_lang = document.getElementById("subtitle_lang")?.value.trim();
+  let cst_lang = document.getElementById("cst_lang")?.value.trim();
   subtitle_lang = subtitle_lang.replace(/\s+/gi, "").replace(/[^a-z0-9A-Z,-]+/gi, "");
   let savevideo = document.getElementById("savevideo")?.checked;
   let videores = document.getElementById("videores")?.checked;
@@ -55,6 +56,7 @@ function save_options(e) {
       modulesep: modulesep,
       spacesep: spacesep,
       subtitle_lang: subtitle_lang,
+      cst_lang: cst_lang,
       savevideo: savevideo,
       videores: videores,
       videoduration: videoduration,
@@ -114,6 +116,7 @@ function restore_options() {
       modulesep: "_",
       spacesep: "_",
       subtitle_lang: "en",
+      cst_lang: "uk",
       savevideo: true,
       videores: true,
       videoduration: false,
@@ -129,7 +132,7 @@ function restore_options() {
       savemode: 0,
       scrolltotitle: false,
       automatic: false,
-      automatic_mode: "a_mark",
+      automatic_mode: "a_cst",
     })
     .then((items) => {
       if (items.course !== undefined) document.getElementById("course").value = items?.course;
@@ -143,6 +146,7 @@ function restore_options() {
       if (items.modulesep !== undefined) document.getElementById("modulesep").value = items?.modulesep;
       if (items.modulesep !== undefined) document.getElementById("spacesep").value = items?.spacesep;
       if (items.subtitle_lang) document.getElementById("subtitle_lang").value = items?.subtitle_lang;
+      if (items.cst_lang) document.getElementById("cst_lang").value = items?.cst_lang;
       if (items.savevideo !== undefined) document.getElementById("savevideo").checked = items?.savevideo;
       if (items.videores !== undefined) document.getElementById("videores").checked = items?.videores;
       if (items.videoduration !== undefined) document.getElementById("videoduration").checked = items?.videoduration;
@@ -282,7 +286,7 @@ function automatic_options(e) {
   for (const item of amode) {
     console.log("automatic_options item", item, t);
     item.classList.toggle("hidden", !t);
-    const a_mode = document.getElementById("a_mark");
+    const a_mode = document.getElementById("a_cst");
     if (a_mode) a_mode.checked = true;
   }
 }
