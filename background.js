@@ -693,7 +693,7 @@ function tab_select_current_video_implode(params) {
 
   function check_cst_loaded() {
     result = document.body?.getAttribute("cst") === "loaded";
-    if (result) console.log("CST module is already marked as loaded, skip");
+    //if (result) console.log("CST module is already marked as loaded, skip");
     return result;
   }
 

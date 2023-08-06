@@ -299,7 +299,7 @@ function useautocourse_options(e) {
   let t = e.target?.checked;
   const amode = document.getElementsByClassName("shortcourse");
   for (const item of amode) {
-    console.log("useautocourse_options item", item, t);
+    //console.log("useautocourse_options item", item, t);
     item.classList.toggle("hidden", !t);
   }
 }
