@@ -126,20 +126,23 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       } else {
         saveObjects.module = fileConfig.lastmodule;
       }
-
-      topic = topic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
-      topic = topic.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
+      if (topic) {
+        topic = topic.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
+        topic = topic.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
+      }
 
       if (fileConfig.useautocourse && fileConfig.useshortcourse) {
-        let course_ar = course.split(" ");
-        course = "";
-        for (const word of course_ar) {
-          //course += course.length ? fileConfig.title_delimeter : "";
-          course += word.charAt(0).toUpperCase() + word.substring(1, 5);
+        if (course) {
+          let course_ar = course.split(" ");
+          course = "";
+          for (const word of course_ar) {
+            //course += course.length ? fileConfig.title_delimeter : "";
+            course += word.charAt(0).toUpperCase() + word.substring(1, 5);
+          }
         }
       }
 
-      if (fileConfig.useautocourse) {
+      if (fileConfig.useautocourse && course) {
         course = course.replace(/([,. ]+)/gi, fileConfig.space_delimeter);
         course = course.replace(/([\\\/"'*&:<>$#@^?!\[\]]+)/gi, "");
       }
@@ -301,7 +304,7 @@ async function Initialize() {
   let ownersite = "";
   try {
     ownersite = new URL(taburl).hostname;
-  } catch (e) {}
+  } catch (e) { }
   if (ownersite.indexOf(fileConfig.host_url) !== -1) {
     debuglog(browser.i18n.getMessage("SEARCHVIDEO"));
     getCourseInfo();
@@ -674,7 +677,7 @@ async function save_options() {
       lastfileid: fileConfig.lastfileid,
       lastcourse: fileConfig.lastcourse,
     })
-    .then(() => {});
+    .then(() => { });
 }
 
 function implode_getCourseInfo(saveObjectsReq) {
@@ -709,13 +712,29 @@ function implode_getCourseInfo(saveObjectsReq) {
     return result;
   }
 
-  function getModouleInfo() {
+  function getModouleInfo_old() {
     let result = {};
     result.course = document
       .querySelector("div.rc-ItemNavBreadcrumbs > div > ol.breadcrumb-list  > li:nth-child(1) > a")
       ?.innerHTML.trim();
     result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
     result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
+    result.videoduration = searchVideoDuratiom();
+    console.log("getModouleInfo result", result)
+    return result;
+  }
+
+  function getModouleInfo() {
+    let result = {};
+    let pathname = window.location.pathname;
+    let course_path = pathname.split('/')[2];
+    result.course = course_path.replace("-"," ")
+    result.module = document
+      .querySelector("div.rc-ItemNavBreadcrumbs > nav > ol > li:nth-child(2) > a > span")
+      ?.innerHTML.split(" ")[1];
+    result.topic = document
+      .querySelector("h1.video-name")
+      ?.innerHTML.trim();
     result.videoduration = searchVideoDuratiom();
     return result;
   }
