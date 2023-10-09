@@ -21,7 +21,7 @@ Version for development: [![current version](https://img.shields.io/github/manif
 ### The application is publicly available in the Store
 
 - Chrome Google Web Store  [![Chrome Web Store](https://img.shields.io/chrome-web-store/v/dmoebncbmkgfpjhjikkjljmbaacncohl)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
-- Microsoft Edge Web Store  [![Static Badge](https://img.shields.io/badge/microsoft%20web%20store_-v2.1.2.1-blue)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
+- Microsoft Edge Web Store  [![Static Badge](https://img.shields.io/badge/microsoft%20web%20store_-v2.1.3-blue)](https://github.com/lexxai/CourseraSaveAssist/wiki/Download)
 
 The application has also been additionally initiated to be added to the stores for other browsers. Now stores are previewing the app before publishing it.
 
