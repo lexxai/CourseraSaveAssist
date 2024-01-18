@@ -692,7 +692,8 @@ function implode_getCourseInfo(saveObjectsReq) {
 
   function searchVideoDuratiom() {
     let duration;
-    let video = document.getElementById("video_player_html5_api");
+      let video = document.getElementsByTagName("video");
+      if (video) video=video[0];
     if (video && video.readyState > 0) {
       duration = Math.round(video.duration / 60);
     }
