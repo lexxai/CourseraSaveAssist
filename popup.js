@@ -474,7 +474,7 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
   let savingItems = 0;
   let saveMode = fileConfig.savemode;
 
-  console.log("implode_save :: saveparam", saveparam);
+  // console.log("implode_save :: saveparam", saveparam);
 
   if (saveparam.video) {
     savingItems++;
