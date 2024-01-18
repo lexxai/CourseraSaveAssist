@@ -24,9 +24,9 @@ const saveObjectsReq = {
   subtitle: true,
   videotext: true,
   videotext_addon: true,
-  videotext_addon_lang: "en",
+  videotext_addon_lang: "en,uk",
   subtitle_addon: true,
-  subtitle_addon_lang: "en",
+  subtitle_addon_lang: "en,uk",
   usesaveid: true,
 };
 
@@ -341,12 +341,12 @@ function implode_search(saveObjectsReq) {
     let lang = "en";
     if (langreq) lang = langreq;
     result.lang = lang;
-    result.subtitle = document.querySelector('video.vjs-tech track[srclang="' + lang + '"]')?.src;
+    result.subtitle = document.querySelector('video track[srclang="' + lang + '"]')?.src;
 
     // console.log("result.module", result.module);
     // console.log("result.topic", result.topic);
     // console.log("result.video", result.video);
-    // console.log("result.subtitle lang:", lang, result.subtitle);
+    console.log("searchInVideo result.subtitle lang:", lang, result.subtitle);
     return result;
   }
 
@@ -374,7 +374,7 @@ function implode_search(saveObjectsReq) {
       result.subtitle_addon = inVideo?.subtitle;
       result.subtitle_addon_lang = inVideo?.lang;
     }
-    //console.log("search result:", result);
+    console.log("searchInMenu search result:", result);
     sendMessage(result);
   }
 
@@ -471,6 +471,9 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
 
   let savingItems = 0;
   let saveMode = fileConfig.savemode;
+
+  console.log("implode_save :: saveparam",saveparam)
+
   if (saveparam.video) {
     savingItems++;
     saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video, saveMode);
@@ -621,14 +624,14 @@ function restore_options() {
       module: "M",
       modulesep: "_",
       spacesep: "_",
-      subtitle_lang: "en",
+      subtitle_lang: "en,uk",
       savevideo: true,
       videores: true,
       videoduration: false,
       savevideotxt: true,
-      savevideotxtadd: false,
+      savevideotxtadd: true,
       savesubtitle: true,
-      savesubtitleadd: false,
+      savesubtitleadd: true,
       lastmodule: "",
       lasttopic: "",
       lastcourse: "",
@@ -687,7 +690,11 @@ function implode_getCourseInfo(saveObjectsReq) {
   }
 
   function searchCourseLanguage() {
-    return document.querySelector("#select-language")?.selectedOptions[0]?.value;
+    const video=document.querySelector("video");
+    const lang_div=video?.closest('div[lang]');
+    const lang=lang_div?.getAttribute("lang");
+    // console.log("searchCourseLanguage", lang);
+    return lang;
   }
 
   function searchVideoDuratiom() {
@@ -733,9 +740,15 @@ function implode_getCourseInfo(saveObjectsReq) {
     result.module = document
       .querySelector("div.rc-ItemNavBreadcrumbs > nav > ol > li:nth-child(2) > a > span")
       ?.innerHTML.split(" ")[1];
-    result.topic = document
-      .querySelector("h1.video-name")
-      ?.innerHTML.trim();
+    const element = document.querySelector("h1.video-name");
+    if (element){
+      const textContent = Array.from(element.childNodes)
+            .filter(node => node.nodeType === Node.TEXT_NODE)
+            .map(node => node.textContent.trim())
+            .join(' ');
+      result.topic = textContent;
+    }
+  
     result.videoduration = searchVideoDuratiom();
     return result;
   }
@@ -768,11 +781,11 @@ function implode_getCourseInfo(saveObjectsReq) {
     let sub = obj.subtitlesVtt;
     let video = obj.sources.byResolution[video_res].mp4VideoUrl;
     let text = obj.subtitlesTxt;
-    // console.log("parseCourseMedia video", video);
-    // console.log("parseCourseMedia subtitle", lang, sub[lang]);
-    // console.log("parseCourseMedia subtitle", lang_add, sub[lang_add]);
-    // console.log("parseCourseMedia text", lang, text[lang]);
-    // console.log("parseCourseMedia text", lang_add, text[lang_add]);
+    console.log("parseCourseMedia video", video);
+    console.log("parseCourseMedia subtitle", lang, sub[lang]);
+    console.log("parseCourseMedia subtitle", lang_add, sub[lang_add]);
+    console.log("parseCourseMedia text", lang, text[lang]);
+    console.log("parseCourseMedia text", lang_add, text[lang_add]);
     if (saveObjectsReq.video) result.video = video;
     if (saveObjectsReq.subtitle) result.subtitle = sub[lang];
     if (saveObjectsReq.videotext) result.videotext = text[lang];
@@ -801,7 +814,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       }
     }
     result.error = "";
-    //console.log("RETURN MESSAGE", result);
+    console.log("RETURN MESSAGE", result);
     sendMessage(result);
   }
 
