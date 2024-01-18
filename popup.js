@@ -6,6 +6,7 @@ let waitSavingStartID = 0;
 const saveObjects = {
   filename: "",
   video: "",
+  subtitle_lang: "",
   subtitle: "",
   videotext: "",
   videotext_addon: "",
@@ -24,9 +25,9 @@ const saveObjectsReq = {
   subtitle: true,
   videotext: true,
   videotext_addon: true,
-  videotext_addon_lang: "en",
+  videotext_addon_lang: "en,uk",
   subtitle_addon: true,
-  subtitle_addon_lang: "en",
+  subtitle_addon_lang: "en,uk",
   usesaveid: true,
 };
 
@@ -171,6 +172,7 @@ browser.runtime.onMessage.addListener(function (request, sender, sendResponse) {
       if (request.message.videotext_addon_lang) saveObjects.videotext_addon_lang = request.message.videotext_addon_lang;
       if (request.message.subtitle_addon) saveObjects.subtitle_addon = request.message.subtitle_addon;
       if (request.message.subtitle_addon_lang) saveObjects.subtitle_addon_lang = request.message.subtitle_addon_lang;
+      saveObjects.subtitle_lang = request.message.subtitle_lang;
       console.log("module: ", saveObjects.filename);
       setTimeout(() => {
         const videoAction = document.getElementById("videoAction");
@@ -304,7 +306,7 @@ async function Initialize() {
   let ownersite = "";
   try {
     ownersite = new URL(taburl).hostname;
-  } catch (e) { }
+  } catch (e) {}
   if (ownersite.indexOf(fileConfig.host_url) !== -1) {
     debuglog(browser.i18n.getMessage("SEARCHVIDEO"));
     getCourseInfo();
@@ -341,12 +343,12 @@ function implode_search(saveObjectsReq) {
     let lang = "en";
     if (langreq) lang = langreq;
     result.lang = lang;
-    result.subtitle = document.querySelector('video.vjs-tech track[srclang="' + lang + '"]')?.src;
+    result.subtitle = document.querySelector('video track[srclang="' + lang + '"]')?.src;
 
     // console.log("result.module", result.module);
     // console.log("result.topic", result.topic);
     // console.log("result.video", result.video);
-    // console.log("result.subtitle lang:", lang, result.subtitle);
+    console.log("searchInVideo result.subtitle lang:", lang, result.subtitle);
     return result;
   }
 
@@ -374,7 +376,7 @@ function implode_search(saveObjectsReq) {
       result.subtitle_addon = inVideo?.subtitle;
       result.subtitle_addon_lang = inVideo?.lang;
     }
-    //console.log("search result:", result);
+    console.log("searchInMenu search result:", result);
     sendMessage(result);
   }
 
@@ -471,17 +473,34 @@ function implode_save(saveparam, fileConfig, tabid = 0) {
 
   let savingItems = 0;
   let saveMode = fileConfig.savemode;
+
+  // console.log("implode_save :: saveparam", saveparam);
+
   if (saveparam.video) {
     savingItems++;
     saveAsFile(saveparam.video, saveparam.filename + fileConfig.ext_video, saveMode);
   }
   if (saveparam.subtitle) {
     savingItems++;
-    saveAsFile(saveparam.subtitle, saveparam.filename + fileConfig.ext_sub, saveMode);
+    const lang = saveparam?.subtitle_lang;
+    let filename;
+    if (lang) {
+      filename = saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_sub;
+    } else {
+      filename = saveparam.filename + fileConfig.ext_sub;
+    }
+    saveAsFile(saveparam.subtitle, filename, saveMode);
   }
   if (saveparam.videotext) {
     savingItems++;
-    saveAsFile(saveparam.videotext, saveparam.filename + fileConfig.ext_text, saveMode);
+    const lang = saveparam?.subtitle_lang;
+    let filename;
+    if (lang) {
+      filename = saveparam.filename + fileConfig.title_delimeter + lang + fileConfig.ext_text;
+    } else {
+      filename = saveparam.filename + fileConfig.ext_text;
+    }
+    saveAsFile(saveparam.videotext, filename, saveMode);
   }
   if (saveparam.videotext_addon) {
     Object.keys(saveparam.videotext_addon).forEach((lang) => {
@@ -621,14 +640,14 @@ function restore_options() {
       module: "M",
       modulesep: "_",
       spacesep: "_",
-      subtitle_lang: "en",
+      subtitle_lang: "en,uk",
       savevideo: true,
       videores: true,
       videoduration: false,
       savevideotxt: true,
-      savevideotxtadd: false,
+      savevideotxtadd: true,
       savesubtitle: true,
-      savesubtitleadd: false,
+      savesubtitleadd: true,
       lastmodule: "",
       lasttopic: "",
       lastcourse: "",
@@ -677,7 +696,7 @@ async function save_options() {
       lastfileid: fileConfig.lastfileid,
       lastcourse: fileConfig.lastcourse,
     })
-    .then(() => { });
+    .then(() => {});
 }
 
 function implode_getCourseInfo(saveObjectsReq) {
@@ -687,12 +706,17 @@ function implode_getCourseInfo(saveObjectsReq) {
   }
 
   function searchCourseLanguage() {
-    return document.querySelector("#select-language")?.selectedOptions[0]?.value;
+    const video = document.querySelector("video");
+    const lang_div = video?.closest("div[lang]");
+    const lang = lang_div?.getAttribute("lang");
+    // console.log("searchCourseLanguage", lang);
+    return lang;
   }
 
   function searchVideoDuratiom() {
     let duration;
-    let video = document.getElementById("video_player_html5_api");
+    let video = document.getElementsByTagName("video");
+    if (video) video = video[0];
     if (video && video.readyState > 0) {
       duration = Math.round(video.duration / 60);
     }
@@ -720,21 +744,27 @@ function implode_getCourseInfo(saveObjectsReq) {
     result.module = document.querySelector("a.breadcrumb-title > span")?.innerHTML.split(" ")[1];
     result.topic = document.querySelector("span.breadcrumb-title")?.innerHTML.trim();
     result.videoduration = searchVideoDuratiom();
-    console.log("getModouleInfo result", result)
+    console.log("getModouleInfo result", result);
     return result;
   }
 
   function getModouleInfo() {
     let result = {};
     let pathname = window.location.pathname;
-    let course_path = pathname.split('/')[2];
-    result.course = course_path.replace("-"," ")
+    let course_path = pathname.split("/")[2];
+    result.course = course_path.replace("-", " ");
     result.module = document
       .querySelector("div.rc-ItemNavBreadcrumbs > nav > ol > li:nth-child(2) > a > span")
       ?.innerHTML.split(" ")[1];
-    result.topic = document
-      .querySelector("h1.video-name")
-      ?.innerHTML.trim();
+    const element = document.querySelector("h1.video-name");
+    if (element) {
+      const textContent = Array.from(element.childNodes)
+        .filter((node) => node.nodeType === Node.TEXT_NODE)
+        .map((node) => node.textContent.trim())
+        .join(" ");
+      result.topic = textContent;
+    }
+
     result.videoduration = searchVideoDuratiom();
     return result;
   }
@@ -800,7 +830,7 @@ function implode_getCourseInfo(saveObjectsReq) {
       }
     }
     result.error = "";
-    //console.log("RETURN MESSAGE", result);
+    // console.log("RETURN MESSAGE", result);
     sendMessage(result);
   }
 
@@ -809,6 +839,7 @@ function implode_getCourseInfo(saveObjectsReq) {
   let lang = searchCourseLanguage();
   let lang_add = saveObjectsReq.subtitle_addon_lang;
   result = getModouleInfo();
+  result.subtitle_lang = lang;
   let courseinfo = searchCourseID();
   if (courseinfo.success) {
     let URL = genAPIrequest(courseinfo);

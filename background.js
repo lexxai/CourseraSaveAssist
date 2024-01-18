@@ -554,7 +554,8 @@ function tab_select_current_video_implode(params) {
     } else {
       let cont = 15;
       while (cont > 0) {
-        let video = document.getElementById("video_player_html5_api");
+              let video = document.getElementsByTagName("video");
+      if (video) video=video[0];
         if (video && video.readyState > 0) {
           console.log("Can save your video", video);
           sendMessage("dosavevieo", document.title);
@@ -580,7 +581,8 @@ function tab_select_current_video_implode(params) {
     load_cst_module();
     while (cont > 0) {
       let cst_state = check_cst_loaded();
-      let video = document.getElementById("video_player_html5_api");
+      let video = document.getElementsByTagName("video");
+      if (video) video=video[0];
       if (cst_state && video && video.readyState > 0) {
         translateVideo();
         break;
@@ -598,7 +600,8 @@ function tab_select_current_video_implode(params) {
     }
     let cont = 15;
     while (cont > 0) {
-      let video = document.getElementById("video_player_html5_api");
+            let video = document.getElementsByTagName("video");
+      if (video) video=video[0];
       if (video && video.readyState > 0) {
         setVideoPos(video);
         break;
@@ -1201,7 +1204,8 @@ function implode_getCourseInfo(saveObjectsReq) {
 
   function searchVideoDuratiom() {
     let duration;
-    let video = document.getElementById("video_player_html5_api");
+          let video = document.getElementsByTagName("video");
+      if (video) video=video[0];
     if (video && video.readyState > 0) {
       duration = Math.round(video.duration / 60);
     }
